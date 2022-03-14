@@ -1,0 +1,288 @@
+
+.tituloHeader{
+	color:black;
+	font-size: 30px;
+	font-family: Impact, Haettenschweiler, 'Arial'
+}
+
+.linkButton{
+	background: #2B312D ;
+	border: 2px solid black;
+	text-decoration: none;
+}
+body{
+	background-image: url('../../static/img/fondo.jpg');
+	background-size: cover;
+}
+
+header{
+	background: aqua;
+	height: 50%;
+	margin: 0%;
+}
+nav{
+	margin 0%;
+}
+
+#myCarousel{
+	max-width: 60%;
+}
+
+.carousel-caption{
+	font-weight: bold;
+}
+
+.crearCuenta{
+	max-width: 70%;
+}
+
+p[class="inicio"]{
+	text-align: justify;
+}
+
+.footer {
+  font-size: 20px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: blue;
+  color: white;
+  text-align: center;
+}
+
+#tablaCategorias{
+	min-width: 50%;
+	max-width: 70%;
+	text-align: center;
+}
+
+#tablaProductos{
+	max-width: 80%;
+}
+*{
+    box-sizing: border-box;
+}
+.fotoPerfil{
+    /* login*/
+    width: 150px;
+    padding: 1px;
+    margin-top: ;
+    margin: auto;
+    margin-left:500px;
+
+}
+
+.contenedor {
+    width: 50%;
+    padding: 15px;
+}
+.contenedor2 {
+    width: 100%;
+    padding: 15px;
+
+}
+.formulario{
+    background: #fff;
+    margin-top: 150px;
+    padding: 3px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 40px;
+
+}
+input[type ="email"],
+input[type ="password"],
+{
+    font-size: 28px;
+    width: 82%;
+    padding: 18PX;
+    border: none;
+}
+input[type ="text"],
+{
+    font-size: 28px;
+    width: 82%;
+    padding: 11PX;
+    border: none;
+
+}
+input[type ="number"]{
+    font-size: 12px;
+    width: 50%;
+    padding: 7PX;
+    border: 1px solid black;
+
+}
+
+.input-contenedor{
+margin-bottom: 15px;
+border: 1px solid black;
+
+}
+.input-contenedor2{
+margin-bottom: 1px;
+border: 1px solid black;
+
+}
+.icon{
+    min-width: 58px;
+    text-align: center;
+    color: black;
+}
+.button{
+    border: none;
+    width: 100%;
+    color: black;
+    font-size: 28px;
+    background: #2491AB;
+    padding: 15px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+
+}.button:hover{
+    background: cadetblue;
+}
+p{
+    text-align: center;
+}
+.link{
+    text-decoration: none;
+    color: #59D85D;
+    font-weight: 680;
+}
+.link:hover{
+    color: cadetblue;
+
+}
+.Revelador{
+    border: none;
+    width: 30%;
+    color: black;
+    font-size: 16px;
+    background: #DFC8EE;
+    padding: 3px 4px;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
+
+
+.TarjetasCuadro{
+     background: #fff;
+    margin-top: 150px;
+    padding: 1px;
+
+}
+
+
+.login-box {
+  width: 320px;
+  height: 420px;
+  background: none;
+  color: #fff;
+  top: 65%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  padding: 70px 30px;
+}
+
+.login-box .avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  position: absolute;
+  top: -50px;
+  left: calc(50% - 50px);
+}
+
+.login-box h1 {
+  margin: 0;
+  padding: 0 0 20px;
+  text-align: center;
+  font-size: 22px;
+  color: black;
+}
+
+.login-box label {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  display: block;
+}
+
+.login-box input {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.login-box input[type="email"], .login-box input[type="password"] {
+  border: none;
+  border-bottom: 1px solid black;
+  background: transparent;
+  outline: none;
+  height: 40px;
+  color: black;
+  font-size: 16px;
+}
+
+.login-box input[type="submit"] {
+  border: none;
+  outline: none;
+  height: 40px;
+  background: #b80f22;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 20px;
+}
+
+.login-box input[type="submit"]:hover {
+  cursor: pointer;
+  background: #ffc107;
+  color: #000;
+}
+
+.login-box a {
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 20px;
+  color: black;
+}
+.login-box p {
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 20px;
+  color: black;
+}
+
+.login-box a:hover {
+  color: #fff;
+}
+
+@media(min-width: 768px){
+    .formulario{
+        margin: auto;
+        width: 500px;
+        margin-top: auto;
+        border-radius: 5%;
+    }
+    .lista{
+        margin: auto;
+        width: 500px;
+        margin-top: 50px;
+
+    }
+    .TarjetasCuadro{
+        margin: auto;
+        width: 500px;
+        margin-top: 110px;
+        border-radius: 5%;
+    }
+
+    }
+
+}

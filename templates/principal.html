@@ -1,0 +1,11 @@
+{% extends 'comunes/base.html' %}
+{% block navbar %}
+    {{super()}}
+    {% include 'comunes/menu.html' %}
+{% endblock %}
+{% block contenido %}
+{{super()}}
+{%if current_user.is_authenticated %}
+<h3>Hola {{current_user.nombre}}</h3>
+{% endif %}
+{% endblock %}

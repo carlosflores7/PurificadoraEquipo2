@@ -1,0 +1,28 @@
+{% extends 'bootstrap/base.html' %}
+{% block title %}
+    AguaZero
+{% endblock %}
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{url_for('static',filename='css/estilo.css')}}">
+{% endblock %}
+{% block navbar %}
+    <header>
+        <h1 class="tituloHeader">AguaZero</h1>
+    </header>
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% block contenido %}
+        <!--Sistema de alertas de Bootstrap -->
+      {% for msg in get_flashed_messages() %}
+        <div class="alert alert-success alert-dismissible">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>
+            {{msg}}
+          </strong>
+        </div>        
+      {% endfor %}
+    {% endblock %}
+</div>
+{% endblock %}

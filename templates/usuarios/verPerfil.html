@@ -1,0 +1,50 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1 class="bg-primary text-center">Mis datos</h1>
+    <form action="/Usuarios/editarPerfil" method="post">
+        <div class="form-group">
+            <label for="nombre">ID:</label>
+            <input class="form-control form-control-lg" type="text" name="ID" maxlength="50"  placeholder="Nombre Completo" value="{{current_user.idUsuario}}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="nombre">Nombre completo:</label>
+            <input class="form-control form-control-lg" type="text" name="nombre" maxlength="50"  placeholder="Nombre Completo" value="{{current_user.nombre}}" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Correo electrónico:</label>
+            <input type="email" name="email" maxlength="50" class="form-control form-control-lg" value="{{current_user.correo}}" required>
+        </div>
+        <div class="form-group">
+            <label for="clave">Password:</label>
+            <input type="password" name="password" id="password" maxlength="20" class="form-control">
+        </div>
+        <!--<input type="checkbox" id="verPassword" onchange="verPasswords()">Ver password
+        <div class="form-group">
+            <label for="clave">Confirmar Password:</label>
+            <input type="password" name="passwordConfirmacion" id="passwordConfirmacion" maxlength="20" class="form-control" required>
+        </div>-->
+        <div class="radio">
+            <label>Tipo:</label>
+            <label class="radio-inline"><input type="radio" name="tipo" value="{{current_user.tipo}}" checked>{{current_user.tipo}}</label>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Actualizar
+        </button>
+        <a href="/Usuarios/iniciarSesion" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+        </a>
+        <br>
+        <br>
+        <a href="/Usuarios/eliminar/{{current_user.idUsuario}}" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon glyphicon-remove"></span>
+            Eliminar mi cuenta
+        </a>
+    </form>
+<div id="notificaciones">
+
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+    <h1>LISTADO DE USUARIOS</h1>
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>NOMBRE COMPLETO</th>
+            <th>EMAIL</th>
+            <th>TIPO</th>
+            <th>ESTATUS</th>
+            <th>VER</th>
+        </thead>
+        {% for u in usuarios %}
+            <tr>
+                <td>{{u.idUsuario}}</td>
+                <td>{{u.nombre}}</td>
+                <td>{{u.correo}}</td>
+                <td>{{u.tipo}}</td>
+                {% if u.estatus=='1' %}
+                <td>Activo</td>
+                {% else %}
+                <td>Inactivo</td>
+                {% endif %}
+                    <td>
+                        <a href="/Usuarios/{{u.idUsuario}}">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </a>
+                    </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+{% endblock %}
