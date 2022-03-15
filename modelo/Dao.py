@@ -70,3 +70,34 @@ class Usuario(UserMixin,db.Model):
         usuario = self.consultaIndividual(id)
         usuario.estatus = '0'
         usuario.editar()
+
+
+class Vehiculo(db.Model):
+    __tablename__ = 'Vehiculo'
+    idVehiculo = Column(Integer, primary_key=True)
+    placas = Column(String(10), nullable=False)
+    tipo_de_vehiculo = Column(String(45), nullable=False)
+    tipo_combustible = Column(String(45), nullable=False)
+    capacidad_tanque = Column(String(45), nullable=False)
+    modelo = Column(String(45), nullable=False)
+    año = Column(String(4), nullable=False)
+    capacidad_garrafones = Column(Integer, nullable=False)
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaIndividual(self,id):
+        return self.query.get(id)
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()

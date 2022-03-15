@@ -1,0 +1,53 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Nuevo vehiculo</h1>
+    <form action="/vehiculo/agregandoVehiculo" method="post">
+        <div>
+            <label>Placas</label>
+            <input type="text" name="placas" maxlength="6" placeholder="##-##-##">
+        </div>
+        <br>
+        <div>
+            <label>Tipo Vehiculo</label>
+            <select name="tipoVehiculo">
+                <option>Selecciona una opcion</option>
+                <option value="Carro">Carro</option>
+                <option value="Motocicleta">Motocicleta</option>
+            </select>
+        </div>
+        <br>
+        <div>
+            <label>Tipo de Combustible</label>
+            <select name="tipoCombustible">
+                <option>Selecciona una opcion</option>
+                <option value="Gasolina">Gasolina</option>
+                <option value="Diesel">Diesel</option>
+            </select>
+        </div>
+        <br>
+        <div>
+            <label>Capacidad de tanque</label>
+            <input type="text" maxlength="2" name="capacidadTanque" required>
+        </div>
+        <br>
+        <div>
+            <label>Modelo</label>
+            <input type="text" maxlength="45" name="modelo" required>
+        </div>
+        <br>
+        <div>
+            <label>Año</label>
+            <input type="text" maxlength="4" name="año" required>
+        </div>
+        <br>
+        <div>
+            <label>Capacidad de Garrafones</label>
+            <input type="text" maxlength="4" name="capacidadGarrafones" required>
+        </div>
+        <div>
+            <button type="submit">Agregar</button>
+        </div>
+    </form>
+    <br>
+{% endblock %}

@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from flask import Flask,render_template,request,redirect,url_for,flash,session,abort
 from flask_bootstrap import Bootstrap
-from modelo.Dao import db,Usuario
+from modelo.Dao import db,Usuario,Vehiculo
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
 app = Flask(__name__)
@@ -168,6 +168,58 @@ def error_404(e):
 @app.errorhandler(405)
 def error_405(e):
     return render_template("comunes/error_405.html"),405
+
+@app.route('/vehiculo/agregar')
+def agregarvehiculo():
+    return render_template('vehiculo/nuevo.html')
+
+@app.route('/vehiculo/consultar')
+def consultarVehiculos():
+    try:
+        v = Vehiculo()
+    except:
+        print("Ocurrio un error")
+    return render_template('vehiculo/consultar.html', vehiculo = v.consultaGeneral())
+
+@app.route('/vehiculo/agregandoVehiculo', methods=['post'])
+def agregandoVehiculo():
+    v = Vehiculo()
+    v.placas = request.form['placas']
+    v.tipo_de_vehiculo = request.form['tipoVehiculo']
+    v.tipo_combustible = request.form['tipoCombustible']
+    v.capacidad_tanque = request.form['capacidadTanque']
+    v.modelo = request.form['modelo']
+    v.año = request.form['año']
+    v.capacidad_garrafones = request.form['capacidadGarrafones']
+    v.insertar()
+    return redirect(url_for('consultarVehiculos'))
+@app.route('/vehiculo/actualizandoVehiculo', methods=['post'])
+def actualizandoVehiculo():
+    v = Vehiculo()
+    v.idVehiculo = request.form['idVehiculo']
+    v.placas = request.form['placas']
+    v.tipo_de_vehiculo = request.form['tipoVehiculo']
+    v.tipo_combustible = request.form['tipoCombustible']
+    v.capacidad_tanque = request.form['capacidadTanque']
+    v.modelo = request.form['modelo']
+    v.año = request.form['año']
+    v.capacidad_garrafones = request.form['capacidadGarrafones']
+    v.actualizar()
+    return redirect(url_for('consultarVehiculos'))
+
+@app.route("/vehiculos/consultar/<int:id>")
+def consultarVehiculoInd(id):
+    v = Vehiculo()
+    return render_template('vehiculo/consultaIndividual.html', vehiculo=v.consultaIndividual(id))
+
+@app.route("/vehiculos/eliminar/<int:id>")
+def eliminarVehiculo(id):
+    v = Vehiculo()
+    v.eliminar(id)
+    return redirect(url_for('consultarVehiculos'))
+
+
+
 
 if __name__=='__main__':
     db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD

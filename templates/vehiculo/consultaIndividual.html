@@ -1,0 +1,66 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consulta de vehiculo</h1>
+    <form action="/vehiculo/actualizandoVehiculo" method="post">
+        <div>
+            <label>idVehiculo</label>
+            <input class="form-control" type="text" name="idVehiculo" maxlength="6" placeholder="##-##-##" value="{{vehiculo.idVehiculo}}" readonly>
+        </div>
+        <br>
+        <div>
+            <label>Placas</label>
+            <input type="text" name="placas" maxlength="6" placeholder="##-##-##" value="{{vehiculo.placas}}">
+        </div>
+        <br>
+        <div>
+            <label>Tipo Vehiculo</label>
+            <select name="tipoVehiculo">
+                {% if vehiculo.tipo_de_vehiculo == 'Carro'%}
+                <option value="Carro">Carro </option>
+                <option value="Motocicleta">Motocicleta</option>
+                {% elif vehiculo.tipo_de_vehiculo == 'Motocicleta'%}
+                <option value="Motocicleta">Motocicleta</option>
+                <option value="Carro">Carro </option>
+                {% endif %}
+            </select>
+        </div>
+        <br>
+        <div>
+            <label>Tipo de Combustible</label>
+            <select name="tipoCombustible">
+                {% if vehiculo.tipo_combustible == 'Gasolina'%}
+                <option value="Gasolina">Gasolina</option>
+                <option value="Diesel">Diesel</option>
+                {% elif vehiculo.tipo_combustible == 'Diesel'%}
+                <option value="Diesel">Diesel</option>
+                <option value="Gasolina">Gasolina</option>
+                {% endif %}
+            </select>
+        </div>
+        <br>
+        <div>
+            <label>Capacidad de tanque</label>
+            <input type="text" maxlength="2" name="capacidadTanque" required value="{{vehiculo.capacidad_tanque}}">
+        </div>
+        <br>
+        <div>
+            <label>Modelo</label>
+            <input type="text" maxlength="45" name="modelo" required value="{{vehiculo.modelo}}">
+        </div>
+        <br>
+        <div>
+            <label>Año</label>
+            <input type="text" maxlength="4" name="año" required value="{{vehiculo.año}}">
+        </div>
+        <br>
+        <div>
+            <label>Capacidad de Garrafones</label>
+            <input type="text" maxlength="4" name="capacidadGarrafones" required value="{{vehiculo.capacidad_garrafones}}">
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-success" type="submit">Actualizar</button>
+        </div>
+    </form>
+{% endblock %}
