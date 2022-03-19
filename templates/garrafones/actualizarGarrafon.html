@@ -1,0 +1,40 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consulta De Garrafones</h1>
+    <form action="/Garrafones/actualizando" method="post">
+        <div>
+            <label>idGarrafon</label>
+            <input class="form-control" type="text" name="idGarrafon" maxlength="10" placeholder="###-###-##" value="{{g.idGarrafon}}" readonly>
+        </div>
+        <br>
+        <div>
+            <label>Estado</label>
+            <input type="text" name="estado" maxlength="15" placeholder="Disponible" value="{{g.Estado}}">
+        </div>
+        <br>
+        <div>
+            <label>Codigo</label>
+           <input type="text" name="codigo" maxlength="10" placeholder="###-###-##" value="{{g.codigo}}">
+        </div>
+        <br>
+        <div>
+            <label>Capacidad</label>
+           <input type="text" name="capacidad" maxlength=" " placeholder="19" value="{{g.capaciodad}}">
+        </div>
+        <br>
+        <div>
+            <label>Precio retornable</label>
+            <input type="text" maxlength="2" name="precioRetornable" value="{{g.precio_retornable}}">
+        </div>
+        <br>
+        <div>
+            <label>Precio completo</label>
+            <input type="text" maxlength="2" name="precioCompleto" value="{{g.precio_completo}}">
+        </div>   
+        <br>
+        <div>
+            <button class="btn btn-success" type="submit">Actualizar</button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+<h1 class="bg-primary text-center">Registro de Garrafones</h1>
+<form action="/Garrafones/agregando" method="post">
+	<div class = "radio">
+		<label>estado:</label>
+		<label class="radio-inline"><input type="radio" name="estado" value="Disponible">Disponible</label>
+		<label class="radio-inline"><input type="radio" name="estado" value="No Disponible">NO Disponible</label>
+	</div>
+	<br>
+
+	<div class="form-group">
+		<label for="codigo">Codigo de garrafon:</label>
+		<input type="text" name="codigo" maxlength="10" class="form-control form-control-lg" required>
+	</div> 
+	<br>
+
+	<div class="form-group">
+		<label for="Capacidad">Capacidad del garrafon:</label>
+		<input type="text" name="capacidad" maxlength="10" class="form-control form-control-lg" required>
+	</div> 
+
+	<br>
+	<div class="form-group">
+		<label for="PrecioR">Precio Retornable:</label>
+		<input type="text" name="precio_retornable" maxlength="10" class="form-control form-control-lg" required>
+	</div> 
+	<br>
+
+	<div class="form-group">
+		<label for="PrecioC">Precio Completo:</label>
+		<input type="text" name="precio_completo" maxlength="10" class="form-control form-control-lg" required>
+	</div> 
+
+
+	<br>
+	<button type="submit" class="btn btn-primary mb-3">
+		<span class="glyphicon glyphicon-floppy-disk"></span>
+		Registrar
+	</button>
+</form>
+<div id="notificaciones">
+
+</div>
+{% endblock %}

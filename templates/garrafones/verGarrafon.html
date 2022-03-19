@@ -1,0 +1,43 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+    <h1>Lista De Garrafones</h1>
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>estado</th>
+            <th>codigo</th>
+            <th>capacidad</th>
+            <th>precio_retornable</th>
+            <th>precio_completo</th>
+            <th>Ver</th>
+            <th>Eliminar</th>
+        </thead>
+        #{% for i in g %}
+            <tr>
+                <td>{{i.idGarrafon}}</td>
+                <td>{{i.Estado}}</td>
+                <td>{{i.codigo}}</td>
+                <td>{{i.capaciodad}}</td>
+                <td>{{i.precio_retornable}}</td>
+                <td>{{i.precio_completo}}</td>
+              
+                    <td>
+                        <a href="/Garrafones/mostrar/{{i.idGarrafon}}">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </a>
+                    </td>
+
+
+                    <td>
+                        <a href="/Garrafones/eliminar/{{i.idGarrafon}}"> 
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+{% endblock %}

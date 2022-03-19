@@ -3,12 +3,12 @@ from datetime import timedelta
 
 from flask import Flask,render_template,request,redirect,url_for,flash,session,abort
 from flask_bootstrap import Bootstrap
-from modelo.Dao import db,Usuario,Vehiculo
+from modelo.Dao import db,Usuario,Vehiculo, Garrafones
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://aguazero:aguazero@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -217,6 +217,59 @@ def eliminarVehiculo(id):
     v = Vehiculo()
     v.eliminar(id)
     return redirect(url_for('consultarVehiculos'))
+
+#Fin del CRUD Vehiculo
+
+#Inicio del CRUD Garrafones
+@app.route('/Garrafones/agregar')
+def agregarGarrafones():
+    return render_template('/Garrafones/nuevoGarrafon.html')
+
+@app.route('/Garrafones/agregando', methods=['post'])
+def agregandoGarrafones():
+
+        garrafon = Garrafones()
+        garrafon.Estado = request.form['estado']
+        garrafon.codigo = request.form['codigo']
+        garrafon.capaciodad = request.form['capacidad']
+        garrafon.precio_retornable = request.form['precio_retornable']
+        garrafon.precio_completo = request.form['precio_completo']
+        garrafon.insertar()
+        flash('¡ El garrafon se ha registrado !')
+
+        return redirect(url_for("agregarGarrafones"))
+
+@app.route('/Garrafones/mostrar')
+def mostrarGarrafones():
+        garrafon = Garrafones()
+        return render_template('Garrafones/verGarrafon.html', g = garrafon.consultaGeneral())
+
+@app.route('/Garrafones/actualizando', methods=['post'])
+def actualizandoGarrafones():
+
+        garrafon = Garrafones()
+        garrafon.idGarrafon = request.form['idGarrafon']
+        garrafon.Estado = request.form['estado']
+        garrafon.codigo = request.form['codigo']
+        garrafon.capaciodad = request.form['capacidad']
+        garrafon.precio_retornable = request.form['precioRetornable']
+        garrafon.precio_completo = request.form['precioCompleto']
+        garrafon.actualizar()
+        return redirect(url_for("mostrarGarrafones"))
+
+@app.route("/Garrafones/mostrar/<int:id>")
+def consultarGarrafonesIndividual(id):
+    garrafon = Garrafones()
+    return render_template('Garrafones/actualizarGarrafon.html', g = garrafon.consultaIndividual(id))
+
+@app.route("/Garrafones/eliminar/<int:id>")
+def eliminarGarrafon(id):
+    garrafon = Garrafones()
+    garrafon.eliminar(id)
+    return redirect(url_for('mostrarGarrafones'))
+
+
+#Fin del CRUD Garrafones
 
 
 

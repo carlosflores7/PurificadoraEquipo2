@@ -101,3 +101,33 @@ class Vehiculo(db.Model):
         obj = self.consultaIndividual(id)
         db.session.delete(obj)
         db.session.commit()
+
+###Garrafones###
+
+class Garrafones(db.Model):
+    __tablename__ = 'garrafones'
+    idGarrafon = Column(Integer, primary_key=True)
+    Estado = Column(String(15), nullable=False)
+    codigo = Column(String(10), nullable = False)
+    capaciodad = Column(Integer, nullable=False)
+    precio_retornable = Column(Float, nullable=False)
+    precio_completo = Column(Float, nullable=False)
+
+    def insertar(self):
+          db.session.add(self)
+          db.session.commit()
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def consultaIndividual(self,id):
+        return self.query.get(id)
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()
