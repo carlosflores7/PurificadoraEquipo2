@@ -1,16 +1,16 @@
 {% extends 'comunes/base.html' %}
 {% block contenido %}
     {{super()}}
-    <h1>Nuevo vehiculo</h1>
+    <h1 class="bg-primary text-center">Registro de vehiculo</h1>
     <form action="/vehiculo/agregandoVehiculo" method="post">
         <div>
             <label>Placas</label>
-            <input type="text" name="placas" maxlength="6" placeholder="##-##-##">
+            <input type="text" name="placas" maxlength="6" placeholder="##-##-##" class="form-control form-control-lg" >
         </div>
         <br>
         <div>
             <label>Tipo Vehiculo</label>
-            <select name="tipoVehiculo">
+            <select name="tipoVehiculo" class="form-control form-control-lg" >
                 <option>Selecciona una opcion</option>
                 <option value="Carro">Carro</option>
                 <option value="Motocicleta">Motocicleta</option>
@@ -19,7 +19,7 @@
         <br>
         <div>
             <label>Tipo de Combustible</label>
-            <select name="tipoCombustible">
+            <select name="tipoCombustible" class="form-control form-control-lg" >
                 <option>Selecciona una opcion</option>
                 <option value="Gasolina">Gasolina</option>
                 <option value="Diesel">Diesel</option>
@@ -28,26 +28,28 @@
         <br>
         <div>
             <label>Capacidad de tanque</label>
-            <input type="text" maxlength="2" name="capacidadTanque" required>
+            <input type="text" maxlength="2" name="capacidadTanque" required class="form-control form-control-lg" >
         </div>
         <br>
         <div>
             <label>Modelo</label>
-            <input type="text" maxlength="45" name="modelo" required>
+            <input type="text" maxlength="45" name="modelo" required class="form-control form-control-lg" >
         </div>
         <br>
         <div>
             <label>Año</label>
-            <input type="text" maxlength="4" name="año" required>
+            <input type="text" maxlength="4" name="año" required class="form-control form-control-lg" >
         </div>
         <br>
         <div>
             <label>Capacidad de Garrafones</label>
-            <input type="text" maxlength="4" name="capacidadGarrafones" required>
+            <input type="text" maxlength="4" name="capacidadGarrafones" required class="form-control form-control-lg" >
         </div>
-        <div>
-            <button type="submit">Agregar</button>
-        </div>
+        <br>
+        <button type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Registrar
+	    </button>
     </form>
     <br>
 {% endblock %}

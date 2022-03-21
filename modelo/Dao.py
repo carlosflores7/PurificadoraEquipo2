@@ -102,6 +102,8 @@ class Vehiculo(db.Model):
         db.session.delete(obj)
         db.session.commit()
 
+
+
 ###Garrafones###
 
 class Garrafones(db.Model):

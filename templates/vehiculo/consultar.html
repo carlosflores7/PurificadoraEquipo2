@@ -2,40 +2,43 @@
 {% block contenido %}
     {{super()}}
     <h1>Consultar Vehiculos</h1>
-
-    <table border="1">
-        <thead>
-            <th>IDVEHICULO</th>
-            <th>PLACAS</th>
-            <th>TIPO DE VEHICULO</th>
-            <th>TIPO DE COMBUSTIBLE</th>
-            <th>CAPACIDAD DEL TANQUE</th>
-            <th>MODELO</th>
-            <th>AÑO</th>
-            <th>CAPACIDAD DE GARAFONES</th>
-            <th>ELIMINAR</th>
-            <th>VER</th>
-        </thead>
-        {% for v in vehiculo %}
-        <tr>
-            <td>{{v.idVehiculo}}</td>
-            <td>{{v.placas}}</td>
-            <td>{{v.tipo_de_vehiculo}}</td>
-            <td>{{v.tipo_combustible}}</td>
-            <td>{{v.capacidad_tanque}}</td>
-            <td>{{v.modelo}}</td>
-            <td>{{v.año}}</td>
-            <td>{{v.capacidad_garrafones}}</td>
-            <td>
-                <a href="/vehiculos/eliminar/{{v.idVehiculo}}">Eliminar</a>
-            </td>
-                <td>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>IDVEHICULO</th>
+                <th>PLACAS</th>
+                <th>TIPO DE VEHICULO</th>
+                <th>TIPO DE COMBUSTIBLE</th>
+                <th>CAPACIDAD DEL TANQUE</th>
+                <th>MODELO</th>
+                <th>AÑO</th>
+                <th>CAPACIDAD DE GARAFONES</th>
+                <th>VER</th>
+                <th>ELIMINAR</th>
+            </thead>
+            {% for v in vehiculo %}
+            <tr>
+                <td>{{v.idVehiculo}}</td>
+                <td>{{v.placas}}</td>
+                <td>{{v.tipo_de_vehiculo}}</td>
+                <td>{{v.tipo_combustible}}</td>
+                <td>{{v.capacidad_tanque}}</td>
+                <td>{{v.modelo}}</td>
+                <td>{{v.año}}</td>
+                <td>{{v.capacidad_garrafones}}</td>
+                 <td>
                     <a href="/vehiculos/consultar/{{v.idVehiculo}}">
-                        Ver
-                         <!--<span class="glyphicon glyphicon-eye-open"></span>-->
+                           <span class="glyphicon glyphicon-eye-open"></span>
                     </a>
                 </td>
-        </tr>
-        {% endfor %}
-    </table>
+                <td>
+                    <a href="/vehiculos/eliminar/{{v.idVehiculo}}">
+                          <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}

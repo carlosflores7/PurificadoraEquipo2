@@ -5,17 +5,17 @@
         <form action="/vehiculo/actualizandoVehiculo" method="post">
             <div>
                 <label>idVehiculo</label>
-                <input class="form-control" type="text" name="idVehiculo" maxlength="6" placeholder="##-##-##" value="{{vehiculo.idVehiculo}}" readonly>
+                <input class="form-control" type="text" name="idVehiculo" maxlength="6" placeholder="##-##-##" value="{{vehiculo.idVehiculo}}" readonly class="form-control form-control-lg">
             </div>
             <br>
             <div>
                 <label>Placas</label>
-                <input type="text" name="placas" maxlength="6" placeholder="##-##-##" value="{{vehiculo.placas}}">
+                <input type="text" name="placas" maxlength="6" placeholder="##-##-##" value="{{vehiculo.placas}}" class="form-control form-control-lg">
             </div>
             <br>
             <div>
                 <label>Tipo Vehiculo</label>
-                <select name="tipoVehiculo">
+                <select name="tipoVehiculo" class="form-control form-control-lg">
                     {% if vehiculo.tipo_de_vehiculo == 'Carro'%}
                     <option value="Carro">Carro </option>
                     <option value="Motocicleta">Motocicleta</option>
@@ -28,7 +28,7 @@
             <br>
             <div>
                 <label>Tipo de Combustible</label>
-                <select name="tipoCombustible">
+                <select name="tipoCombustible" class="form-control form-control-lg">
                     {% if vehiculo.tipo_combustible == 'Gasolina'%}
                     <option value="Gasolina">Gasolina</option>
                     <option value="Diesel">Diesel</option>
@@ -41,26 +41,27 @@
             <br>
             <div>
                 <label>Capacidad de tanque</label>
-                <input type="text" maxlength="2" name="capacidadTanque" required value="{{vehiculo.capacidad_tanque}}">
+                <input type="text" maxlength="2" name="capacidadTanque" required value="{{vehiculo.capacidad_tanque}}" class="form-control form-control-lg">
             </div>
             <br>
             <div>
                 <label>Modelo</label>
-                <input type="text" maxlength="45" name="modelo" required value="{{vehiculo.modelo}}">
+                <input type="text" maxlength="45" name="modelo" required value="{{vehiculo.modelo}}" class="form-control form-control-lg">
             </div>
             <br>
             <div>
                 <label>Año</label>
-                <input type="text" maxlength="4" name="año" required value="{{vehiculo.año}}">
+                <input type="text" maxlength="4" name="año" required value="{{vehiculo.año}}" class="form-control form-control-lg">
             </div>
             <br>
             <div>
                 <label>Capacidad de Garrafones</label>
-                <input type="text" maxlength="4" name="capacidadGarrafones" required value="{{vehiculo.capacidad_garrafones}}">
+                <input type="text" maxlength="4" name="capacidadGarrafones" required value="{{vehiculo.capacidad_garrafones}}" class="form-control form-control-lg">
             </div>
             <br>
             <div>
                 <button class="btn btn-success" type="submit">Actualizar</button>
             </div>
+            <br>
         </form>
     {% endblock %}
