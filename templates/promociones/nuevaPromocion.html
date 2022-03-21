@@ -1,0 +1,35 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1 class="bg-primary text-center">Registro de Promocion</h1>
+    <form action="/Promociones/agregando" method="post">
+        <div>
+            <label>Cantidad Maxima</label>
+            <input type="text" maxlength="10" name="cantidadMaxima" required>
+        </div>
+        <br>
+        <div>
+            <label>Cantidad Minima</label>
+            <input type="text" maxlength="10" name="cantidadMinima" required>
+        </div>
+        <br>
+        <div class="radio">
+            <label>Tipo:</label>
+            <label class="radio-inline"><input type="radio" name="estatus" value=0>Inactivo</label>
+            <label class="radio-inline"><input type="radio" name="estatus" value=1>Activo</label>
+        </div>
+        <br>
+        <div>
+            <label>Porcentaje</label>
+            <input type="text" name="porcentaje" maxlength="10"  placeholder="%" required>
+        </div>
+        <br>
+
+        <button type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Crear
+        </button>
+        </a>
+    </form>
+<br>
+{% endblock %}

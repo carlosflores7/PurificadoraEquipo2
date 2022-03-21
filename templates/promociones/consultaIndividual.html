@@ -1,0 +1,48 @@
+    {% extends 'comunes/base.html' %}
+    {% block contenido %}
+        {{super()}}
+        <h1>Consulta de Promocion</h1>
+       <form action="/Promociones/actualizar" method="post">
+       <div>
+            <label>ID</label>
+            <input type="text" maxlength="10" name="ID" required value="{{promociones.idpromocion}}" readonly>
+        </div>
+        <br>
+        <div>
+            <label>Cantidad Maxima</label>
+            <input type="text" maxlength="10" name="cantidadMaxima" required value="{{promociones.cantidad_max}}">
+        </div>
+        <br>
+        <div>
+            <label>Cantidad Minima</label>
+            <input type="text" maxlength="10" name="cantidadMinima" required value="{{promociones.cantidad_min}}">
+        </div>
+        <br>
+        <div class="radio">
+            <label>Estatus:</label>
+            {%if promociones.estatus==1%}
+            <label class="radio-inline"><input type="radio" name="estatus" value=0>Inactivo</label>
+            <label class="radio-inline"><input type="radio" name="estatus" value=1 checked>Activo</label>
+            {%else%}
+            <label class="radio-inline"><input type="radio" name="estatus" value=0 checked>Inactivo</label>
+            <label class="radio-inline"><input type="radio" name="estatus" value=1>Activo</label>
+            {%endif%}
+        </div>
+        <br>
+        <div>
+            <label>Porcentaje</label>
+            <input type="text" name="porcentaje" maxlength="10"  placeholder="%" required value="{{promociones.porcentaje}}">
+        </div>
+        <br>
+
+        <button type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Actualizar
+        </button>
+
+        <a href="/Promociones/eliminar/{{promociones.idpromocion}}" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Eliminar
+        </a>
+    </form>
+    {% endblock %}

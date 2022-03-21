@@ -1,0 +1,48 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consultar Promociones</h1>
+
+    <table border="1">
+        <thead>
+            <th>IDPROMOCION</th>
+            <th>CANTIDAD MAXIMA</th>
+            <th>CANTIDAD MINIMA</th>
+            <th>ESTATUS</th>
+            <th>PORCENTAJE</th>
+            <th>VER</th>
+        </thead>
+        {% for p in promociones.items%}
+        <tr>
+            <td>{{p.idpromocion}}</td>
+            <td>{{p.cantidad_max}}</td>
+            <td>{{p.cantidad_min}}</td>
+            {%if p.estatus==1%}
+            <td>Activo</td>
+            {%else%}
+            <td>Inactivo</td>
+            {%endif%}
+            <td>{{p.porcentaje}}</td>
+                <td>
+                    <a href="/Promociones/{{p.idpromocion}}">
+                        Ver
+                         <!--<span class="glyphicon glyphicon-eye-open"></span>-->
+                    </a>
+                </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <ul class="pagination">
+    {% for page in promociones.iter_pages() %}
+        {% if page %}
+            {% if page == pagina %}
+                <li class="active"><a href="#">{{page}}</a></li>
+            {% else %}
+                <li><a href="{{url_for('consultarPromociones', pagina=page)}}">{{ page }}</a></li>
+            {% endif %}
+        {% else %}
+        <li><a href="#">...</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% endblock %}

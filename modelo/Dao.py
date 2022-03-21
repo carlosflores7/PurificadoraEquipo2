@@ -140,3 +140,40 @@ class Garrafones(db.Model):
         obj = self.consultaIndividual(id)
         db.session.delete(obj)
         db.session.commit()
+
+###Promociones###
+
+class Promociones(db.Model):
+    __tablename__='promociones'
+    idpromocion=Column(Integer,primary_key=True)
+    cantidad_max=Column(Integer,nullable=False)
+    cantidad_min=Column(Integer,nullable=True)
+    estatus=Column(Integer,nullable=False)
+    porcentaje=Column(Float,nullable=False)
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaIndividual(self,id):
+        return self.query.get(id)
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()
+
+    def eliminacionLogica(self, id):
+        promocion = self.consultaIndividual(id)
+        promocion.estatus=0
+        promocion.actualizar()
+
+    def paginacion(self,pagina):
+        return self.query.paginate(per_page=3,page=pagina,error_out=True)

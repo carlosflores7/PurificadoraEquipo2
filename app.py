@@ -3,12 +3,12 @@ from datetime import timedelta
 
 from flask import Flask,render_template,request,redirect,url_for,flash,session,abort
 from flask_bootstrap import Bootstrap
-from modelo.Dao import db,Usuario,Vehiculo, Garrafones
+from modelo.Dao import db,Usuario,Vehiculo, Garrafones, Promociones
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -293,6 +293,59 @@ def eliminarGarrafon(id):
 
 
 #Fin del CRUD Garrafones
+
+#Inicio del Crud de Promociones
+@app.route('/Promociones/agregar')
+def agregarPromocion():
+    return render_template('/Promociones/nuevaPromocion.html')
+
+@app.route('/Promociones/agregando', methods=['post'])
+def agregarPromociones():
+    promocion = Promociones()
+    promocion.cantidad_max = request.form['cantidadMaxima']
+    promocion.cantidad_min = request.form['cantidadMinima']
+    promocion.estatus = request.form['estatus']
+    promocion.porcentaje = request.form['porcentaje']
+    promocion.insertar()
+    flash('¡La promocion se ha agregado!')
+
+    return redirect(url_for("agregarPromocion"))
+
+@app.route('/Promociones/pagina/<int:pagina>')
+def consultarPromociones(pagina):
+    promociones=Promociones()
+    return render_template('promociones/consultar.html',promociones=promociones.paginacion(pagina),pagina=pagina)
+
+@app.route('/Promociones/<int:id>')
+def promocionesIndividual(id):
+    promociones=Promociones()
+    return render_template('promociones/consultaIndividual.html',promociones=promociones.consultaIndividual(id))
+
+
+@app.route('/Promociones/actualizar', methods=['post'])
+def actualizarPromociones():
+    promocion = Promociones()
+    promocion.idpromocion = request.form['ID']
+    promocion.cantidad_max = request.form['cantidadMaxima']
+    promocion.cantidad_min = request.form['cantidadMinima']
+    promocion.estatus = request.form['estatus']
+    promocion.porcentaje = request.form['porcentaje']
+    promocion.actualizar()
+    flash('¡La promocion se ha actualizado''!')
+
+    return redirect(url_for("inicio"))
+
+@app.route('/Promociones/eliminar/<int:id>')
+def eliminarPromocion(id):
+    try:
+        promocion=Promociones()
+        promocion.eliminacionLogica(id)
+        flash('¡La promocion se ha eliminado''!')
+    except:
+        flash('¡ERROR''!')
+    return redirect(url_for("inicio"))
+#Fin del CRUD PROMOCIONES
+
 
 
 if __name__=='__main__':
