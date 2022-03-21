@@ -104,6 +104,11 @@ class Vehiculo(db.Model):
         db.session.delete(obj)
         db.session.commit()
 
+    def filtrar(self, filtro):
+        return self.query.filter(Vehiculo.placas.like('%'+filtro+'%'))
+
+    def paginar(self, pagina):
+        return self.query.paginate(per_page=4, page=pagina, error_out=True)
 
 
 ###Garrafones###

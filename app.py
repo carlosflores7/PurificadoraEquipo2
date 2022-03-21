@@ -8,7 +8,7 @@ from flask_login import login_required,login_user,logout_user,current_user,Login
 import json
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://aguazero:aguazero@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -182,13 +182,24 @@ def error_405(e):
 def agregarvehiculo():
     return render_template('vehiculo/nuevo.html')
 
-@app.route('/vehiculo/consultar')
-def consultarVehiculos():
-    try:
+#@app.route('/vehiculo/consultar')
+#def consultarVehiculos():
+#    try:
+#        v = Vehiculo()
+#    except:
+#        print("Ocurrio un error")
+#    return render_template('vehiculo/consultar.html', vehiculo = v.consultaGeneral())
+
+@app.route('/vehiculo/consultar/<int:pagina>')
+@login_required
+def consultarVehiculos(pagina):
+    if current_user.is_admin():
         v = Vehiculo()
-    except:
-        print("Ocurrio un error")
-    return render_template('vehiculo/consultar.html', vehiculo = v.consultaGeneral())
+        return render_template('vehiculo/consultar.html', vehiculo=v.paginar(pagina), pagina=pagina)
+    else:
+        abort(404)
+
+
 
 @app.route('/vehiculo/agregandoVehiculo', methods=['post'])
 def agregandoVehiculo():
@@ -201,7 +212,9 @@ def agregandoVehiculo():
     v.año = request.form['año']
     v.capacidad_garrafones = request.form['capacidadGarrafones']
     v.insertar()
-    return redirect(url_for('consultarVehiculos'))
+    flash('¡ El vehiculo se ha registrado !')
+    return redirect(url_for('agregarvehiculo'))
+
 @app.route('/vehiculo/actualizandoVehiculo', methods=['post'])
 def actualizandoVehiculo():
     v = Vehiculo()
@@ -226,6 +239,7 @@ def eliminarVehiculo(id):
     v = Vehiculo()
     v.eliminar(id)
     return redirect(url_for('consultarVehiculos'))
+
 
 #Fin del CRUD Vehiculo
 
@@ -279,8 +293,6 @@ def eliminarGarrafon(id):
 
 
 #Fin del CRUD Garrafones
-
-
 
 
 if __name__=='__main__':

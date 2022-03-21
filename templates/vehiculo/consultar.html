@@ -2,6 +2,7 @@
 {% block contenido %}
     {{super()}}
     <h1>Consultar Vehiculos</h1>
+     <input class="form-control form-control-lg" type="text" name="nombre" maxlength="50"  placeholder="Nombre Completo" required>
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -16,7 +17,7 @@
                 <th>VER</th>
                 <th>ELIMINAR</th>
             </thead>
-            {% for v in vehiculo %}
+            {% for v in vehiculo.items %}
             <tr>
                 <td>{{v.idVehiculo}}</td>
                 <td>{{v.placas}}</td>
@@ -41,4 +42,23 @@
             {% endfor %}
         </table>
     </div>
+    <br>
+    <div>
+    <ul class="pagination">
+        {% for page in vehiculo.iter_pages() %}
+            {% if page %}
+                {% if page == pagina %}
+                    <li class="active"><a href="#">{{page}}</a></li>
+                {% else %}
+                    <li><a href="{{url_for('consultarVehiculos', pagina=page)}}">{{ page }}</a></li>
+                {% endif %}
+            {% else %}
+            <li><a href="#">...</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    </div>
+<div id="notificaciones">
+
+</div>
 {% endblock %}

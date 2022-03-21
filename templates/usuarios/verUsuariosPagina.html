@@ -33,6 +33,7 @@
     </table>
     </div>
     <br>
+
     <ul class="pagination">
     {% for page in usuarios.iter_pages() %}
         {% if page %}
@@ -46,6 +47,7 @@
         {% endif %}
     {% endfor %}
     </ul>
+
     <br>
     <a href="/" class="btn btn-danger mb-3">
             <span class="glyphicon glyphicon-circle-arrow-left"></span>

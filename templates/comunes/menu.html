@@ -41,12 +41,12 @@
         <ul class="dropdown-menu">
 
           <li><a href="vehiculo/agregar">Nuevo Vehiculo</a></li>
-          <li><a href="vehiculo/consultar">Consultar Vehiculos</a></li>
+          <li><a href="vehiculo/consultar/1">Consultar Vehiculos</a></li>
 
         </ul>
       </li>
       {% endif %}
-
+      <br>
       {% if current_user.is_authenticated and current_user.is_admin() %}
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">GARRAFONES
