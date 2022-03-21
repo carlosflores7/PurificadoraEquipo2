@@ -1,7 +1,24 @@
 {% extends 'comunes/base.html' %}
 {% block contenido %}
 {{super()}}
+    {% if consulta == 'general' %}
     <h1>LISTADO DE USUARIOS</h1>
+    {% else %}
+    <h1>LISTADO DE USUARIOS - Tipo: {{consulta}}</h1>
+    {% endif %}
+<br>
+<ul class="pagination">
+    <li class="active"><a href="#">Filtro: </a></li>
+    <li><a href="/Usuarios/verUsuarios">Todos</a></li>
+    <li><a href="/Usuarios/verUsuarios?tipo=Administrador">Administrador</a></li>
+    <li><a href="/Usuarios/verUsuarios?tipo=Vendedor">Vendedor</a></li>
+    <li><a href="/Usuarios/verUsuarios?tipo=Cliente">Cliente</a></li>
+</ul>
+<br>
+<form action="/Usuarios/verUsuarios" method="get">
+    Buscar por nombre: <input type="text" name="nombre">
+    <input type="submit" value="Buscar">
+</form>
     <div class="table-responsive">
     <table class="table">
         <thead>

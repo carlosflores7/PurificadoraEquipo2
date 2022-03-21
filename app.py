@@ -140,12 +140,18 @@ def eliminarPerfil(id):
     else:
         abort(404)
 
-@app.route('/Usuarios/verUsuarios')
+@app.route('/Usuarios/verUsuarios', methods=['get'])
 @login_required
 def verUsuarios():
     if current_user.is_admin():
         usuarios = Usuario()
-        return render_template('usuarios/verUsuarios.html', usuarios=usuarios.consultaGeneral())
+        if request.args.get('tipo') == None:
+            if request.args.get('nombre'):
+                return render_template('usuarios/verUsuarios.html', usuarios=usuarios.consultaNombre(request.args.get('nombre')),consulta='general')
+            else:
+                return render_template('usuarios/verUsuarios.html', usuarios=usuarios.consultaGeneral(),consulta='general')
+        else:
+            return render_template('usuarios/verUsuarios.html', usuarios=usuarios.consultaTipo(request.args.get('tipo')), consulta=request.args.get('tipo'))
     else:
         abort(404)
 

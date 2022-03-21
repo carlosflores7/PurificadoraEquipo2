@@ -74,6 +74,12 @@ class Usuario(UserMixin,db.Model):
     def paginar(self, pagina):
         return self.query.paginate(per_page=4, page=pagina, error_out=True)
 
+    def consultaTipo(self, tipo):
+        return self.query.filter(Usuario.tipo == tipo).all()
+
+    def consultaNombre(self, nombre):
+        return self.query.filter(Usuario.nombre == nombre).all()
+
 class Vehiculo(db.Model):
     __tablename__ = 'Vehiculo'
     idVehiculo = Column(Integer, primary_key=True)
