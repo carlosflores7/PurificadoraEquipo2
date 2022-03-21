@@ -1,7 +1,7 @@
 {% extends 'comunes/base.html' %}
 {% block contenido %}
 {{super()}}
-    <h1>LISTADO DE USUARIOS</h1>
+    <h1>LISTADO DE USUARIOS - PÁGINA {{pagina}}</h1>
     <div class="table-responsive">
     <table class="table">
         <thead>
@@ -12,7 +12,7 @@
             <th>ESTATUS</th>
             <th>VER</th>
         </thead>
-        {% for u in usuarios %}
+        {% for u in usuarios.items %}
             <tr>
                 <td>{{u.idUsuario}}</td>
                 <td>{{u.nombre}}</td>
@@ -32,6 +32,21 @@
         {% endfor %}
     </table>
     </div>
+    <br>
+    <ul class="pagination">
+    {% for page in usuarios.iter_pages() %}
+        {% if page %}
+            {% if page == pagina %}
+                <li class="active"><a href="#">{{page}}</a></li>
+            {% else %}
+                <li><a href="{{url_for('usuariosPagina', pagina=page)}}">{{ page }}</a></li>
+            {% endif %}
+        {% else %}
+        <li><a href="#">...</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+    <br>
     <a href="/" class="btn btn-danger mb-3">
             <span class="glyphicon glyphicon-circle-arrow-left"></span>
             Regresar

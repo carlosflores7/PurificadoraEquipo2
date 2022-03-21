@@ -71,6 +71,8 @@ class Usuario(UserMixin,db.Model):
         usuario.estatus = '0'
         usuario.editar()
 
+    def paginar(self, pagina):
+        return self.query.paginate(per_page=4, page=pagina, error_out=True)
 
 class Vehiculo(db.Model):
     __tablename__ = 'Vehiculo'

@@ -8,7 +8,7 @@ from flask_login import login_required,login_user,logout_user,current_user,Login
 import json
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://aguazero:aguazero@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -155,6 +155,15 @@ def usuarioIndividual(id):
     if current_user.is_admin():
         usuario = Usuario()
         return render_template('usuarios/verUsuario.html',usuario=usuario.consultaIndividual(id))
+    else:
+        abort(404)
+
+@app.route('/Usuarios/Pagina/<int:pagina>')
+@login_required
+def usuariosPagina(pagina):
+    if current_user.is_admin():
+        usuarios = Usuario()
+        return render_template('usuarios/verUsuariosPagina.html', usuarios=usuarios.paginar(pagina),pagina=pagina)
     else:
         abort(404)
 

@@ -16,6 +16,7 @@
         <ul class="dropdown-menu">
           <li><a href="Usuarios/nuevo">Registrar usuario</a></li>
           <li><a href="Usuarios/verUsuarios">Ver usuarios</a></li>
+          <li><a href="Usuarios/Pagina/1">Ver usuarios (paginación)</a></li>
         </ul>
       </li>
 
@@ -41,6 +42,19 @@
 
           <li><a href="vehiculo/agregar">Nuevo Vehiculo</a></li>
           <li><a href="vehiculo/consultar">Consultar Vehiculos</a></li>
+
+        </ul>
+      </li>
+      {% endif %}
+
+      {% if current_user.is_authenticated and current_user.is_admin() %}
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">GARRAFONES
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+
+          <li><a href="Garrafones/agregar">Nuevo garrafón</a></li>
+          <li><a href="Garrafones/mostrar">Consultar garrafones</a></li>
 
         </ul>
       </li>
