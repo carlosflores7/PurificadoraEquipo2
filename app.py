@@ -8,7 +8,7 @@ from flask_login import login_required,login_user,logout_user,current_user,Login
 import json
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -201,7 +201,10 @@ def agregarvehiculo():
 def consultarVehiculos(pagina):
     if current_user.is_admin():
         v = Vehiculo()
-        return render_template('vehiculo/consultar.html', vehiculo=v.paginar(pagina), pagina=pagina)
+        if request.args.get('filtro'):
+            return render_template('vehiculo/consultarfiltro.html',vehiculo_sin_paginacion=v.filtrar(request.args.get('filtro')), pagina = pagina)
+        else:
+            return render_template('vehiculo/consultar.html', vehiculo = v.paginar(pagina), pagina = pagina)
     else:
         abort(404)
 

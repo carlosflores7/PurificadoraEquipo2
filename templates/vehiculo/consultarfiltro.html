@@ -24,10 +24,7 @@
                 <th>VER</th>
                 <th>ELIMINAR</th>
             </thead>
-
-
-
-            {% for v in vehiculo.items %}
+            {% for v in vehiculo_sin_paginacion %}
             <tr>
                 <td>{{v.idVehiculo}}</td>
                 <td>{{v.placas}}</td>
@@ -53,23 +50,7 @@
         </table>
     </div>
     <br>
-    <div>
 
-
-    <ul class="pagination">
-        {% for page in vehiculo.iter_pages() %}
-            {% if page %}
-                {% if page == pagina %}
-                    <li class="active"><a href="#">{{page}}</a></li>
-                {% else %}
-                    <li><a href="{{url_for('consultarVehiculos', pagina=page)}}">{{ page }}</a></li>
-                {% endif %}
-            {% else %}
-            <li><a href="#">...</a></li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-    </div>
 <div id="notificaciones">
 
 </div>

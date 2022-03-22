@@ -117,6 +117,7 @@ class Vehiculo(db.Model):
         return self.query.paginate(per_page=4, page=pagina, error_out=True)
 
 
+
 ###Garrafones###
 
 class Garrafones(db.Model):
