@@ -9,7 +9,7 @@
          <br>
          <input class="btn btn-success" type="submit" value="Buscar" required>
     </form>
-    
+
     <div class="table-responsive">
     <table class="table">
         <thead>
@@ -22,7 +22,7 @@
             <th>Ver</th>
             <th>Eliminar</th>
         </thead>
-        #{% for i in g.items %}
+        #{% for i in garrafon_sin_paginacion %}
             <tr>
                 <td>{{i.idGarrafon}}</td>
                 <td>{{i.Estado}}</td>
@@ -32,14 +32,14 @@
                 <td>{{i.precio_completo}}</td>
               
                     <td>
-                        <a href="/Garrafones/mostrarIndividual/{{i.idGarrafon}}">
+                        <a href="/Garrafones/mostrar/{{i.idGarrafon}}">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </a>
                     </td>
 
 
                     <td>
-                        <a href="/Garrafones/eliminar/{{i.idGarrafon}}">
+                        <a href="/Garrafones/eliminar/{{i.idGarrafon}}"> 
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
                     </td>
@@ -52,20 +52,6 @@
     <br>
     <div>
 
-
-    <ul class="pagination">
-        {% for page in g.iter_pages() %}
-            {% if page %}
-                {% if page == pagina %}
-                    <li class="active"><a href="#">{{page}}</a></li>
-                {% else %}
-                    <li><a href="{{url_for('mostrarGarrafones', pagina=page)}}">{{ page }}</a></li>
-                {% endif %}
-            {% else %}
-            <li><a href="#">...</a></li>
-            {% endif %}
-        {% endfor %}
-    </ul>
     </div>
 
 {% endblock %}

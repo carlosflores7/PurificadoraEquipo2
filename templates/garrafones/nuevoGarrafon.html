@@ -3,7 +3,12 @@
 {{super()}}
 <h1 class="bg-primary text-center">Registro de Garrafones</h1>
 <form action="/Garrafones/agregando" method="post">
-
+	<div class = "radio form-control form-control-lg">
+		<label>estado:</label>
+		<label class=" radio-inline"><input type="radio" name="estado" value="Disponible">Disponible</label>
+		<label class="radio-inline"><input type="radio" name="estado" value="No Disponible">NO Disponible</label>
+	</div>
+	<br>
 
 	<div class="form-group">
 		<label for="codigo">Codigo de garrafon:</label>
@@ -26,13 +31,9 @@
 	<div class="form-group">
 		<label for="PrecioC">Precio Completo:</label>
 		<input type="text" name="precio_completo" maxlength="10" class="form-control form-control-lg" required>
-	</div>
-	<br>
-	<div class = "radio">
-		<label>estado:</label>
-		<label class="radio-inline"><input type="radio" name="estado" value="Disponible">Disponible</label>
-		<label class="radio-inline"><input type="radio" name="estado" value="No Disponible">NO Disponible</label>
-	</div>
+	</div> 
+
+
 	<br>
 	<button type="submit" class="btn btn-primary mb-3">
 		<span class="glyphicon glyphicon-floppy-disk"></span>

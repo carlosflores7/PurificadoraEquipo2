@@ -147,6 +147,12 @@ class Garrafones(db.Model):
         obj = self.consultaIndividual(id)
         db.session.delete(obj)
         db.session.commit()
+    
+    def filtro(self, filtro):
+        return self.query.filter(Garrafones.codigo.like('%'+filtro+'%'))
+
+    def paginacion(self,pagina):
+        return self.query.paginate(per_page=2,page=pagina,error_out=True)
 
 ###Promociones###
 

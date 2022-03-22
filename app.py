@@ -257,6 +257,14 @@ def eliminarVehiculo(id):
 def agregarGarrafones():
     return render_template('/Garrafones/nuevoGarrafon.html')
 
+@app.route('/Garrafones/mostrar/<int:pagina>')
+def mostrarGarrafones(pagina):
+    garrafon=Garrafones()
+    if request.args.get('filtro'):
+        return render_template('garrafones/verFiltro.html', garrafon_sin_paginacion=garrafon.filtro(request.args.get('filtro')), pagina=pagina)
+    else:
+        return render_template('garrafones/verGarrafon.html',g=garrafon.paginacion(pagina),pagina=pagina)
+
 @app.route('/Garrafones/agregando', methods=['post'])
 def agregandoGarrafones():
 
@@ -271,10 +279,10 @@ def agregandoGarrafones():
 
         return redirect(url_for("agregarGarrafones"))
 
-@app.route('/Garrafones/mostrar')
-def mostrarGarrafones():
-        garrafon = Garrafones()
-        return render_template('Garrafones/verGarrafon.html', g = garrafon.consultaGeneral())
+#@app.route('/Garrafones/mostrar')
+#def mostrarGarrafones():
+ #       garrafon = Garrafones()
+  #      return render_template('Garrafones/verGarrafon.html', g = garrafon.consultaGeneral())
 
 @app.route('/Garrafones/actualizando', methods=['post'])
 def actualizandoGarrafones():
@@ -289,7 +297,7 @@ def actualizandoGarrafones():
         garrafon.actualizar()
         return redirect(url_for("mostrarGarrafones"))
 
-@app.route("/Garrafones/mostrar/<int:id>")
+@app.route("/Garrafones/mostrarIndividual/<int:id>")
 def consultarGarrafonesIndividual(id):
     garrafon = Garrafones()
     return render_template('Garrafones/actualizarGarrafon.html', g = garrafon.consultaIndividual(id))
@@ -298,7 +306,7 @@ def consultarGarrafonesIndividual(id):
 def eliminarGarrafon(id):
     garrafon = Garrafones()
     garrafon.eliminar(id)
-    return redirect(url_for('mostrarGarrafones'))
+    return render_template('Inicio')
 
 
 #Fin del CRUD Garrafones
