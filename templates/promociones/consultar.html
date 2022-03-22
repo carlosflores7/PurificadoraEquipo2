@@ -2,8 +2,8 @@
 {% block contenido %}
     {{super()}}
     <h1>Consultar Promociones</h1>
-
-    <table border="1">
+<div class="table-responsive">
+    <table class="table">
         <thead>
             <th>IDPROMOCION</th>
             <th>CANTIDAD MAXIMA</th>
@@ -32,6 +32,7 @@
         </tr>
         {% endfor %}
     </table>
+    </div>
     <ul class="pagination">
     {% for page in promociones.iter_pages() %}
         {% if page %}

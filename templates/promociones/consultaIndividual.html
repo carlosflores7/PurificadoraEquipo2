@@ -5,17 +5,17 @@
        <form action="/Promociones/actualizar" method="post">
        <div>
             <label>ID</label>
-            <input type="text" maxlength="10" name="ID" required value="{{promociones.idpromocion}}" readonly>
+            <input type="text" maxlength="10" name="ID" required value="{{promociones.idpromocion}}" readonly class="form-control form-control-lg">
         </div>
         <br>
         <div>
             <label>Cantidad Maxima</label>
-            <input type="text" maxlength="10" name="cantidadMaxima" required value="{{promociones.cantidad_max}}">
+            <input type="text" maxlength="10" name="cantidadMaxima" required value="{{promociones.cantidad_max}}" class="form-control form-control-lg">
         </div>
         <br>
         <div>
             <label>Cantidad Minima</label>
-            <input type="text" maxlength="10" name="cantidadMinima" required value="{{promociones.cantidad_min}}">
+            <input type="text" maxlength="10" name="cantidadMinima" required value="{{promociones.cantidad_min}}" class="form-control form-control-lg">
         </div>
         <br>
         <div class="radio">
@@ -31,7 +31,7 @@
         <br>
         <div>
             <label>Porcentaje</label>
-            <input type="text" name="porcentaje" maxlength="10"  placeholder="%" required value="{{promociones.porcentaje}}">
+            <input type="text" name="porcentaje" maxlength="10"  placeholder="%" required value="{{promociones.porcentaje}}" class="form-control form-control-lg">
         </div>
         <br>
 

@@ -8,7 +8,7 @@ from flask_login import login_required,login_user,logout_user,current_user,Login
 import json
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -295,7 +295,7 @@ def actualizandoGarrafones():
         garrafon.precio_retornable = request.form['precioRetornable']
         garrafon.precio_completo = request.form['precioCompleto']
         garrafon.actualizar()
-        return redirect(url_for("mostrarGarrafones"))
+        return redirect(url_for("inicio"))
 
 @app.route("/Garrafones/mostrarIndividual/<int:id>")
 def consultarGarrafonesIndividual(id):
@@ -306,7 +306,7 @@ def consultarGarrafonesIndividual(id):
 def eliminarGarrafon(id):
     garrafon = Garrafones()
     garrafon.eliminar(id)
-    return render_template('Inicio')
+    return redirect(url_for("inicio"))
 
 
 #Fin del CRUD Garrafones
