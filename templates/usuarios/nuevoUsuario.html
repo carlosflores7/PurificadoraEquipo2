@@ -3,7 +3,7 @@
     {{super()}}
     <h1 class="bg-primary text-center">Registro de Usuarios</h1>
 
-    <form action="/Usuarios/agregar" method="post">
+    <form action="/Usuarios/agregar" method="post" onsubmit="return validar(this)">
         <div class="form-group">
             <label for="nombre">Nombre completo:</label>
             <input class="form-control form-control-lg" type="text" name="nombre" maxlength="50"  placeholder="Nombre Completo" required>
@@ -16,11 +16,11 @@
             <label for="clave">Password:</label>
             <input type="password" name="password" id="password" maxlength="20" class="form-control" required>
         </div>
-        <!--<input type="checkbox" id="verPassword" onchange="verPasswords()">Ver password
+        <input type="checkbox" id="verPassword" onchange="verPasswords()">Ver password
         <div class="form-group">
             <label for="clave">Confirmar Password:</label>
             <input type="password" name="passwordConfirmacion" id="passwordConfirmacion" maxlength="20" class="form-control" required>
-        </div>-->
+        </div>
         <div class="radio">
             <label>Tipo:</label>
             <label class="radio-inline"><input type="radio" name="tipo" value="Administrador">Administrador</label>
@@ -40,4 +40,8 @@
 <div id="notificaciones">
 
 </div>
+{% endblock %}
+{% block scripts %}
+{{super()}}
+    <script src="{{url_for('static',filename='js/usuarios.js')}}"></script>
 {% endblock %}

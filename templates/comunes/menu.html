@@ -14,9 +14,9 @@
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">ADMIN
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="Usuarios/nuevo">Registrar usuario</a></li>
-          <li><a href="Usuarios/verUsuarios">Ver usuarios</a></li>
-          <li><a href="Usuarios/Pagina/1">Ver usuarios (paginación)</a></li>
+          <li><a href="/Usuarios/nuevo">Registrar usuario</a></li>
+          <li><a href="/Usuarios/verUsuarios">Ver usuarios</a></li>
+          <li><a href="/Usuarios/Pagina/1">Ver usuarios (paginación)</a></li>
         </ul>
       </li>
 
@@ -27,10 +27,10 @@
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
           {% if current_user.is_authenticated %}
-          <li><a href="Usuarios/verPerfil">Ver Perfil</a></li>
-          <li><a href="Usuarios/cerrarSesion">Cerrar sesión</a></li>
+          <li><a href="/Usuarios/verPerfil">Ver Perfil</a></li>
+          <li><a href="/Usuarios/cerrarSesion">Cerrar sesión</a></li>
           {% else %}
-          <li><a href="Usuarios/iniciarSesion">Iniciar sesión</a></li>
+          <li><a href="/Usuarios/iniciarSesion">Iniciar sesión</a></li>
           {% endif %}
         </ul>
       </li>
@@ -40,8 +40,8 @@
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
 
-          <li><a href="vehiculo/agregar">Nuevo Vehiculo</a></li>
-          <li><a href="vehiculo/consultar/1">Consultar Vehiculos</a></li>
+          <li><a href="/vehiculo/agregar">Nuevo Vehiculo</a></li>
+          <li><a href="/vehiculo/consultar/1">Consultar Vehiculos</a></li>
 
         </ul>
       </li>
@@ -53,8 +53,8 @@
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
 
-          <li><a href="Garrafones/agregar">Nuevo garrafón</a></li>
-          <li><a href="Garrafones/mostrar/1">Consultar garrafones</a></li>
+          <li><a href="/Garrafones/agregar">Nuevo garrafón</a></li>
+          <li><a href="/Garrafones/mostrar/1">Consultar garrafones</a></li>
 
         </ul>
       </li>
