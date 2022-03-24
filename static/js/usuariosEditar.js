@@ -1,16 +1,19 @@
 function validar(form){
-    var cad=validarPassword(form.password.value);
-    cad+=passwordRobusto(form.password.value,form.password.value);
-    cad+=validarPasswords(form.password.value,form.passwordConfirmacion.value)
-    var div=document.getElementById("notificaciones");
-    if(cad!=''){
-        div.innerHTML='<p>'+cad+'</p>';
-        return false;
-    }
-    else{
+    if(form.password.value!='' || form.passwordConfirmacion.value!=''){
+        var cad=validarPassword(form.password.value);
+        cad+=passwordRobusto(form.password.value,form.password.value);
+        cad+=validarPasswords(form.password.value,form.passwordConfirmacion.value)
+        var div=document.getElementById("notificaciones");
+        if(cad!=''){
+            div.innerHTML='<p>'+cad+'</p>';
+            return false;
+        }
+        else{
+            return true;
+        }
+    }else{
         return true;
     }
-
 }
 function validarPassword(pwd){
     if(pwd.length<8){
