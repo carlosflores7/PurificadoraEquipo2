@@ -116,6 +116,17 @@ class Vehiculo(db.Model):
     def paginar(self, pagina):
         return self.query.paginate(per_page=4, page=pagina, error_out=True)
 
+    def consultarPlacas(self, placas):
+        salida={"estatus":"","mensaje":""}
+        vehiculo = None
+        vehiculo = self.query.filter(Vehiculo.placas==placas).first()
+        if vehiculo != None:
+            salida['estatus']='Error'
+            salida['mensaje'] = 'Las placas ' + placas + ' ya estan registradas'
+        else:
+            salida['estatus'] = 'Ok'
+            salida['mensaje'] = 'Las placas ' + placas + ' estan libres'
+        return salida
 
 
 ###Garrafones###

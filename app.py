@@ -6,9 +6,10 @@ from flask_bootstrap import Bootstrap
 from modelo.Dao import db,Usuario,Vehiculo, Garrafones, Promociones
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
+
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://aguazero:aguazero@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -249,6 +250,10 @@ def eliminarVehiculo(id):
     v.eliminar(id)
     return redirect(url_for('consultarVehiculos'))
 
+@app.route('/vehiculos/placas/<string:placas>', methods=['Get'])
+def consultarPlacas(placas):
+    v = Vehiculo()
+    return json.dumps(v.consultarPlacas(placas))
 
 #Fin del CRUD Vehiculo
 

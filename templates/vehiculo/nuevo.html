@@ -1,17 +1,16 @@
 {% extends 'comunes/base.html' %}
 {% block contenido %}
     {{super()}}
-    <h1 class="bg-primary text-center">Registro de vehiculo</h1>
+     <h1 class="bg-primary text-center">Registro de vehiculo</h1>
     <form action="/vehiculo/agregandoVehiculo" method="post">
         <div>
             <label>Placas</label>
-            <input type="text" name="placas" maxlength="6" placeholder="##-##-##" class="form-control form-control-lg" >
+            <input id="placas" onblur="consultarPlacas()" type="text" name="placas" maxlength="6" placeholder="##-##-##" class="form-control form-control-lg" >
         </div>
         <br>
         <div>
             <label>Tipo Vehiculo</label>
             <select name="tipoVehiculo" class="form-control form-control-lg" >
-                <option>Selecciona una opcion</option>
                 <option value="Carro">Carro</option>
                 <option value="Motocicleta">Motocicleta</option>
             </select>
@@ -20,7 +19,6 @@
         <div>
             <label>Tipo de Combustible</label>
             <select name="tipoCombustible" class="form-control form-control-lg" >
-                <option>Selecciona una opcion</option>
                 <option value="Gasolina">Gasolina</option>
                 <option value="Diesel">Diesel</option>
             </select>
@@ -46,10 +44,14 @@
             <input type="text" maxlength="4" name="capacidadGarrafones" required class="form-control form-control-lg" >
         </div>
         <br>
-        <button type="submit" class="btn btn-primary mb-3">
+        <button id="registrar" type="submit" class="btn btn-primary mb-3">
             <span class="glyphicon glyphicon-floppy-disk"></span>
             Registrar
 	    </button>
     </form>
-    <br>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+    <script src="{{url_for('static',filename='js/vehiculos.js')}}"></script>
 {% endblock %}
