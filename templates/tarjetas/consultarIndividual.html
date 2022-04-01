@@ -1,0 +1,47 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+     <h1 class="bg-primary text-center">Edicion de Tarjeta</h1>
+    <form action="/Tarjetas/editandoTarjeta" method="post">
+        <div>
+            <label>ID Tarjeta</label>
+            <input type="text" name="idTarjeta" value="{{tarjeta.idTarjeta}}" readonly required class="form-control form-control-lg" >
+        </div>
+        <div>
+            <label>ID Empleado</label>
+            <input type="text" name="idEmpleado" value="{{tarjeta.Empleado_idEmpleado}}" readonly required class="form-control form-control-lg" >
+        </div>
+        <div>
+            <label>Nombre Empleado</label>
+            <input type="text" value="{{usuario.nombre}}" readonly required class="form-control form-control-lg" >
+        </div>
+        <br>
+        <div>
+            <label>Numero de Tarjeta</label>
+            <input type="text" maxlength="16" name="numero" value="{{tarjeta.numero_tarjeta}}" required class="form-control form-control-lg" >
+        </div>
+        <br>
+        <div>
+            <label>Banco</label>
+            <select name="banco" class="form-control form-control-lg" >
+                {% if tarjeta.banco == 'BBVA'%}
+                <option value="BBVA">BBVA</option>
+                <option value="BANAMEX">BANAMEX</option>
+                {% elif tarjeta.banco == 'BANAMEX'%}
+                <option value="BANAMEX">BANAMEX</option>
+                <option value="BBVA">BBVA</option>
+                {% endif %}
+            </select>
+        </div>
+        <br>
+        <button id="registrar" type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Actualizar
+	    </button>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+   
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+     <h1 class="bg-primary text-center">Registro de Tarjetas</h1>
+    <form action="/Tarjetas/agregandoTarjeta" method="post">
+         <div>
+            <label>Empleado</label>
+            <select name="empleado" class="form-control form-control-lg" >
+                <option value="1">Selecciona un empleado</option>
+                {% for e in empleado %}
+                    <option value="{{e.idEmpleado}}">{{e.usuario.nombre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <div>
+            <label>Numero de Tarjeta</label>
+            <input type="text" maxlength="16" name="numero" required class="form-control form-control-lg" >
+        </div>
+        <br>
+        <div>
+            <label>Banco</label>
+            <select name="banco" class="form-control form-control-lg" >
+                <option value="1">Selecciona un banco</option>
+                <option value="BBVA">BBVA</option>
+                <option value="BANAMEX">BANAMEX</option>
+            </select>
+        </div>
+        <br>
+        <button id="registrar" type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Registrar
+	    </button>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+
+{% endblock %}

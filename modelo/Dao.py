@@ -201,3 +201,67 @@ class Promociones(db.Model):
 
     def paginacion(self,pagina):
         return self.query.paginate(per_page=3,page=pagina,error_out=True)
+
+
+
+
+
+class Puesto(db.Model):
+    __tablename__='puestos'
+    idPuesto = Column(Integer,primary_key=True)
+    nombre = Column(String(45),nullable=False)
+    salario_max = Column(String(45),nullable=False)
+    salario_min = Column(String(45),nullable=False)
+    descripcion = Column(String(200),nullable=False)
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+class Empleado(db.Model):
+    __tablename__='Empleado'
+    idEmpleado = Column(Integer,primary_key=True)
+    tipoEmpleado = Column(String(40),nullable=False)
+    salario_por_dia = Column(String(45),nullable=False)
+    turno = Column(String(45),nullable=False)
+    nss = Column(String(45),nullable=False)
+    Usuarios_idUsuario = Column(Integer, ForeignKey('Usuarios.idUsuario'))
+    puestos_idPuesto = Column(Integer,ForeignKey('puestos.idPuesto'))
+    usuario = relationship('Usuario',lazy='select')
+    puesto = relationship('Puesto',lazy='select')
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def consultaIndividual(self, id):
+        return self.query.get(id)
+class Tarjetas(db.Model):
+    __tablename__='tarjetas'
+    idTarjeta = Column(Integer, primary_key=True)
+    Empleado_idEmpleado = Column(Integer,ForeignKey('Empleado.idEmpleado'))
+    numero_tarjeta = Column(String(45),nullable=False)
+    banco=Column(String(45),nullable=False)
+    empleado = relationship('Empleado',lazy='select')
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaIndividual(self,id):
+        return self.query.get(id)
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()

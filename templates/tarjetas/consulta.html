@@ -1,0 +1,42 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consultar Tarjetas</h1>
+
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>IDTARJETA</th>
+                <th>IDEMPLEADO</th>
+                <th>NUMERO DE TARJETA</th>
+                <th>BANCO</th>
+                <th>EDITAR</th>
+                <th>ELIMINAR</th>
+            </thead>
+            {% for t in tarjetas %}
+            <tr>
+                <td>{{t.idTarjeta}}</td>
+                <td>{{t.Empleado_idEmpleado}}</td>
+                <td>{{t.numero_tarjeta}}</td>
+                <td>{{t.banco}}</td>
+
+                 <td>
+                    <a href="/Tarjetas/editar/{{t.idTarjeta}}">
+                           <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+                </td>
+                <td>
+                    <a href="/Tarjetas/eliminar/{{t.idTarjeta}}">
+                          <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+<div id="notificaciones">
+
+</div>
+{% endblock %}

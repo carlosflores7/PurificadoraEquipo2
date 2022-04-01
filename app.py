@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from flask import Flask,render_template,request,redirect,url_for,flash,session,abort
 from flask_bootstrap import Bootstrap
-from modelo.Dao import db,Usuario,Vehiculo, Garrafones, Promociones
+from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
 
@@ -368,7 +368,58 @@ def eliminarPromocion(id):
     return redirect(url_for("inicio"))
 #Fin del CRUD PROMOCIONES
 
+#CRUD TARJETAS
+@app.route('/Tarjetas/agregar')
+def agregarTarjeta():
+    e = Empleado()
+    return render_template('/tarjetas/nueva.html', empleado = e.consultaGeneral())
 
+@app.route('/Tarjetas/consultar')
+def consultarTarjetas():
+    t = Tarjetas()
+    return render_template('/tarjetas/consulta.html', tarjetas = t.consultaGeneral())
+
+@app.route('/Tarjetas/editar/<int:id>')
+def editarTarjeta(id):
+    t = Tarjetas()
+    e = Empleado()
+    u = Usuario()
+    tar = t.consultaIndividual(id)
+    emp = tar.Empleado_idEmpleado
+    empleado = e.consultaIndividual(emp)
+    usu = empleado.Usuarios_idUsuario
+    return render_template('/tarjetas/consultarIndividual.html',tarjeta = t.consultaIndividual(id), usuario = u.consultaIndividual(usu))
+
+@app.route('/Tarjetas/agregandoTarjeta', methods=['post'])
+def agregandoTarjeta():
+    t = Tarjetas()
+    t.Empleado_idEmpleado = request.form['empleado']
+    t.numero_tarjeta = request.form['numero']
+    t.banco = request.form['banco']
+    t.insertar()
+    flash('¡La tarjeta se ha agregado!')
+    return redirect(url_for('agregarTarjeta'))
+
+@app.route('/Tarjetas/editandoTarjeta', methods=['post'])
+def editandoTarjeta():
+    t = Tarjetas()
+    t.idTarjeta=request.form['idTarjeta']
+    t.Empleado_idEmpleado = request.form['idEmpleado']
+    t.numero_tarjeta = request.form['numero']
+    t.banco = request.form['banco']
+    t.actualizar()
+    flash('¡La tarjeta se actualizo!')
+    return redirect(url_for('consultarTarjetas'))
+
+
+@app.route("/Tarjetas/eliminar/<int:id>")
+def eliminarTarjetas(id):
+    t = Tarjetas()
+    t.eliminar(id)
+    flash('¡La tarjeta se elimino!')
+    return redirect(url_for('consultarTarjetas'))
+
+#FIN DEL CRUD TARJETAS
 
 if __name__=='__main__':
     db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD
