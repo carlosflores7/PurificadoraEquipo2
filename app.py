@@ -392,12 +392,15 @@ def editarTarjeta(id):
 
 @app.route('/Tarjetas/agregandoTarjeta', methods=['post'])
 def agregandoTarjeta():
-    t = Tarjetas()
-    t.Empleado_idEmpleado = request.form['empleado']
-    t.numero_tarjeta = request.form['numero']
-    t.banco = request.form['banco']
-    t.insertar()
-    flash('¡La tarjeta se ha agregado!')
+    try:
+        t = Tarjetas()
+        t.Empleado_idEmpleado = request.form['empleado']
+        t.numero_tarjeta = request.form['numero']
+        t.banco = request.form['banco']
+        t.insertar()
+        flash('¡La tarjeta se ha agregado!')
+    except:
+        flash('Fallo al guardar la tarjeta')
     return redirect(url_for('agregarTarjeta'))
 
 @app.route('/Tarjetas/editandoTarjeta', methods=['post'])

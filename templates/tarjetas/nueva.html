@@ -2,11 +2,11 @@
 {% block contenido %}
     {{super()}}
      <h1 class="bg-primary text-center">Registro de Tarjetas</h1>
-    <form action="/Tarjetas/agregandoTarjeta" method="post">
+    <form action="/Tarjetas/agregandoTarjeta" method="post" onsubmit="return validar(this)">
          <div>
             <label>Empleado</label>
             <select name="empleado" class="form-control form-control-lg" >
-                <option value="1">Selecciona un empleado</option>
+                <option value="opcion">Selecciona un empleado</option>
                 {% for e in empleado %}
                     <option value="{{e.idEmpleado}}">{{e.usuario.nombre}}</option>
                 {% endfor %}
@@ -21,7 +21,7 @@
         <div>
             <label>Banco</label>
             <select name="banco" class="form-control form-control-lg" >
-                <option value="1">Selecciona un banco</option>
+                <option value="opcion">Selecciona un banco</option>
                 <option value="BBVA">BBVA</option>
                 <option value="BANAMEX">BANAMEX</option>
             </select>
@@ -32,9 +32,13 @@
             Registrar
 	    </button>
     </form>
+<br>
+<div id="notificaciones" style="width: 400px; margin: 0 auto; background-color: brown; color: white;">
+
+</div>
 {% endblock %}
 
 {% block scripts %}
 {{super()}}
-
+  <script src="{{url_for('static',filename='js/tarjetas.js')}}"></script>
 {% endblock %}
