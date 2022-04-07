@@ -9,7 +9,7 @@ import json
 
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -49,10 +49,10 @@ def cargar_usuario(id):
 
 @app.route('/Usuarios/nuevo')
 def nuevoUsuario():
-    if current_user.is_authenticated and not current_user.is_admin():
-        abort(404)
-    else:
+    if current_user.is_authenticated and current_user.is_admin():
         return render_template('usuarios/nuevoUsuario.html')
+    else:
+        abort(404)
 
 @app.route('/Usuarios/agregar',methods=['post'])
 def agregarUsuario():

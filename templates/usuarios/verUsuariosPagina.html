@@ -2,6 +2,21 @@
 {% block contenido %}
 {{super()}}
     <h1>LISTADO DE USUARIOS - PÁGINA {{pagina}}</h1>
+<br>
+<ul class="pagination">
+    <li class="active"><a href="#">Filtro: </a></li>
+    <li><a href="/Usuarios/Pagina/1">Todos</a></li>
+    <li><a href="/Usuarios/verUsuarios?tipo=Administrador">Administrador</a></li>
+    <li><a href="/Usuarios/verUsuarios?tipo=Vendedor">Vendedor</a></li>
+    <li><a href="/Usuarios/verUsuarios?tipo=Cliente">Cliente</a></li>
+</ul>
+<br>
+
+<form action="/Usuarios/verUsuarios" method="get">
+    Buscar por nombre: <input type="text" name="nombre">
+    <input type="submit" value="Buscar">
+</form>
+<br>
     <div class="table-responsive">
     <table class="table">
         <thead>
@@ -32,7 +47,6 @@
         {% endfor %}
     </table>
     </div>
-    <br>
 
     <ul class="pagination">
     {% for page in usuarios.iter_pages() %}
