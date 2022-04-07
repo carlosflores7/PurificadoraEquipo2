@@ -14,7 +14,15 @@
         </div>
         <div class="form-group">
             <label for="turno">Turno:</label>
-            <input class="form-control form-control-lg" type="text" name="turno" maxlength="45"  placeholder="Turno" value="{{e.turno}}" required>
+            <select name="turno" class="form-control">
+                {% if e.turno == 'Matutino' %}
+                    <option selected>Matutino</option>
+                    <option>Vespertino</option>
+                {% else %}
+                    <option>Matutino</option>
+                    <option selected>Vespertino</option>
+                {% endif%}
+            </select>
         </div>
         <div class="form-group">
             <label for="nss">NSS:</label>
