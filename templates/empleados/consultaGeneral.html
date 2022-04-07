@@ -51,7 +51,7 @@
             {% if page == pagina %}
                 <li class="active"><a href="#">{{page}}</a></li>
             {% else %}
-                <li><a href="{{url_for('usuariosPagina', pagina=page)}}">{{ page }}</a></li>
+                <li><a href="{{url_for('consultarEmpleados', pagina=page)}}">{{ page }}</a></li>
             {% endif %}
         {% else %}
         <li><a href="#">...</a></li>
