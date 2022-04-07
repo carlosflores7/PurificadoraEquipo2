@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from flask import Flask,render_template,request,redirect,url_for,flash,session,abort
 from flask_bootstrap import Bootstrap
-from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas
+from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
 
@@ -424,6 +424,81 @@ def eliminarTarjetas(id):
 
 #FIN DEL CRUD TARJETAS
 
+#INICIA CRUD DE EMPLEADOS
+
+@app.route("/Empleados/nuevo")
+def nuevoEmpleado():
+    usuarios = Usuario()
+    puestos = Puesto()
+    return render_template('empleados/nuevoEmpleado.html', usuarios = usuarios.consultaTipo('Empleado'), puestos=puestos.consultaGeneral())
+
+@app.route('/Empleados/agregar',methods=['post'])
+def agregarEmpleado():
+    try:
+        empleado = Empleado()
+        empleado.tipoEmpleado = 'A'
+        empleado.salario_por_dia = request.form['salario']
+        empleado.turno = request.form['turno']
+        empleado.nss = request.form['nss']
+        empleado.Usuarios_idUsuario = request.form['usuario']
+        empleado.puestos_idPuesto = request.form['puesto']
+        empleado.insertar()
+        flash('¡ Empleado registrado con éxito !')
+    except:
+        flash('¡ Error al agregar al empleado !')
+    return redirect(url_for('nuevoEmpleado'))
+
+@app.route('/Empleados/Pagina/<int:pagina>')
+def consultarEmpleados(pagina):
+    empleados = Empleado()
+    return render_template('/empleados/consultaGeneral.html', empleados = empleados.paginar(pagina), pagina=pagina)
+
+@app.route('/Empleados/verEmpleados')
+def verEmpleados():
+    empleados = Empleado()
+    tipo = request.args.get('tipo')
+    if request.args.get('nombre') == None:
+        return render_template('/empleados/consulta2.html', empleados = empleados.consultaGeneral(), tipo=tipo)
+    else:
+        return render_template('/empleados/consulta2.html', empleados=empleados.consultaGeneral(),nombre=request.args.get('nombre'))
+
+@app.route('/Empleados/<int:id>')
+def consultaIndividualEmpleado(id):
+    empleados = Empleado()
+    puestos = Puesto()
+    return render_template('/empleados/consultaIndividual.html', e = empleados.consultaIndividual(id), puestos=puestos.consultaGeneral())
+
+@app.route('/Empleados/editar',methods=['post'])
+def editarEmpleado():
+    try:
+        empleado = Empleado()
+        empleado.idEmpleado = request.form['ID']
+        empleado.tipoEmpleado = request.form['estatus']
+        empleado.salario_por_dia = request.form['salario']
+        empleado.turno = request.form['turno']
+        empleado.nss = request.form['nss']
+        empleado.puestos_idPuesto = request.form['puesto']
+        empleado.editar()
+        flash('¡ Empleado editado con éxito !')
+    except:
+        flash('¡ Error al editar al empleado !')
+    return redirect(url_for('consultarEmpleados', pagina=1))
+
+@app.route('/Empleados/eliminar/<int:id>')
+@login_required
+def eliminarEmpleado(id):
+    if current_user.is_authenticated and current_user.is_admin():
+        try:
+            empleado = Empleado()
+            empleado.eliminacionLogica(id)
+            flash('Empleado eliminado de su puesto')
+        except:
+            flash('Error al eliminar empleado')
+        return redirect(url_for('consultarEmpleados', pagina=1))
+    else:
+        abort(404)
+
+#TERMINA CRUD DE EMPLEADOS
 if __name__=='__main__':
     db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD
     app.run(debug=True)

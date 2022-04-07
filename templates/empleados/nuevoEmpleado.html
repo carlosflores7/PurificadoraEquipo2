@@ -1,0 +1,51 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1 class="bg-primary text-center">Registro de Empleados</h1>
+
+    <form action="/Empleados/agregar" method="post" onsubmit="return validar(this)">
+        <div class="form-group">
+            <label for="usuario">Usuario:</label>
+            <select name='usuario' class="form-control">
+                {% for u in usuarios %}
+                <option value="{{u.idUsuario}}">{{u.nombre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="nombre">Salario por día:</label>
+            <input class="form-control form-control-lg" type="text" name="salario" maxlength="45"  placeholder="Salario por día" required>
+        </div>
+        <div class="form-group">
+            <label for="turno">Turno:</label>
+            <input class="form-control form-control-lg" type="text" name="turno" maxlength="45"  placeholder="Turno" required>
+        </div>
+        <div class="form-group">
+            <label for="nss">NSS:</label>
+            <input class="form-control form-control-lg" type="text" name="nss" maxlength="11"  placeholder="NSS" required>
+        </div>
+        <label for="puesto">Puesto:</label>
+            <select name='puesto' class="form-control">
+                {% for p in puestos %}
+                <option value="{{p.idPuesto}}">{{p.nombre}}</option>
+                {% endfor %}
+            </select>
+        <br>
+        <button type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Registrar
+        </button>
+        <a href="/Usuarios/iniciarSesion" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+        </a>
+    </form>
+<div id="notificaciones">
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+    <script src="{{url_for('static',filename='js/empleados.js')}}"></script>
+{% endblock %}

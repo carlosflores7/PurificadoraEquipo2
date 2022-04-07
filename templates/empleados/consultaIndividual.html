@@ -1,0 +1,69 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1 class="bg-primary text-center">Empleado "{{e.usuario.nombre}}"</h1>
+
+    <form action="/Empleados/editar" method="post" onsubmit="return validar(this)">
+        <div class="form-group">
+            <label for="ID">ID:</label>
+            <input class="form-control form-control-lg" type="text" name="ID" maxlength="45" value="{{e.idEmpleado}}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="nombre">Salario por día:</label>
+            <input class="form-control form-control-lg" type="text" name="salario" maxlength="45"  placeholder="Salario por día" value="{{e.salario_por_dia}}" required>
+        </div>
+        <div class="form-group">
+            <label for="turno">Turno:</label>
+            <input class="form-control form-control-lg" type="text" name="turno" maxlength="45"  placeholder="Turno" value="{{e.turno}}" required>
+        </div>
+        <div class="form-group">
+            <label for="nss">NSS:</label>
+            <input class="form-control form-control-lg" type="text" name="nss" maxlength="11"  placeholder="NSS" value="{{e.nss}}" required>
+        </div>
+        <div class="form-group">
+            <label for="puesto">Puesto:</label>
+            <select name='puesto' class="form-control">
+                {% for p in puestos %}
+                    {% if e.puesto.nombre == p.nombre %}
+                        <option value="{{p.idPuesto}}" selected>{{p.nombre}}</option>
+                    {% else %}
+                        <option value="{{p.idPuesto}}">{{p.nombre}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="estatus">Estatus:</label>
+            <select name='estatus' class="form-control">
+                {% if e.tipoEmpleado == 'A' %}
+                    <option value="A" selected>Activo</option>
+                    <option value="I">Inactivo</option>
+                {% else %}
+                    <option value="A">Activo</option>
+                    <option value="I" selected>Inactivo</option>
+                {% endif %}
+            </select>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Actualizar
+        </button>
+        <a href="/Empleados/Pagina/1" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+        </a>
+        <a href="/Empleados/eliminar/{{e.idEmpleado}}" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon glyphicon-remove"></span>
+            Dejar sin puesto
+        </a>
+    </form>
+<div id="notificaciones">
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+    <script src="{{url_for('static',filename='js/empleados.js')}}"></script>
+{% endblock %}

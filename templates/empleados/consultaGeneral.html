@@ -1,18 +1,17 @@
 {% extends 'comunes/base.html' %}
 {% block contenido %}
 {{super()}}
-    <h1>LISTADO DE USUARIOS - PÁGINA {{pagina}}</h1>
+    <h1>LISTADO DE EMPLEADOS - PÁGINA {{pagina}}</h1>
 <br>
 <ul class="pagination">
     <li class="active"><a href="#">Filtro: </a></li>
-    <li><a href="/Usuarios/Pagina/1">Todos</a></li>
-    <li><a href="/Usuarios/verUsuarios?tipo=Administrador">Administrador</a></li>
-    <li><a href="/Usuarios/verUsuarios?tipo=Empleado">Empleado</a></li>
-    <li><a href="/Usuarios/verUsuarios?tipo=Cliente">Cliente</a></li>
+    <li><a href="/Empleados/Pagina/1">Todos</a></li>
+    <li><a href="/Empleados/verEmpleados?tipo=Llenador">Llenador</a></li>
+    <li><a href="/Empleados/verEmpleados?tipo=Repartidor">Repartidor</a></li>
 </ul>
 <br>
 
-<form action="/Usuarios/verUsuarios" method="get">
+<form action="/Empleados/verEmpleados" method="get">
     Buscar por nombre: <input type="text" name="nombre">
     <input type="submit" value="Buscar">
 </form>
@@ -21,25 +20,23 @@
     <table class="table">
         <thead>
             <th>ID</th>
-            <th>NOMBRE COMPLETO</th>
-            <th>EMAIL</th>
-            <th>TIPO</th>
-            <th>ESTATUS</th>
-            <th>VER</th>
+            <th>Nombre</th>
+            <th>Estatus</th>
+            <th>Puesto</th>
+            <th>Ver</th>
         </thead>
-        {% for u in usuarios.items %}
+        {% for e in empleados.items %}
             <tr>
-                <td>{{u.idUsuario}}</td>
-                <td>{{u.nombre}}</td>
-                <td>{{u.correo}}</td>
-                <td>{{u.tipo}}</td>
-                {% if u.estatus=='1' %}
+                <td>{{e.idEmpleado}}</td>
+                <td>{{e.usuario.nombre}}</td>
+                {% if e.tipoEmpleado=='A' %}
                 <td>Activo</td>
                 {% else %}
                 <td>Inactivo</td>
                 {% endif %}
+                <td>{{e.puesto.nombre}}</td>
                     <td>
-                        <a href="/Usuarios/{{u.idUsuario}}">
+                        <a href="/Empleados/{{e.idEmpleado}}">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </a>
                     </td>
@@ -49,7 +46,7 @@
     </div>
 
     <ul class="pagination">
-    {% for page in usuarios.iter_pages() %}
+    {% for page in empleados.iter_pages() %}
         {% if page %}
             {% if page == pagina %}
                 <li class="active"><a href="#">{{page}}</a></li>

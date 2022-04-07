@@ -218,6 +218,9 @@ class Puesto(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def consultaGeneral(self):
+        return self.query.all()
+
 class Empleado(db.Model):
     __tablename__='Empleado'
     idEmpleado = Column(Integer,primary_key=True)
@@ -239,6 +242,19 @@ class Empleado(db.Model):
 
     def consultaIndividual(self, id):
         return self.query.get(id)
+
+    def paginar(self,pagina):
+        return self.query.paginate(per_page=4,page=pagina,error_out=True)
+
+    def editar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminacionLogica(self,id):
+        empleado = self.consultaIndividual(id)
+        empleado.tipoEmpleado = 'I'
+        empleado.editar()
+
 class Tarjetas(db.Model):
     __tablename__='tarjetas'
     idTarjeta = Column(Integer, primary_key=True)

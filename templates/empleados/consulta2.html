@@ -1,0 +1,72 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+    <h1>LISTADO DE EMPLEADOS</h1>
+<br>
+<ul class="pagination">
+    <li class="active"><a href="#">Filtro: </a></li>
+    <li><a href="/Empleados/Pagina/1">Todos</a></li>
+    <li><a href="/Empleados/verEmpleados?tipo=Llenador">Llenador</a></li>
+    <li><a href="/Empleados/verEmpleados?tipo=Repartidor">Repartidor</a></li>
+</ul>
+<br>
+
+<form action="/Empleados/verEmpleados" method="get">
+    Buscar por nombre: <input type="text" name="nombre">
+    <input type="submit" value="Buscar">
+</form>
+<br>
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Estatus</th>
+            <th>Puesto</th>
+            <th>Ver</th>
+        </thead>
+        {% for e in empleados %}
+            {% if e.puesto.nombre == tipo %}
+            <tr>
+                <td>{{e.idEmpleado}}</td>
+                <td>{{e.usuario.nombre}}</td>
+                {% if e.tipoEmpleado=='A' %}
+                <td>Activo</td>
+                {% else %}
+                <td>Inactivo</td>
+                {% endif %}
+                <td>{{e.puesto.nombre}}</td>
+                    <td>
+                        <a href="/Empleados/{{e.idEmpleado}}">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </a>
+                    </td>
+            </tr>
+            {% endif %}
+            {% if e.usuario.nombre == nombre %}
+            <tr>
+                <td>{{e.idEmpleado}}</td>
+                <td>{{e.usuario.nombre}}</td>
+                {% if e.tipoEmpleado=='A' %}
+                <td>Activo</td>
+                {% else %}
+                <td>Inactivo</td>
+                {% endif %}
+                <td>{{e.puesto.nombre}}</td>
+                    <td>
+                        <a href="/Empleados/{{e.idEmpleado}}">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </a>
+                    </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    </div>
+
+    <br>
+    <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+{% endblock %}

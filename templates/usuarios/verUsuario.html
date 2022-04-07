@@ -28,15 +28,15 @@
             <label>Tipo:</label>
             {% if usuario.tipo == 'Administrador' %}
             <label class="radio-inline"><input type="radio" name="tipo" value="Administrador" checked>Administrador</label>
-            <label class="radio-inline"><input type="radio" name="tipo" value="Vendedor">Vendedor</label>
+            <label class="radio-inline"><input type="radio" name="tipo" value="Empleado">Empleado</label>
             <label class="radio-inline"><input type="radio" name="tipo" value="Cliente">Cliente</label>
-            {% elif usuario.tipo == 'Vendedor' %}
+            {% elif usuario.tipo == 'Empleado' %}
             <label class="radio-inline"><input type="radio" name="tipo" value="Administrador">Administrador</label>
-            <label class="radio-inline"><input type="radio" name="tipo" value="Vendedor" checked>Vendedor</label>
+            <label class="radio-inline"><input type="radio" name="tipo" value="Empleado" checked>Empleado</label>
             <label class="radio-inline"><input type="radio" name="tipo" value="Cliente">Cliente</label>
             {% elif usuario.tipo == 'Cliente' %}
             <label class="radio-inline"><input type="radio" name="tipo" value="Administrador">Administrador</label>
-            <label class="radio-inline"><input type="radio" name="tipo" value="Vendedor">Vendedor</label>
+            <label class="radio-inline"><input type="radio" name="tipo" value="Empleado">Empleado</label>
             <label class="radio-inline"><input type="radio" name="tipo" value="Cliente" checked>Cliente</label>
             {% endif %}
         </div>
