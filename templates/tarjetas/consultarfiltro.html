@@ -1,14 +1,14 @@
 {% extends 'comunes/base.html' %}
 {% block contenido %}
     {{super()}}
-    <h1>Consultar Tarjetas</h1>
+    <h1>Consultar Vehiculos</h1>
 
-     <form action="/Tarjetas/consultar/1" method="get">
-        Buscar por numero de tarjeta:
+     <form action="/tarjetas/consultar/1" method="get">
+        Buscar por placas:
          <input class="form-control form-control-lg" type="text" name="filtro">
          <br>
          <input class="btn btn-success" type="submit" value="Buscar" required>
-          <a href="/" id="regresar" type="submit" class="btn btn-warning mb-3">
+          <a href="{{url_for('consultarTarjetas', pagina=1)}}" id="regresar" type="submit" class="btn btn-warning mb-3">
             Regresar
         </a>
     </form>
@@ -23,7 +23,7 @@
                 <th>EDITAR</th>
                 <th>ELIMINAR</th>
             </thead>
-            {% for t in tarjetas.items %}
+            {% for t in tarjeta_sin_paginacion %}
             <tr>
                 <td>{{t.idTarjeta}}</td>
                 <td>{{t.Empleado_idEmpleado}}</td>
@@ -45,21 +45,8 @@
             {% endfor %}
         </table>
     </div>
- <div>
-    <ul class="pagination">
-        {% for page in tarjetas.iter_pages() %}
-            {% if page %}
-                {% if page == pagina %}
-                    <li class="active"><a href="#">{{page}}</a></li>
-                {% else %}
-                    <li><a href="{{url_for('consultarTarjetas', pagina=page)}}">{{ page }}</a></li>
-                {% endif %}
-            {% else %}
-            <li><a href="#">...</a></li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-    </div>
+    <br>
+
 <div id="notificaciones">
 
 </div>

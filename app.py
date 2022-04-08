@@ -9,7 +9,7 @@ import json
 
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -208,9 +208,6 @@ def consultarVehiculos(pagina):
             return render_template('vehiculo/consultar.html', vehiculo = v.paginar(pagina), pagina = pagina)
     else:
         abort(404)
-
-
-
 @app.route('/vehiculo/agregandoVehiculo', methods=['post'])
 def agregandoVehiculo():
     v = Vehiculo()
@@ -374,11 +371,18 @@ def agregarTarjeta():
     e = Empleado()
     return render_template('/tarjetas/nueva.html', empleado = e.consultaGeneral())
 
-@app.route('/Tarjetas/consultar')
-def consultarTarjetas():
-    t = Tarjetas()
-    return render_template('/tarjetas/consulta.html', tarjetas = t.consultaGeneral())
 
+@app.route('/Tarjetas/consultar/<int:pagina>')
+@login_required
+def consultarTarjetas(pagina):
+    if current_user.is_admin():
+        t = Tarjetas()
+        if request.args.get('filtro'):
+            return render_template('tarjetas/consultarfiltro.html',tarjeta_sin_paginacion=t.filtrar(request.args.get('filtro')), pagina = pagina)
+        else:
+            return render_template('tarjetas/consulta.html', tarjetas = t.paginar(pagina), pagina = pagina)
+    else:
+        abort(404)
 @app.route('/Tarjetas/editar/<int:id>')
 def editarTarjeta(id):
     t = Tarjetas()
@@ -401,7 +405,7 @@ def agregandoTarjeta():
         flash('¡La tarjeta se ha agregado!')
     except:
         flash('Fallo al guardar la tarjeta')
-    return redirect(url_for('agregarTarjeta'))
+    return redirect(url_for('consultarTarjetas', pagina=1))
 
 @app.route('/Tarjetas/editandoTarjeta', methods=['post'])
 def editandoTarjeta():
@@ -412,7 +416,7 @@ def editandoTarjeta():
     t.banco = request.form['banco']
     t.actualizar()
     flash('¡La tarjeta se actualizo!')
-    return redirect(url_for('consultarTarjetas'))
+    return redirect(url_for('consultarTarjetas', pagina=1))
 
 
 @app.route("/Tarjetas/eliminar/<int:id>")
@@ -420,7 +424,7 @@ def eliminarTarjetas(id):
     t = Tarjetas()
     t.eliminar(id)
     flash('¡La tarjeta se elimino!')
-    return redirect(url_for('consultarTarjetas'))
+    return redirect(url_for('consultarTarjetas', pagina=1))
 
 #FIN DEL CRUD TARJETAS
 

@@ -202,10 +202,6 @@ class Promociones(db.Model):
     def paginacion(self,pagina):
         return self.query.paginate(per_page=3,page=pagina,error_out=True)
 
-
-
-
-
 class Puesto(db.Model):
     __tablename__='puestos'
     idPuesto = Column(Integer,primary_key=True)
@@ -281,3 +277,9 @@ class Tarjetas(db.Model):
         obj = self.consultaIndividual(id)
         db.session.delete(obj)
         db.session.commit()
+
+    def filtrar(self, filtro):
+        return self.query.filter(Tarjetas.numero_tarjeta.like('%' + filtro + '%'))
+
+    def paginar(self, pagina):
+        return self.query.paginate(per_page=4, page=pagina, error_out=True)

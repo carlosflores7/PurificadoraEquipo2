@@ -18,7 +18,7 @@
         <br>
         <div>
             <label>Numero de Tarjeta</label>
-            <input type="text" maxlength="16" name="numero" value="{{tarjeta.numero_tarjeta}}" required class="form-control form-control-lg" >
+            <input type="text" maxlength="19" name="numero" value="{{tarjeta.numero_tarjeta}}" required class="form-control form-control-lg" >
         </div>
         <br>
         <div>
@@ -38,6 +38,9 @@
             <span class="glyphicon glyphicon-floppy-disk"></span>
             Actualizar
 	    </button>
+        <a href="{{url_for('consultarTarjetas', pagina=1)}}" id="regresar" type="submit" class="btn btn-warning mb-3">
+            Regresar
+        </a>
     </form>
 {% endblock %}
 
