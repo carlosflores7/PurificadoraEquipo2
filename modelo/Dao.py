@@ -315,3 +315,54 @@ class Repartidor(db.Model):
         obj = self.consultaIndividual(id)
         db.session.delete(obj)
         db.session.commit()
+
+##Chilcho
+###Ventas_Detalle###
+class VentasDetalle(db.Model):
+    _tablename_ = 'ventas_detalle'
+    idventas_detalle = Column(Integer, primary_key=True)
+    Garrafones_idGarrafon = Column(Integer, ForeignKey('garrafones.idGarrafon'))
+    cantidad = Column(String(45), nullable=False)
+    precio_venta = Column(String(45), nullable=False)
+    prestado = Column(String(2), nullable=False)
+    Ventas_idVenta = Column(Integer, ForeignKey('ventas.idVenta'))
+    g = relationship ('Garrafones', lazy='select')
+    v = relationship('Ventas', lazy='select')
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaIndividual(self, id):
+        return self.query.get(id)
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()
+
+    def paginacion(self,pagina):
+        return self.query.paginate(per_page=2,page=pagina,error_out=True)
+
+    def filtro(self, filtro):
+        return self.query.filter(VentasDetalle.cantidad.like('%'+filtro+'%'))
+
+###Ventas###
+class Ventas(db.Model):
+    _tablename_ = 'ventas'
+    idVenta = Column(Integer, primary_key=True)
+    precio_total = Column(Float, nullable=False)
+    fecha = Column(Date, nullable=False)
+    estatus = Column(String(45), nullable=False)
+    Promociones_idpromocion = Column(Integer, ForeignKey('Promociones.idpromocion'))
+    Repartidor_idRepartidor = Column(Integer, ForeignKey('Repartidor.idRepartidor'))
+
+    def consultaGeneral(self):
+        return self.query.all()

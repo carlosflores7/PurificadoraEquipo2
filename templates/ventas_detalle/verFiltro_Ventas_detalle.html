@@ -1,0 +1,62 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+    <h1>Lista Ventas Detalle</h1>
+
+    <form action="/Ventas_detalle/mostrar/1" method="get">
+        Buscar por codigo:
+         <input class="form-control form-control-lg" type="text" name="filtro">
+         <br>
+         <input class="btn btn-success" type="submit" value="Buscar" required>
+        
+    </form>
+    
+    
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>ID_Garrafon</th>
+            <th>cantidad</th>
+            <th>precio_venta</th>
+            <th>prestado</th>
+            <th>ID_Venta</th>
+            <th>Ver</th>
+            <th>Eliminar</th>
+        </thead>
+        #{% for i in dventas_sin_paginacion %}
+            <tr>
+                <td>{{i.idventas_detalle}}</td>
+                <td>{{i.Garrafones_idGarrafon}}</td>
+                <td>{{i.cantidad}}</td>
+                <td>{{i.precio_venta}}</td>
+                <td>{{i.prestado}}</td>
+                <td>{{i.Ventas_idVenta}}</td>
+              
+                    <td>
+                        <a href="/Ventas_detalle/mostrar/{{i.idventas_detalle}}">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </a>
+                    </td>
+
+
+                    <td>
+                        <a href="/Ventas_detalle/eliminar/{{i.idventas_detalle}}">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+    
+    
+ <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+    
+   
+
+{% endblock %}

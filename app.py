@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from flask import Flask,render_template,request,redirect,url_for,flash,session,abort
 from flask_bootstrap import Bootstrap
-from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor
+from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
 
@@ -568,6 +568,62 @@ def eliminarRepartidor(id):
         abort(404)
 
 #FIN CRUD DE REPARTIDOR
+
+##Inicio del CRUD Ventas_detalle
+
+@app.route('/Ventas_detalle/agregar')
+def agregarVentas_detalle():
+    garrafones = Garrafones()
+    ventas = Ventas()
+    return render_template('/Ventas_detalle/nuevaVenta_detalle.html', garrafones = garrafones.consultaGeneral(), ventas = ventas.consultaGeneral())
+
+@app.route('/Ventas_detalle/agregando', methods=['post'])
+def agregandoVentasDetalle():
+
+        dventas = VentasDetalle()
+
+        dventas.Garrafones_idGarrafon = request.form['garrafones']
+        dventas.cantidad = request.form['cantidad']
+        dventas.precio_venta = request.form['PrecioVenta']
+        dventas.prestado = request.form['prestado']
+        dventas.Ventas_idVenta = request.form['ventas']
+        dventas.insertar()
+
+        flash('¡ El detalle de la venta se ha registrado !')
+
+        return redirect(url_for("agregarVentas_detalle"))
+
+@app.route('/Ventas_detalle/mostrar/<int:pagina>')
+def mostrarVentasDetalle(pagina):
+    dventas = VentasDetalle()
+    if request.args.get('filtro'):
+        return render_template('Ventas_detalle/verFiltro_Ventas_detalle.html', dventas_sin_paginacion=dventas.filtro(request.args.get('filtro')), pagina=pagina)
+    else:
+        return render_template('Ventas_detalle/verVentas_detalles.html', dventas=dventas.paginacion(pagina), pagina=pagina)
+
+
+@app.route('/Ventas_detalle/actualizando', methods=['post'])
+def actualizandoVentas_detalle():
+         dventas = VentasDetalle()
+
+         dventas.idventas_detalle = request.form['id']
+         dventas.cantidad = request.form['cantidad']
+         dventas.precio_venta = request.form['precio_venta']
+         dventas.prestado = request.form['prestado']
+         dventas.actualizar()
+         return redirect(url_for("inicio"))
+
+@app.route("/Ventas_detalle/mostrarIndividual/<int:id>")
+def consultarVentas_DetalleIndividual(id):
+    dventas = VentasDetalle()
+    return render_template('Ventas_detalle/actualizarVenta_detalle.html', dventa = dventas.consultaIndividual(id))
+
+@app.route("/Ventas_detalle/eliminar/<int:id>")
+def eliminarVentas_detalle(id):
+    dventas = VentasDetalle()
+    dventas.eliminar(id)
+    return redirect(url_for("inicio"))
+##Fin del CRUD
 
 
 if __name__=='__main__':
