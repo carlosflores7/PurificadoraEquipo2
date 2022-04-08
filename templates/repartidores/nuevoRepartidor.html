@@ -1,0 +1,48 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1 class="bg-primary text-center">Registro de Repartidores</h1>
+    <form action="/Repartidores/agregar" method="post" onsubmit="return validar(this)">
+        <div class="form-group">
+            <label for="empleado">Empleado:</label>
+            <select name='empleado' class="form-control">
+                {% for e in empleados %}
+                <option value="{{e.idEmpleado}}">{{e.usuario.nombre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="vehiculo">Vehiculo:</label>
+            <select name='vehiculo' class="form-control">
+                {% for v in vehiculos %}
+                <option value="{{v.idVehiculo}}">{{v.idVehiculo}} - {{v.modelo}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="ruta">Ruta:</label>
+            <input class="form-control form-control-lg" type="text" name="ruta" maxlength="45"  placeholder="Ruta" required>
+        </div>
+        <div class="form-group">
+            <label for="folio">Folio de licencia:</label>
+            <input class="form-control form-control-lg" type="text" name="folio" maxlength="7"  placeholder="Folio" required>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Registrar
+        </button>
+        <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+        </a>
+    </form>
+<div id="notificaciones">
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+    <script src="{{url_for('static',filename='js/repartidores.js')}}"></script>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+    <h1>LISTADO DE REPARTIDORES</h1>
+<br>
+<br>
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Vehiculo</th>
+            <th>Ruta</th>
+            <th>Folio de licencia</th>
+            <th>Ver</th>
+        </thead>
+        {% for r in repartidores.items %}
+            <tr>
+                <td>{{r.idRepartidor}}</td>
+                <td>{{r.empleado.usuario.nombre}}</td>
+                <td>{{r.Vehiculo_idVehiculo}}</td>
+                <td>{{r.ruta}}</td>
+                <td>{{r.folio_de_licencia}}</td>
+                <td>
+                    <a href="/Repartidores/{{r.idRepartidor}}">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    <ul class="pagination">
+    {% for page in repartidores.iter_pages() %}
+        {% if page %}
+            {% if page == pagina %}
+                <li class="active"><a href="#">{{page}}</a></li>
+            {% else %}
+                <li><a href="{{url_for('consultarRepartidores', pagina=page)}}">{{ page }}</a></li>
+            {% endif %}
+        {% else %}
+        <li><a href="#">...</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+
+    <br>
+    <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+{% endblock %}

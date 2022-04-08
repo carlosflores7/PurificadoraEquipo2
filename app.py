@@ -3,13 +3,13 @@ from datetime import timedelta
 
 from flask import Flask,render_template,request,redirect,url_for,flash,session,abort
 from flask_bootstrap import Bootstrap
-from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto
+from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
 
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -503,6 +503,73 @@ def eliminarEmpleado(id):
         abort(404)
 
 #TERMINA CRUD DE EMPLEADOS
+
+#INICIA CRUD DE REPARTIDOR
+@app.route('/Repartidores/Pagina/<int:pagina>')
+@login_required
+def consultarRepartidores(pagina):
+    repartidores = Repartidor()
+    return render_template('/repartidores/consultaGeneral.html', repartidores=repartidores.paginar(pagina),pagina=pagina)
+
+@app.route("/Repartidores/nuevo")
+def nuevoRepartidor():
+    empleados = Empleado()
+    vehiculos = Vehiculo()
+    return render_template('repartidores/nuevoRepartidor.html', empleados=empleados.consultaGeneral(),vehiculos=vehiculos.consultaGeneral())
+
+@app.route('/Repartidores/agregar',methods=['post'])
+def agregarRepartidor():
+    try:
+        repartidor = Repartidor()
+        repartidor.Empleado_idEmpleado = request.form['empleado']
+        repartidor.Vehiculo_idVehiculo = request.form['vehiculo']
+        repartidor.ruta = request.form['ruta']
+        repartidor.folio_de_licencia = request.form['folio']
+        repartidor.insertar()
+        flash('¡ Repartidor registrado con éxito !')
+    except:
+        flash('¡ Error al agregar al repartidor !')
+    return redirect(url_for('nuevoRepartidor'))
+
+@app.route('/Repartidores/<int:id>')
+@login_required
+def verRepartidorIndividual(id):
+    repartidores = Repartidor()
+    vehiculos = Vehiculo()
+    return render_template('/repartidores/consultaIndividual.html', r=repartidores.consultaIndividual(id), vehiculos=vehiculos.consultaGeneral())
+
+@app.route('/Repartidores/editar',methods=['post'])
+def editarRepartidor():
+    try:
+        repartidor = Repartidor()
+        repartidor.idRepartidor = request.form['ID']
+        repartidor.Empleado_idEmpleado = request.form['empleado']
+        repartidor.Vehiculo_idVehiculo = request.form['vehiculo']
+        repartidor.ruta = request.form['ruta']
+        repartidor.folio_de_licencia = request.form['folio']
+        repartidor.actualizar()
+        flash('¡ Repartidor actualizado con éxito !')
+    except:
+        flash('¡ Error al actualizar al repartidor !')
+    return redirect(url_for('consultarRepartidores', pagina=1))
+
+@app.route('/Repartidores/eliminar/<int:id>')
+@login_required
+def eliminarRepartidor(id):
+    if current_user.is_authenticated and current_user.is_admin():
+        try:
+            repartidor = Repartidor()
+            repartidor.eliminar(id)
+            flash('Repartidor eliminado con éxito')
+        except:
+            flash('Error al eliminar al repartidor')
+        return redirect(url_for('consultarRepartidores', pagina=1))
+    else:
+        abort(404)
+
+#FIN CRUD DE REPARTIDOR
+
+
 if __name__=='__main__':
     db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD
     app.run(debug=True)

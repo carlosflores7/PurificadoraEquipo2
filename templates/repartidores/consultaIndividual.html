@@ -1,0 +1,56 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1 class="bg-primary text-center">Ver datos de repartidor - {{r.empleado.usuario.nombre}}</h1>
+    <form action="/Repartidores/editar" method="post" onsubmit="return validar(this)">
+        <div class="form-group">
+            <label for="ID">ID:</label>
+            <input class="form-control form-control-lg" type="text" name="ID" readonly value="{{r.idRepartidor}}">
+        </div>
+        <div class="form-group">
+            <label for="empleado">Empleado:</label>
+            <input class="form-control form-control-lg" type="text" name="empleado" maxlength="45" readonly value="{{r.empleado.idEmpleado}}">
+        </div>
+        <div class="form-group">
+            <label for="vehiculo">Vehiculo:</label>
+            <select name='vehiculo' class="form-control">
+                {% for v in vehiculos %}
+                    {% if v.idVehiculo == r.Vehiculo_idVehiculo %}
+                    <option value="{{v.idVehiculo}}" selected>{{v.idVehiculo}} - {{v.modelo}}</option>
+                    {% else %}
+                    <option value="{{v.idVehiculo}}">{{v.idVehiculo}} - {{v.modelo}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="ruta">Ruta:</label>
+            <input class="form-control form-control-lg" type="text" name="ruta" maxlength="45"  placeholder="Ruta" required value="{{r.ruta}}">
+        </div>
+        <div class="form-group">
+            <label for="folio">Folio de licencia:</label>
+            <input class="form-control form-control-lg" type="text" name="folio" maxlength="7"  placeholder="Folio" required value="{{r.folio_de_licencia}}">
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Actualizar
+        </button>
+        <a href="/Repartidores/Pagina/1" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+        </a>
+        <a href="/Repartidores/eliminar/{{r.idRepartidor}}" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon glyphicon-remove"></span>
+            Eliminar
+        </a>
+    </form>
+<div id="notificaciones">
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+    <script src="{{url_for('static',filename='js/repartidores.js')}}"></script>
+{% endblock %}

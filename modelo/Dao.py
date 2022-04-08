@@ -283,3 +283,35 @@ class Tarjetas(db.Model):
 
     def paginar(self, pagina):
         return self.query.paginate(per_page=4, page=pagina, error_out=True)
+    
+class Repartidor(db.Model):
+    __tablename__='Repartidor'
+    idRepartidor = Column(Integer, primary_key=True)
+    Empleado_idEmpleado = Column(Integer,ForeignKey('Empleado.idEmpleado'))
+    Vehiculo_idVehiculo = Column(Integer,ForeignKey('Vehiculo.idVehiculo'))
+    ruta = Column(String(45),nullable=False)
+    folio_de_licencia = Column(Integer,nullable=False)
+    empleado = relationship('Empleado', lazy='select')
+    vehiculo = relationship('Vehiculo', lazy='select')
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaIndividual(self,id):
+        return self.query.get(id)
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def paginar(self,pagina):
+        return self.query.paginate(per_page=2,page=pagina,error_out=True)
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()
