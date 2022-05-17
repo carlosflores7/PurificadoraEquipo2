@@ -84,12 +84,30 @@
 
       {% endif %}
       {% if current_user.is_authenticated and current_user.is_admin() %}
+
+        <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">VENTA_DETALLE
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Ventas_detalle/agregar">Agregar Venta_detalle</a></li>
+          <li><a href="/Ventas_detalle/mostrar/1">Ver Venta_detalle</a></li>
+        </ul>
+      </li>
+
        <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">TARJETAS
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="/Tarjetas/agregar">Agregar tarjeta</a></li>
           <li><a href="/Tarjetas/consultar/1">Ver tarjetas</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">REPARTIDORES
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Repartidores/nuevo">Agregar Repartidor</a></li>
+          <li><a href="/Repartidores/Pagina/1">Ver Repartidores</a></li>
         </ul>
       </li>
       {% endif %}

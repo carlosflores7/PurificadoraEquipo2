@@ -1,0 +1,61 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+<h1 class="bg-primary text-center">Registro Detalle De Ventas</h1>
+<form action="/Ventas_detalle/agregando" method="post">
+
+	<label for="garrafones">Garrafones:</label>
+            <select name='garrafones' class="form-control">
+                {% for g in garrafones %}
+                <option value="{{g.idGarrafon}}">{{g.codigo}}</option>
+                {% endfor %}
+            </select>
+        <br>
+	
+	<div class="form-group">
+		<label for="cantidad">Cantidad:</label>
+		<input type="text" name="cantidad" maxlength="5" class="form-control form-control-lg" required>
+	</div> 
+	<br>
+
+	<div class="form-group">
+		<label for="PrecioVenta">Precio de venta:</label>
+		<input type="text" name="PrecioVenta" maxlength="10" class="form-control form-control-lg" required>
+	</div> 
+
+	<div class = "radio form-control form-control-lg">
+		<label>Prestado:</label>
+		<label class=" radio-inline"><input type="radio" name="prestado" value=1>Si</label>
+		<label class="radio-inline"><input type="radio" name="prestado" value=0>No</label>
+	</div>
+	<br>
+
+	<label for="ventas">Ventas:</label>
+            <select name='ventas' class="form-control">
+                {% for v in ventas %}
+                <option value="{{v.idVenta}}">{{v.estatus}}</option>
+                {% endfor %}
+            </select>
+        <br>
+
+	<button type="submit" class="btn btn-primary mb-3">
+		<span class="glyphicon glyphicon-floppy-disk"></span>
+		Registrar
+	</button>
+
+	
+
+</form>
+ <a href="/Ventas_detalle/mostrar/1" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-rigth"></span>
+            Mostrar
+        </a>
+
+     <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+<div id="notificaciones">
+
+</div>
+{% endblock %}

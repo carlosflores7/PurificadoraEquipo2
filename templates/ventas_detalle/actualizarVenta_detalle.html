@@ -1,0 +1,38 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consulta De Ventas Detalle </h1>
+    <form action="/Ventas_detalle/actualizando" method="post">
+        <div>
+            <label>idventas_detalle</label>
+            <input class="form-control" type="text" name="id" maxlength="10" placeholder="###-###-##" value="{{dventa.idventas_detalle}}" readonly class="form-control form-control-lg">
+        </div>
+        <br>
+        
+        <div>
+            <label>Cantidad</label>
+           <input type="text" name="cantidad" maxlength="2" placeholder="###-###-##" value="{{dventa.cantidad}}" class="form-control form-control-lg">
+        </div>
+        <br>
+        <div>
+            <label>Precio_venta</label>
+           <input type="text" name="precio_venta" maxlength=" " placeholder=" " value="{{dventa.precio_venta}}" class="form-control form-control-lg">
+        </div>
+        <br>
+        <div>
+            <label>Prestado</label>
+            <input type="text" maxlength="2" name="prestado" value="{{dventa.prestado}}" class="form-control form-control-lg">
+        </div>
+        <br>
+       
+        <div>
+            <button class="btn btn-success" type="submit">Actualizar</button>
+        </div>
+
+        
+    </form>
+     <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+{% endblock %}
