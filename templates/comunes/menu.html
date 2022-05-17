@@ -72,6 +72,16 @@
           <li><a href="/Empleados/Pagina/1">Ver empleados</a></li>
         </ul>
       </li>
+
+       <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">NOMINAS
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Nomina/nueva">Registrar Nomina</a></li>
+          <li><a href="/Nomina/consultar/1">Ver Nominas</a></li>
+        </ul>
+      </li>
+
       {% endif %}
       {% if current_user.is_authenticated and current_user.is_admin() %}
        <li class="dropdown">

@@ -283,3 +283,37 @@ class Tarjetas(db.Model):
 
     def paginar(self, pagina):
         return self.query.paginate(per_page=4, page=pagina, error_out=True)
+
+class Nomina(db.Model):
+    __tablename__='nominas'
+    idnomina = Column(Integer, primary_key=True)
+    Empleado_idEmpleado = Column(Integer,ForeignKey('Empleado.idEmpleado'))
+    salario_total = Column(Integer, nullable=False)
+    dias_trabajados = Column(Integer, nullable=False)
+    comisiones = Column(Integer, nullable=False)
+    empleado=relationship('Empleado', lazy='select')
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaIndividual(self, id):
+        return self.query.get(id)
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()
+
+    def paginar(self, pagina):
+        return self.query.paginate(per_page=4, page=pagina, error_out=True)
+
+    def filtrar(self, filtro):
+        return self.query.filter(Nomina.numero_tarjeta.like('%' + filtro + '%'))

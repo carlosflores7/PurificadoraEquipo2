@@ -1,0 +1,112 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+     <h1 class="bg-primary text-center">Registro de Nominas</h1>
+    <form action="/Nomina/actualizar" method="post">
+        <div>
+            <label>ID Nomina</label>
+            <input type="text" name="idNomina" value="{{nomina.idnomina}}" readonly required class="form-control form-control-lg" >
+        </div>
+        <br>
+        <div>
+            <label>ID Empleado</label>
+            <input type="text" name="idEmpleado" value="{{nomina.Empleado_idEmpleado}}" readonly required class="form-control form-control-lg" >
+        </div>
+        <br>
+        <div>
+            <label>Nombre Empleado</label>
+            <input type="text" value="{{usuario.nombre}}" readonly required class="form-control form-control-lg" >
+        </div>
+        <br>
+        <div>
+            <label>Salario Total</label>
+            <input type="text" maxlength="19" name="salario" value="{{nomina.salario_total}}" required class="form-control form-control-lg">
+        </div>
+        <br>
+        <div>
+            <label>Dias trabajados</label>
+            <select name="dias_trabajados" class="form-control form-control-lg" >
+                {% if nomina.dias_trabajados == 1 %}
+                <option value="1" selected>1</option>
+                <option value="2" >2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                {% elif nomina.dias_trabajados == 2 %}
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                 {% elif nomina.dias_trabajados == 3 %}
+                <option value="1">1</option>
+                <option value="2" >2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                 {% elif nomina.dias_trabajados == 4 %}
+                <option value="1">1</option>
+                <option value="2" >2</option>
+                <option value="3">3</option>
+                <option value="4" selected>4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                 {% elif nomina.dias_trabajados == 5 %}
+                <option value="1">1</option>
+                <option value="2" >2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5" selected>5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                 {% elif nomina.dias_trabajados == 6 %}
+                <option value="1">1</option>
+                <option value="2" >2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5" >5</option>
+                <option value="6" selected>6</option>
+                <option value="7">7</option>
+                  {% elif nomina.dias_trabajados == 7 %}
+                <option value="1">1</option>
+                <option value="2" >2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5" >5</option>
+                <option value="6" >6</option>
+                <option value="7" selected>7</option>
+                {% endif %}
+            </select>
+        </div>
+        <br>
+        <div>
+            <label>Comisiones</label>
+            <input type="text" maxlength="10" name="comisiones" value="{{nomina.comisiones}}" required class="form-control form-control-lg">
+        </div>
+        <br>
+        <button id="registrar" type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Actualizar
+	    </button>
+        <a href="/" id="regresar" type="submit" class="btn btn-warning mb-3">
+            Regresar
+        </a>
+
+    </form>
+<br>
+<div id="notificaciones" style="width: 400px; margin: 0 auto; background-color: brown; color: white;">
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+
+{% endblock %}

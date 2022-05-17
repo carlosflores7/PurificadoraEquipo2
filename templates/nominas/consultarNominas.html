@@ -1,0 +1,67 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consultar Nominas</h1>
+    <a href="/" id="regresar" type="submit" class="btn btn-warning mb-3">Regresar</a>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>IDNOMINA</th>
+                <th>IDEMPLEADO</th>
+                <th>SALARIO TOTAL</th>
+                <th>DIAS TRABAJADOS</th>
+                <th>COMISIONES</th>
+                <th>EDITAR</th>
+                <th>ELIMINAR</th>
+            </thead>
+            {% for n in nomina.items %}
+            <tr>
+                <td>{{n.idnomina}}</td>
+
+                {% for e in empleado %}
+
+                {% if e.idEmpleado == n.Empleado_idEmpleado %}
+                <td>{{n.empleado.usuario.nombre}}</td>
+                {% endif %}
+
+                {% endfor %}
+
+                <td>{{n.salario_total}}</td>
+                <td>{{n.dias_trabajados}}</td>
+                <td>{{n.comisiones}}</td>
+                 <td>
+                    <a href="/Nomina/{{n.idnomina}}">
+                           <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+                </td>
+                <td>
+                    <a href="/Nomina/eliminar/{{n.idnomina}}">
+                          <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+ <div>
+    <ul class="pagination">
+        {% for page in nomina.iter_pages() %}
+            {% if page %}
+                {% if page == pagina %}
+                    <li class="active"><a href="#">{{page}}</a></li>
+                {% else %}
+                    <li><a href="{{url_for('consultarNomina', pagina=page)}}">{{ page }}</a></li>
+                {% endif %}
+            {% else %}
+            <li><a href="#">...</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    </div>
+<div id="notificaciones">
+
+</div>
+{% endblock %}

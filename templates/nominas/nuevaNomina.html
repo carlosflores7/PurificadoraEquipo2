@@ -1,0 +1,57 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+     <h1 class="bg-primary text-center">Registro de Nominas</h1>
+    <form action="/Nomina/agregar" method="post">
+         <div>
+            <label>Empleado</label>
+            <select name="empleado" class="form-control form-control-lg" >
+                <option value="opcion">Selecciona un empleado</option>
+                {% for e in empleado %}
+                    <option value="{{e.idEmpleado}}">{{e.usuario.nombre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <div>
+            <label>Salario Total</label>
+            <input type="text" maxlength="19" name="salario" required class="form-control form-control-lg">
+        </div>
+        <br>
+        <div>
+            <label>Dias trabajados</label>
+            <select name="dias_trabajados" class="form-control form-control-lg" >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </div>
+        <br>
+        <div>
+            <label>Comisiones</label>
+            <input type="text" maxlength="10" name="comisiones" required class="form-control form-control-lg">
+        </div>
+        <br>
+        <button id="registrar" type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Registrar
+	    </button>
+        <a href="/" id="regresar" type="submit" class="btn btn-warning mb-3">
+            Regresar
+        </a>
+
+    </form>
+<br>
+<div id="notificaciones" style="width: 400px; margin: 0 auto; background-color: brown; color: white;">
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+
+{% endblock %}
