@@ -3,13 +3,13 @@ from datetime import timedelta
 
 from flask import Flask,render_template,request,redirect,url_for,flash,session,abort
 from flask_bootstrap import Bootstrap
-from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas
+from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas,Factura,Cliente
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
 
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -624,6 +624,76 @@ def eliminarVentas_detalle(id):
     dventas.eliminar(id)
     return redirect(url_for("inicio"))
 ##Fin del CRUD
+
+##Inicio del CRUD FACTURAS
+
+#NUEVA FACTURA
+@app.route('/Factura/nueva')
+def agregarFactura():
+    cliente = Cliente()
+    ventas = Ventas()
+
+    return render_template('/Factura/NuevoFactura.html', cliente = cliente.consultaGeneral(), ventas = ventas.consultaGeneral())
+
+
+
+@app.route('/Factura/agregando', methods=['post'])
+def agregarFacturas():
+    fac = Factura()
+    fac.fecha = request.form['Fecha']
+    fac.Cliente_idCliente = request.form['Cliente']
+    fac.Ventas_idVenta = request.form['Ventas']
+    fac.insertar()
+    flash('¡La factura se ha registrado!')
+
+    return redirect(url_for("agregarFactura"))
+
+
+#MOSTRAR
+@app.route('/Factura/consultar/<int:pagina>')
+@login_required
+def consultarFactura(pagina):
+    if current_user.is_admin():
+        fac = Factura()
+        if request.args.get('filtro'):
+            return render_template('Factura/ConsultarFiltro.html', factura_sin_paginacion = fac.filtrar(request.args.get('filtro')), pagina = pagina)
+        else:
+                return render_template('Factura/ConsultarFactura.html', factura = fac.paginar(pagina), pagina = pagina)
+    else:
+        abort(404)
+
+
+#EDITAR
+@app.route('/Factura/editar/<int:id>')
+def editarFactura(id):
+    fac = Factura()
+    c = Cliente()
+    u = Usuario()
+    f = fac.consultaIndividual(id)
+    cli = f.Cliente_idCliente
+    cliente = c.consultaIndividual(cli)
+    usu = cliente.Usuarios_idUsuario
+    return render_template('/Factura/ConsultarIndividual.html', fac=fac.consultaIndividual(id), usuario = u.consultaIndividual(usu))
+
+@app.route('/Factura/editandoFactura', methods=['post'])
+def editandoFactura():
+    fac = Factura()
+    fac.idfactura=request.form['idfactura']
+    fac.fecha = request.form['fecha']
+    fac.Cliente_idCliente = request.form['Cliente']
+    fac.Ventas_idVenta = request.form['Ventas']
+    fac.actualizar()
+    flash('¡La factura se actualizó!')
+    return redirect(url_for('consultarFactura', pagina=1))
+
+#Eliminar
+@app.route("/Factura/eliminar/<int:id>")
+def eliminarFactura(id):
+    fac = Factura()
+    fac.eliminar(id)
+    flash('¡La Factura se elimino!')
+    return redirect(url_for('consultarFactura', pagina=1))
+##Fin del CRUD FACTURAS
 
 
 if __name__=='__main__':

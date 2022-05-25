@@ -379,9 +379,81 @@ class Ventas(db.Model):
     precio_total = Column(Float, nullable=False)
     fecha = Column(Date, nullable=False)
     estatus = Column(String(45), nullable=False)
-    Promociones_idpromocion = Column(Integer, ForeignKey('Promociones.idpromocion'))
+    promociones_idpromocion = Column(Integer, ForeignKey('promociones.idpromocion'))
     Repartidor_idRepartidor = Column(Integer, ForeignKey('Repartidor.idRepartidor'))
+    promociones = relationship('Promociones', lazy='select')
+    repartidor = relationship('Repartidor', lazy='select')
+
 
     def consultaGeneral(self):
         return self.query.all()
+
+#Chilcho
+###Factura###
+class Factura(db.Model):
+    __tablename_ = 'factura'
+    idfactura = Column(Integer, primary_key=True)
+    fecha = Column(String(45), nullable=False)
+    Cliente_idCliente = Column(Integer, ForeignKey('cliente.idCliente'))
+    Ventas_idVenta = Column(Integer, ForeignKey('ventas.idVenta'))
+    c = relationship('Cliente', lazy='select')
+    v = relationship('Ventas', lazy='select')
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaIndividual(self, id):
+        return self.query.get(id)
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()
+
+    def filtrar(self, filtro):
+        return self.query.filter(Factura.idfactura.like('%' + filtro + '%'))
+
+    def paginar(self, pagina):
+        return self.query.paginate(per_page=3, page=pagina, error_out=True)
+
+#Carlos --> Cliente
+class Cliente(db.Model):
+    _tablename_='Cliente'
+    idCliente = Column(Integer,primary_key=True)
+    domicilio = Column(String(45),nullable=False)
+    localidad = Column(String(45),nullable=False)
+    rfc = Column(String(15),nullable=False)
+    Usuarios_idUsuario = Column(Integer, ForeignKey('Usuarios.idUsuario'))
+    usuario = relationship('Usuario',lazy='select')
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaIndividual(self, id):
+        return self.query.get(id)
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()
+
+    def paginacion(self,pagina):
+        return self.query.paginate(per_page=1,page=pagina,error_out=True)
+
 

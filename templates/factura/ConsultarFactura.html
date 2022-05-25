@@ -1,0 +1,62 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consultar Factura</h1>
+
+     <form action="/Factura/consultar/1" method="get">
+        Buscar por id de factura:
+         <input class="form-control form-control-lg" type="text" name="filtro">
+         <br>
+         <input class="btn btn-success" type="submit" value="Buscar" required>
+          <a href="/" id="regresar" type="submit" class="btn btn-warning mb-3">
+            Regresar
+        </a>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>IDFACTURA</th>
+                <th>FECHA</th>
+                <th>CLIENTE_IDCLIENTE</th>
+                <th>VENTAS_IDVENTAS</th>
+            </thead>
+            {% for fac in factura.items %}
+            <tr>
+                <td>{{fac.idfactura}}</td>
+                <td>{{fac.fecha}}</td>
+                <td>{{fac.Cliente_idCliente}}</td>
+                <td>{{fac.Ventas_idVenta}}</td>
+                <td>
+                    <a href="/Factura/editar/{{fac.idfactura}}">
+                           <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+                </td>
+                <td>
+                    <a href="/Factura/eliminar/{{fac.idfactura}}">
+                          <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+ <div>
+    <ul class="pagination">
+        {% for page in factura.iter_pages() %}
+            {% if page %}
+                {% if page == pagina %}
+                    <li class="active"><a href="#">{{page}}</a></li>
+                {% else %}
+                    <li><a href="{{url_for('consultarFactura', pagina=page)}}">{{ page }}</a></li>
+                {% endif %}
+            {% else %}
+            <li><a href="#">...</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    </div>
+<div id="notificaciones">
+
+</div>
+{% endblock %}

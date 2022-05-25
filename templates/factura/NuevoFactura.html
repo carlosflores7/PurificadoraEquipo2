@@ -1,0 +1,53 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+<h1 class="bg-primary text-center">Registro De Factura</h1>
+<form action="/Factura/agregando" method="post">
+
+	<label for="factura">factura:</label>
+           	
+	<div class="form-group">
+		<label for="cantidad">Fecha:</label>
+		<input type="date" name="Fecha" class="form-control form-control-lg" required>
+	</div> 
+	<br>
+
+
+	<label for="Cliente">Cliente:</label>
+            <select name='Cliente' class="form-control">
+                {% for c in cliente %}
+                <option value="{{c.idCliente}}">{{c.usuario.nombre}}</option>
+                {% endfor %}
+            </select>
+        <br>
+
+    <label for="Cliente">Ventas:</label>
+            <select name='Ventas' class="form-control">
+                {% for v in ventas %}
+                <option value="{{v.idVenta}}">{{v.idVenta}}</option>
+                {% endfor %}
+            </select>
+        <br>
+
+
+	<button type="submit" class="btn btn-primary mb-3">
+		<span class="glyphicon glyphicon-floppy-disk"></span>
+		Registrar
+	</button>
+
+	
+
+</form>
+ <a href="/Factura/consultar/1" class="btn btn-danger mb-3"> 
+            <span class="glyphicon glyphicon-circle-arrow-rigth"></span>
+            Mostrar
+        </a>
+
+     <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+<div id="notificaciones">
+
+</div>
+{% endblock %}
