@@ -5,7 +5,31 @@
 {% endblock %}
 {% block contenido %}
 {{super()}}
+
 {%if current_user.is_authenticated %}
+
 <h3>Hola {{current_user.nombre}}</h3>
+<!-- Carousel -->
+
+<table>
+    <thead>
+        <th>   </th>
+    </thead>
+    <img src="{{url_for('static',filename='img/aguazero1.png')}}" width="95%">
+
+    <body>
+    <h1 class="center"> Contáctanos </h1>
+        <main class="container-fluid">
+            <div class="row">
+                <div class="">
+                    <a href="https://www.facebook.com/AGUA-ZERO-1831925067032254" class="btn btn-lg btn-block btn-primary">Facebook</a>
+                </div>
+            </div>
+        </main>
+    </body>
+</table>
+<br>
+<br>
+
 {% endif %}
 {% endblock %}

@@ -6,11 +6,21 @@
     {{super()}}
     <link rel="stylesheet" href="{{url_for('static',filename='css/estilo.css')}}">
 {% endblock %}
+
+
+
 {% block navbar %}
     <header>
         <h1 class="tituloHeader">AguaZero</h1>
     </header>
 {% endblock %}
+
+{% block scripts %}
+    {{super()}}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     {% block contenido %}

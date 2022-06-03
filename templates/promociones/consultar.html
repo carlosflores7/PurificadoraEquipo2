@@ -6,23 +6,23 @@
     <table class="table">
         <thead>
             <th>IDPROMOCION</th>
-            <th>CANTIDAD MAXIMA</th>
-            <th>CANTIDAD MINIMA</th>
             <th>ESTATUS</th>
             <th>PORCENTAJE</th>
+            <th>CODIGO DE PROMOCION</th>
+
             <th>VER</th>
         </thead>
         {% for p in promociones.items%}
         <tr>
             <td>{{p.idpromocion}}</td>
-            <td>{{p.cantidad_max}}</td>
-            <td>{{p.cantidad_min}}</td>
             {%if p.estatus==1%}
             <td>Activo</td>
             {%else%}
             <td>Inactivo</td>
             {%endif%}
+
             <td>{{p.porcentaje}}</td>
+             <td>{{p.codigo}}</td>
                 <td>
                     <a href="/Promociones/{{p.idpromocion}}">
                         Ver

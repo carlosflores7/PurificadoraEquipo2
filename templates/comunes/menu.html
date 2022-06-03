@@ -51,7 +51,6 @@
         <ul class="dropdown-menu">
           <li><a href="/Garrafones/agregar">Nuevo garrafón</a></li>
           <li><a href="/Garrafones/mostrar/1">Consultar garrafones</a></li>
-
         </ul>
       </li>
 
@@ -121,7 +120,46 @@
         </ul>
       </li>
       {% endif %}
+      #CLIENTE
+      {% if current_user.is_authenticated and current_user.is_Cliente() %}
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">PEDIDOS
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Pedido/Nuevo">Nuevo Pedido</a></li>
+          <li><a href="/Pedido/Mispedidos">Mis Pedidos</a></li>
+        </ul>
+      </li>
 
+       <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">GARRAFONES
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Garrafones/mostrar/1">Consultar garrafones</a></li>
+        </ul>
+      </li>
+
+       <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">FACTURA
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Factura/nueva">Nueva Factura</a></li>
+          <li><a href="/Factura/consultar/1">Ver Facturas</a></li>
+        </ul>
+      </li>
+      {% endif %}
+
+      #VENDEDOR
+      {% if current_user.is_authenticated and current_user.is_Empleado() %}
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">PROMOCIONES
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Promociones/pagina/1">Ver promociones</a></li>
+        </ul>
+      </li>
+
+      {% endif %}
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="reloj"></a>
       </li>

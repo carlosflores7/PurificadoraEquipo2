@@ -1,0 +1,45 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+<div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>ID DE VENTA</th>
+                <th>PRECIO DE VENTA</th>
+                <th>FECHA</th>
+                <th>ESTATUS</th>
+                <th>CONFIRMADO</th>
+                <th>CANCELAR</th>
+            </thead>
+            {% for p in p %}
+            <tr>
+                <td>{{p.idVenta}}</td>
+                <td>{{p.precio_total}}</td>
+                <td>{{p.fecha}}</td>
+                <td>{{p.estatus}}</td>
+
+                {% if p.estatus == "Se encuentra en entrega" %}
+                <td>
+                    <a href="/Pedido/Confirmar/{{p.idVenta}}" class="btn btn-info btn-lg">
+                      <span  class="glyphicon glyphicon-ok"></span> Recibi el pedido
+                    </a>
+                </td>
+                <td>
+                     <a href="/Pedido/Cancelar/{{p.idVenta}}" class="btn btn-info btn-lg">
+                       <span class="glyphicon glyphicon-remove"></span> Cancelar Pedido
+                     </a>
+                </td>
+                {% endif %}
+            </tr>
+
+            {% endfor %}
+        </table>
+    </div>
+    <a href="/" class="btn btn-danger mb-3">
+      <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+<div id="notificaciones">
+
+</div>
+{% endblock %}

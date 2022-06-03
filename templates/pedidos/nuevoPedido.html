@@ -1,10 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+     <h1 class="bg-primary text-center">Registro De Pedidos</h1>
+    <form action="/Pedido/Agregando" method="post">
 
-</body>
-</html>
+        <div>
+            <label>Cliente : {{usuario.nombre}}  </label>
+            <br>
+        </div>
+        <div>
+            <label>Tú ID de Cliente es:</label>
+            <input type="text" maxlength="3" name="idCliente" value="{{cliente}}" readonly class="form-control form-control-lg" placeholder="" >
+        </div>
+        <br>
+        <div>
+            <label>Cantidad Garrafones</label>
+            <input type="text" maxlength="3" name="cGarrafones" required class="form-control form-control-lg" placeholder="" >
+        </div>
+        <br>
+        <div>
+            <label>¿Tienes algun codigo de promocion?</label>
+            <input type="text" maxlength="5" name="codigoPromocion" class="form-control form-control-lg" placeholder="" >
+        </div>
+
+        <br>
+        <button id="registrar" type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Confirmar
+        </button>
+        <a href="/" id="regresar" type="submit" class="btn btn-warning mb-3">
+            Regresar
+        </a>
+
+    </form>
+<br>
+<div id="notificaciones" style="width: 400px; margin: 0 auto; background-color: brown; color: white;">
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+
+{% endblock %}

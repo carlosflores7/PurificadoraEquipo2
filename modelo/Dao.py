@@ -44,6 +44,17 @@ class Usuario(UserMixin,db.Model):
             return True
         else:
             return False
+
+    def is_Cliente(self):
+        if self.tipo=='Cliente':
+            return True
+        else:
+            return False
+    def is_Empleado(self):
+        if self.tipo=='Vendedor':
+            return True
+        else:
+            return False
     #Definir el método para la autenticacion
     def validar(self,correo,password):
         usuario=Usuario.query.filter(Usuario.correo==correo).first()
@@ -170,11 +181,9 @@ class Garrafones(db.Model):
 class Promociones(db.Model):
     __tablename__='promociones'
     idpromocion=Column(Integer,primary_key=True)
-    cantidad_max=Column(Integer,nullable=False)
-    cantidad_min=Column(Integer,nullable=True)
     estatus=Column(Integer,nullable=False)
     porcentaje=Column(Float,nullable=False)
-
+    codigo = Column (String(5), nullable= False)
     def insertar(self):
         db.session.add(self)
         db.session.commit()
@@ -201,6 +210,9 @@ class Promociones(db.Model):
 
     def paginacion(self,pagina):
         return self.query.paginate(per_page=3,page=pagina,error_out=True)
+
+    def consultaCodigo(self, co):
+        return self.query.filter(Promociones.codigo == co).first()
 
 class Puesto(db.Model):
     __tablename__='puestos'
@@ -381,13 +393,21 @@ class Ventas(db.Model):
     estatus = Column(String(45), nullable=False)
     promociones_idpromocion = Column(Integer, ForeignKey('promociones.idpromocion'))
     Repartidor_idRepartidor = Column(Integer, ForeignKey('Repartidor.idRepartidor'))
+    idCliente = Column(Integer, ForeignKey('cliente.idCliente'))
     promociones = relationship('Promociones', lazy='select')
     repartidor = relationship('Repartidor', lazy='select')
+    cliente = relationship('Cliente', lazy='select')
 
 
     def consultaGeneral(self):
         return self.query.all()
 
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def consultarMisPedidos(self, id):
+        return self.query.filter(Ventas.idCliente == id)
 #Chilcho
 ###Factura###
 class Factura(db.Model):
@@ -423,10 +443,11 @@ class Factura(db.Model):
 
     def paginar(self, pagina):
         return self.query.paginate(per_page=3, page=pagina, error_out=True)
-
+    def facturasCliente(self, idCliente):
+        return self.query.filter(Factura.Cliente_idCliente == idCliente).all()
 #Carlos --> Cliente
 class Cliente(db.Model):
-    _tablename_='Cliente'
+    _tablename_='cliente'
     idCliente = Column(Integer,primary_key=True)
     domicilio = Column(String(45),nullable=False)
     localidad = Column(String(45),nullable=False)
@@ -456,4 +477,29 @@ class Cliente(db.Model):
     def paginacion(self,pagina):
         return self.query.paginate(per_page=1,page=pagina,error_out=True)
 
+    def consulta(self, id):
+        return self.query.filter(Cliente.Usuarios_idUsuario == id).first()
 
+class Pedidos(db.Model):
+    _tablename = 'pedidos'
+    idPedido = Column(Integer, primary_key=True)
+    cantidad_garrafones = Column(Integer, nullable=False)
+    ClienteID = Column(Integer, ForeignKey('cliente.idCliente'))
+    idPromocion = Column(Integer, ForeignKey('promociones.idpromocion'))
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaIndividual(self, id):
+        return self.query.get(id)
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+
+
+    def procedimientAlmacenado(self,codigoPromocion, idPedido, precioTotal, idCliente):
+        #db.session.execute("sp_compraConfirmada ?, ?", ["CE005", 1])
+        db.session.execute(db.text(f"CALL sp_compraConfirmada('{codigoPromocion}',{idPedido},{precioTotal},{idCliente})"))
+        db.session.commit()

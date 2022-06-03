@@ -1,0 +1,33 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consultar Factura</h1>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>IDFACTURA</th>
+                <th>FECHA</th>
+                <th>CLIENTE</th>
+                <th>VENTAS_IDVENTAS</th>
+            </thead>
+            {% for fac in factura %}
+            <tr>
+                <td>{{fac.idfactura}}</td>
+                <td>{{fac.fecha}}</td>
+                <td>{{current_user.nombre}}</td>
+                <td>{{fac.Ventas_idVenta}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+ <div>
+      <a href="/" class="btn btn-danger mb-3">
+      <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+
+<div id="notificaciones">
+
+</div>
+{% endblock %}

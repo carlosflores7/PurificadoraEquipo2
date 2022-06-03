@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from flask import Flask,render_template,request,redirect,url_for,flash,session,abort
 from flask_bootstrap import Bootstrap
-from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas,Factura,Cliente
+from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas,Factura,Cliente,Pedidos
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
 
@@ -345,10 +345,9 @@ def promocionesIndividual(id):
 def actualizarPromociones():
     promocion = Promociones()
     promocion.idpromocion = request.form['ID']
-    promocion.cantidad_max = request.form['cantidadMaxima']
-    promocion.cantidad_min = request.form['cantidadMinima']
     promocion.estatus = request.form['estatus']
     promocion.porcentaje = request.form['porcentaje']
+    promocion.porcentaje = request.form['codigo']
     promocion.actualizar()
     flash('¡La promocion se ha actualizado''!')
 
@@ -653,12 +652,21 @@ def agregarFacturas():
 @app.route('/Factura/consultar/<int:pagina>')
 @login_required
 def consultarFactura(pagina):
-    if current_user.is_admin():
+    if current_user.is_admin() :
         fac = Factura()
         if request.args.get('filtro'):
             return render_template('Factura/ConsultarFiltro.html', factura_sin_paginacion = fac.filtrar(request.args.get('filtro')), pagina = pagina)
         else:
                 return render_template('Factura/ConsultarFactura.html', factura = fac.paginar(pagina), pagina = pagina)
+    elif current_user.is_Cliente():
+        fac = Factura()
+        c = Cliente()
+        v = Ventas()
+        id = current_user.idUsuario
+        aux = c.consulta(id)
+        facturas = fac.facturasCliente(aux.idCliente)
+        return render_template('Factura/facturasCliente.html', factura=facturas)
+
     else:
         abort(404)
 
@@ -696,6 +704,83 @@ def eliminarFactura(id):
 ##Fin del CRUD FACTURAS
 
 
+@app.route("/Pedido/Nuevo")
+def nuevoPedido():
+    if current_user.is_Cliente():
+        c = Cliente()
+        u = Usuario()
+        id = current_user.idUsuario
+        aux = c.consulta(id)
+        print (aux.idCliente)
+        usuario = u.consultaIndividual(id)
+        return render_template("/pedidos/nuevoPedido.html", cliente = aux.idCliente, usuario = usuario)
+    else:
+        abort(404)
+
+@app.route("/Pedido/Agregando", methods=['post'])
+def reglaNegocio():
+    p = Pedidos()
+    pro = Promociones()
+    codigoPromocion = request.form['codigoPromocion']
+    idCliente = request.form['idCliente']
+    garrafones = request.form['cGarrafones']
+
+
+    p.cantidad_garrafones = garrafones;
+    p.ClienteID = idCliente
+
+    resultCodigo = pro.consultaCodigo(codigoPromocion)
+    if resultCodigo != None:
+        p.insertar()
+        garrafonesInt = int(garrafones)
+        precio = (garrafonesInt * 20)
+        precioaux = float(precio)#200
+        descuento = (precioaux * resultCodigo.porcentaje)/100 #20
+        precioTotal = (precioaux - descuento)
+        p.procedimientAlmacenado(codigoPromocion,p.idPedido,precioTotal,idCliente)
+        flash('La venta se a registrado, esta pendiente de entregar')
+        return redirect(url_for("nuevoPedido"))
+    else:
+        p.insertar()
+        garrafonesInt = int(garrafones)
+        precioTotal = garrafonesInt*20
+        p.procedimientAlmacenado('00000',p.idPedido, precioTotal,idCliente)
+        flash('La venta se registro pero la promocion es invalida')
+        return redirect(url_for("nuevoPedido"))
+@app.route("/Pedido/Mispedidos")
+def misPedidos():
+    if current_user.is_Cliente():
+        c = Cliente()
+        v = Ventas()
+        id = current_user.idUsuario
+        aux = c.consulta(id)
+        print(aux.idCliente)
+        pedidos = v.consultarMisPedidos(aux.idCliente)
+        return render_template("/pedidos/misPedidos.html", p = pedidos)
+    else:
+        abort(404)
+@app.route("/Pedido/Confirmar/<int:id>")
+def confirmarPedido(id):
+    if current_user.is_Cliente():
+       v = Ventas()
+       v.idVenta = id
+       v.estatus = "Entregado"
+       v.actualizar()
+       flash('La venta se a entregado')
+       return redirect(url_for("misPedidos"))
+    else:
+        abort(404)
+@app.route("/Pedido/Cancelar/<int:id>")
+def cancelarPedido(id):
+    if current_user.is_Cliente():
+       v = Ventas()
+       v.idVenta = id
+       v.estatus = "Cancelado"
+       v.actualizar()
+       flash('La venta se a cancelado')
+       return redirect(url_for("misPedidos"))
+    else:
+        abort(404)
 if __name__=='__main__':
     db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD
     app.run(debug=True)
