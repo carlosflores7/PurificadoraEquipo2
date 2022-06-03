@@ -1,0 +1,60 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+    <h1>LISTADO DE CLIENTES - PÁGINA {{pagina}}</h1>
+<br>
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>CORREO</th>
+            <th>DOMICILIO</th>
+            <th>LOCALIDAD</th>
+            <th>RFC</th>
+            <th>ESTATUS</th>
+            <th>VER</th>
+        </thead>
+        {% for c in clientes.items %}
+            <tr>
+                <td>{{c.idCliente}}</td>
+                <td>{{c.usuario.nombre}}</td>
+                <td>{{c.usuario.correo}}</td>
+                <td>{{c.domicilio}}</td>
+                <td>{{c.localidad}}</td>
+                <td>{{c.rfc}}</td>
+                {% if c.usuario.estatus=='1' %}
+                <td>Activo</td>
+                {% else %}
+                <td>Inactivo</td>
+                {% endif %}
+                    <td>
+                        <a href="/Cliente/ind/{{c.idCliente}}">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </a>
+                    </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    <ul class="pagination">
+    {% for page in clientes.iter_pages() %}
+        {% if page %}
+            {% if page == pagina %}
+                <li class="active"><a href="#">{{page}}</a></li>
+            {% else %}
+                <li><a href="{{url_for('verClientes', pagina=page)}}">{{ page }}</a></li>
+            {% endif %}
+        {% else %}
+        <li><a href="#">...</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+
+    <br>
+    <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+{% endblock %}

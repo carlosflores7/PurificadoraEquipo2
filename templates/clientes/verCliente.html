@@ -1,0 +1,81 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1 class="bg-primary text-center">Datos de cliente - {{c.idCliente}}</h1>
+
+    <form action="/Cliente/actualizar" method="post" onsubmit="return validar(this)">
+        <div class="form-group">
+            <label for="ID">ID:</label>
+            <input class="form-control form-control-lg" type="text" name="IDCLIENTE" maxlength="45" value="{{c.idCliente}}" readonly>
+        </div>
+            <input class="form-control form-control-lg" type="hidden" name="IDUSUARIO" maxlength="45" value="{{c.usuario.idUsuario}}">
+        <div class="form-group">
+            <label for="nombre">Nombre completo:</label>
+            <input class="form-control form-control-lg" type="text" name="nombre" maxlength="50"  placeholder="Nombre Completo" value="{{c.usuario.nombre}}" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Correo electrónico:</label>
+            <input type="email" name="email" maxlength="50" class="form-control form-control-lg" value="{{c.usuario.correo}}" required>
+        </div>
+        <div class="form-group">
+            <label for="clave">Password:</label>
+            <input type="password" name="password" id="password" maxlength="20" class="form-control">
+        </div>
+        <input type="checkbox" id="verPassword" onchange="verPasswords()">Ver password
+        <div class="form-group">
+            <label for="clave">Confirmar Password:</label>
+            <input type="password" name="passwordConfirmacion" id="passwordConfirmacion" maxlength="20" class="form-control">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="domicilio">Domicilio:</label>
+            <input class="form-control form-control-lg" type="text" name="domicilio" maxlength="45"  placeholder="Domicilio" required value="{{c.domicilio}}">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="localidad">Localidad:</label>
+            <input class="form-control form-control-lg" type="text" name="localidad" maxlength="45"  placeholder="Localidad" value="{{c.localidad}}" required>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="rfc">RFC:</label>
+            <input class="form-control form-control-lg" type="text" name="rfc" maxlength="13"  placeholder="RFC" value="{{c.rfc}}" required>
+        </div>
+        <div class="form-group">
+            <label for="estatus">Estatus:</label>
+            {% if c.usuario.estatus=='1' %}
+            <input class="form-control form-control-lg" type="text" name="estatus" value="Activo" readonly>
+            {% else %}
+            <input class="form-control form-control-lg" type="text" name="estatus" value="Inactivo" readonly>
+            {% endif %}
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Registrar
+        </button>
+        <a href="/Usuarios/iniciarSesion" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+        </a>
+        {% if c.usuario.estatus=='1' %}
+            <a href="/Cliente/eliminar/{{c.usuario.idUsuario}}" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon glyphicon-remove"></span>
+            Eliminar
+        </a>
+            {% else %}
+            <a href="/Cliente/activar/{{c.usuario.idUsuario}}" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-repeat"></span>
+            Activar
+        </a>
+            {% endif %}
+    </form>
+<div id="notificaciones">
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+    <script src="{{url_for('static',filename='js/clientesEditar.js')}}"></script>
+{% endblock %}

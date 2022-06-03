@@ -781,6 +781,97 @@ def cancelarPedido(id):
        return redirect(url_for("misPedidos"))
     else:
         abort(404)
+
+#CRUD de clientes#
+
+@app.route("/Cliente/nuevo")
+def nuevoCliente():
+    return render_template('clientes/agregarCliente.html')
+
+@app.route("/Cliente/agregando", methods=['post'])
+def agregandoCliente():
+    try:
+        usuario = Usuario()
+        usuario.nombre = request.form['nombre']
+        usuario.correo = request.form['email']
+        usuario.password = request.form['password']
+        usuario.tipo = 'Cliente'
+        usuario.estatus = '1'
+        usuario.agregar()
+        cliente = Cliente()
+        cliente.domicilio = request.form['domicilio']
+        cliente.localidad = request.form['localidad']
+        cliente.rfc = request.form['rfc']
+        cliente.Usuarios_idUsuario = usuario.idUsuario
+        cliente.insertar()
+        flash('¡ Cliente registrado con éxito !')
+    except:
+        flash('¡ Error al agregar al cliente !')
+    return redirect(url_for('nuevoCliente'))
+
+@app.route("/Cliente/consultar/<int:pagina>")
+def verClientes(pagina):
+    clientes = Cliente()
+    return render_template('clientes/consultaGeneral.html', clientes=clientes.paginacion(pagina), pagina=pagina)
+
+@app.route("/Cliente/ind/<int:id>")
+def verClienteIndividual(id):
+    cliente = Cliente()
+    return render_template('clientes/verCliente.html', c=cliente.consultaIndividual(id))
+
+@app.route("/Cliente/actualizar", methods=['post'])
+def editandoCliente():
+    try:
+        usuario = Usuario()
+        usuario.idUsuario = request.form['IDUSUARIO']
+        usuario.nombre = request.form['nombre']
+        usuario.correo = request.form['email']
+        if request.form['password'] != '':
+            usuario.password = request.form['password']
+        usuario.editar()
+        cliente = Cliente()
+        cliente.idCliente = request.form['IDCLIENTE']
+        cliente.domicilio = request.form['domicilio']
+        cliente.localidad = request.form['localidad']
+        cliente.rfc = request.form['rfc']
+        cliente.Usuarios_idUsuario = usuario.idUsuario
+        cliente.actualizar()
+        flash('¡ Cliente editado con éxito !')
+    except:
+        flash('¡ Error al editar al cliente !')
+    return redirect(url_for('verClienteIndividual', id=request.form['IDCLIENTE']))
+
+@app.route('/Cliente/eliminar/<int:id>')
+def eliminarCliente(id):
+    if current_user.is_authenticated:
+        try:
+            usuario = Usuario()
+            usuario.eliminacionLogica(id)
+            if current_user.idUsuario == id:
+                logout_user()
+            flash('Usuario eliminado con exito')
+        except:
+            flash('Error al eliminar el usuario')
+        return redirect(url_for('inicio'))
+    else:
+        abort(404)
+
+@app.route('/Cliente/activar/<int:id>')
+def activarCliente(id):
+    if current_user.is_authenticated:
+        try:
+            usuario = Usuario()
+            usuario = usuario.consultaIndividual(id)
+            usuario.estatus=1
+            usuario.editar()
+            flash('Usuario activado con exito')
+        except:
+            flash('Error al activar el usuario')
+        return redirect(url_for('inicio'))
+    else:
+        abort(404)
+
+#Fin CRUD de clientes#
 if __name__=='__main__':
     db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD
     app.run(debug=True)
