@@ -1,12 +1,17 @@
 import datetime
+import io
 from datetime import timedelta
 
-from flask import Flask,render_template,request,redirect,url_for,flash,session,abort
+import xlwt
+from flask import Flask, render_template, request, redirect, url_for, flash, session, abort, make_response, Response
 from flask_bootstrap import Bootstrap
-from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas,Factura,Cliente,Pedidos
+import psycopg2
+import psycopg2.extras
+import pdfkit
+from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas,Factura,Cliente,Pedidos, Nomina
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
-
+from datetime import date
 app = Flask(__name__)
 Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
@@ -629,24 +634,32 @@ def eliminarVentas_detalle(id):
 #NUEVA FACTURA
 @app.route('/Factura/nueva')
 def agregarFactura():
-    cliente = Cliente()
-    ventas = Ventas()
-
-    return render_template('/Factura/NuevoFactura.html', cliente = cliente.consultaGeneral(), ventas = ventas.consultaGeneral())
-
+    if current_user.is_Cliente():
+        c = Cliente()
+        id = current_user.idUsuario
+        aux = c.consulta(id)
+        ventas = Ventas()
+        return render_template('/Factura/NuevoFactura.html', ventas = ventas.ventasCliente(aux.idCliente))
+    else:
+        abort(404)
 
 
 @app.route('/Factura/agregando', methods=['post'])
 def agregarFacturas():
-    fac = Factura()
-    fac.fecha = request.form['Fecha']
-    fac.Cliente_idCliente = request.form['Cliente']
-    fac.Ventas_idVenta = request.form['Ventas']
-    fac.insertar()
-    flash('¡La factura se ha registrado!')
+    if current_user.is_Cliente():
+        fac = Factura()
+        c = Cliente()
+        idAux=current_user.idUsuario
+        aux = c.consulta(idAux)
+        fac.fecha = request.form['Fecha']
+        fac.Cliente_idCliente = aux.idCliente
+        fac.Ventas_idVenta = request.form['Ventas']
+        fac.insertar()
+        flash('¡La factura se ha registrado!')
 
-    return redirect(url_for("agregarFactura"))
-
+        return redirect(url_for("agregarFactura"))
+    else:
+        abort(404)
 
 #MOSTRAR
 @app.route('/Factura/consultar/<int:pagina>')
@@ -870,6 +883,157 @@ def activarCliente(id):
         return redirect(url_for('inicio'))
     else:
         abort(404)
+
+@app.route('/PDF/nuevo/<int:id>')
+def pdf_template(id):
+    f = Factura()
+    factura = f.consultaIndividual(id)
+
+    rendered = render_template('PDF/format.html', fa = factura, today = date.today())
+    config = pdfkit.configuration(wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
+    pdf = pdfkit.from_string(rendered, False, configuration= config)
+
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename= output.pdf'
+
+    return response
+@app.route('/Excel/Download')
+def downloadExcel():
+    if current_user.is_authenticated and current_user.is_admin():
+        v = Ventas()
+        ventas = v.consultaGeneral()
+        output  = io.BytesIO()
+        workbook = xlwt.Workbook()
+        sh = workbook.add_sheet('Ventas')
+        sh.write(0, 0, 'idVenta')
+        sh.write(0, 1, 'Precio_Total')
+        sh.write(0, 2, 'Fecha')
+        sh.write(0, 3, 'Estatus')
+        sh.write(0, 4, 'Promociones_idPromocion')
+        sh.write(0, 5, 'Repartidor_idRepartidor')
+        sh.write(0, 6, 'idCliente')
+        sh.write(0, 7, 'idPedido')
+
+        idx = 0
+        for v in ventas:
+            sh.write(idx + 1, 0, str(v.idVenta))
+            sh.write(idx + 1, 1, str(v.precio_total))
+            sh.write(idx + 1, 2, str(v.fecha))
+            sh.write(idx + 1, 3, str(v.estatus))
+            sh.write(idx + 1, 4, str(v.promociones_idpromocion))
+            sh.write(idx + 1, 5, str(v.Repartidor_idRepartidor))
+            sh.write(idx + 1, 6, str(v.idCliente))
+            sh.write(idx + 1, 7, str(v.idPedido))
+            idx +=1
+        workbook.save(output)
+        output.seek(0)
+
+        return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=Ventas.xls"})
+    else:
+        abort(404)
+@app.route("/venta/consultar")
+def consultarVentas():
+    if current_user.is_authenticated and current_user.is_admin():
+        v = Ventas()
+        return render_template('ventas/consultarVentas.html', ventas = v.consultaGeneral())
+    else:
+        abort(404)
+@app.route("/Nomina/nueva")
+def nuevaNomina():
+    if current_user.is_authenticated and current_user.is_admin():
+        e = Empleado()
+
+        return render_template('nominas/nuevaNomina.html', empleado = e.consultaGeneral())
+    else:
+        abort(404)
+
+@app.route("/Nomina/agregar", methods=['post'])
+def agregarNomina():
+    if current_user.is_authenticated and current_user.is_admin():
+        n = Nomina()
+        salario = int(request.form['salario'])
+        comisiones = int(request.form['comisiones'])
+        empleado = request.form['empleado']
+        mensaje = ""
+        if empleado == "opcion":
+            mensaje += "Empleado incorrecto\n"
+        if salario < 0 :
+            mensaje += "Salario incorrecto\n"
+        if comisiones < 0 :
+            mensaje += "Comisiones incorrecto\n"
+
+        if mensaje == "":
+            n.Empleado_idEmpleado = empleado
+            n.salario_total = salario
+            n.dias_trabajados = request.form['dias_trabajados']
+            n.comisiones = comisiones
+            n.insertar()
+            flash("Nomina registrada")
+        else:
+            flash(mensaje)
+    else:
+        abort(404)
+    return redirect(url_for('nuevaNomina'))
+@app.route("/Nomina/consultar/<int:pagina>")
+@login_required
+def consultarNomina(pagina):
+    if current_user.is_authenticated and current_user.is_admin():
+        n = Nomina()
+        e = Empleado()
+        return render_template('nominas/consultarNominas.html', nomina=n.paginar(pagina), pagina=pagina, empleado = e.consultaGeneral())
+    else:
+        abort(404)
+@app.route("/Nomina/<int:id>")
+@login_required
+def editarNomina(id):
+    if current_user.is_authenticated and current_user.is_admin():
+        n = Nomina()
+        return render_template('nominas/verNomina.html', nomina = n.consultaIndividual(id))
+    else:
+        abort(404)
+
+@app.route("/Nomina/actualizar", methods=['post'])
+@login_required
+def actualizarNomina():
+    if current_user.is_authenticated and current_user.is_admin():
+        n = Nomina()
+        salario = float(request.form['salario'])
+        comisiones = float(request.form['comisiones'])
+        mensaje = ""
+        if salario < 0.0 :
+            mensaje += "Salario incorrecto\n"
+        if comisiones < 0.0 :
+            mensaje += "Comisiones incorrecto\n"
+
+        if mensaje == "":
+            n.idnomina = request.form['idNomina']
+            n.salario_total = salario
+            n.dias_trabajados = request.form['dias_trabajados']
+            n.comisiones = comisiones
+            n.actualizar()
+            flash("Nomina actualizada")
+        else:
+            flash(mensaje)
+    else:
+        abort(404)
+    return redirect("/Nomina/consultar/1")
+@app.route("/Nomina/eliminar/<int:id>")
+def eliminarNomina(id):
+    if current_user.is_authenticated and current_user.is_admin():
+        n = Nomina()
+        n.eliminar(id)
+        flash("Nomina eliminada")
+    else:
+        abort(404)
+
+    return redirect("/Nomina/consultar/1")
+@app.route('/Pago/nuevo')
+def nuevoPago():
+    #if current_user.is_authenticated and current_user.is_admin():
+    return render_template('pagos/nuevoPago.html')
+    #else:
+        #abort(404)
 
 #Fin CRUD de clientes#
 if __name__=='__main__':

@@ -10,6 +10,7 @@
                 <th>FECHA</th>
                 <th>CLIENTE</th>
                 <th>VENTAS_IDVENTAS</th>
+                <th>GENERAR DOCUMENTO</th>
             </thead>
             {% for fac in factura %}
             <tr>
@@ -17,6 +18,14 @@
                 <td>{{fac.fecha}}</td>
                 <td>{{current_user.nombre}}</td>
                 <td>{{fac.Ventas_idVenta}}</td>
+
+                {% if fac.v.estatus == 'Entregado' %}
+                <td>
+                    <a href="/PDF/nuevo/{{fac.idfactura}}">
+                          <span class="glyphicon glyphicon-save-file"></span> PDF
+                    </a>
+                </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </table>

@@ -1,0 +1,49 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consultar Ventas</h1>
+
+
+    <div class="table-responsive">
+
+        <table class="table">
+            <thead>
+                <th>IDVENTA</th>
+                <th>PRECIO TOTAL</th>
+                <th>FECHA</th>
+                <th>ESTATUS</th>
+                <th>IDPROMOCION</th>
+                <th>IDREPARTIDOR</th>
+                <th>IDCLIENTE</th>
+                <th>IDPEDIDO</th>
+            </thead>
+            {% for v in ventas %}
+            <tr>
+                <td>{{v.idVenta}}</td>
+                <td>{{v.precio_total}}</td>
+                <td>{{v.fecha}}</td>
+                <td>{{v.estatus}}</td>
+                <td>{{v.promociones_idpromocion}}</td>
+                <td>{{v.Repartidor_idRepartidor}}</td>
+                <td>{{v.idCliente}}</td>
+                <td>{{v.idPedido}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <br>
+
+<div id="notificaciones">
+
+</div>
+    <br>
+
+
+    <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+    <a href="/Excel/Download"  class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-file"></span> Descargar Excel
+        </a>
+{% endblock %}

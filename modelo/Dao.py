@@ -306,6 +306,28 @@ class Nomina(db.Model):
     comisiones = Column(Integer, nullable=False)
     empleado=relationship('Empleado', lazy='select')
 
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaIndividual(self,id):
+        return self.query.get(id)
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()
+
+    def paginar(self, pagina):
+        return self.query.paginate(per_page=4, page=pagina, error_out=True)
+
     
 class Repartidor(db.Model):
     __tablename__='Repartidor'
@@ -394,9 +416,12 @@ class Ventas(db.Model):
     promociones_idpromocion = Column(Integer, ForeignKey('promociones.idpromocion'))
     Repartidor_idRepartidor = Column(Integer, ForeignKey('Repartidor.idRepartidor'))
     idCliente = Column(Integer, ForeignKey('cliente.idCliente'))
+    idPedido = Column(Integer, ForeignKey('pedidos.idPedido'))
+
     promociones = relationship('Promociones', lazy='select')
     repartidor = relationship('Repartidor', lazy='select')
     cliente = relationship('Cliente', lazy='select')
+    pe = relationship('Pedidos', lazy='select')
 
 
     def consultaGeneral(self):
@@ -408,6 +433,9 @@ class Ventas(db.Model):
 
     def consultarMisPedidos(self, id):
         return self.query.filter(Ventas.idCliente == id)
+
+    def ventasCliente(self, id):
+        return self.query.filter(Ventas.idCliente == id).where(Ventas.estatus == 'Entregado').all()
 #Chilcho
 ###Factura###
 class Factura(db.Model):
@@ -443,6 +471,7 @@ class Factura(db.Model):
 
     def paginar(self, pagina):
         return self.query.paginate(per_page=3, page=pagina, error_out=True)
+
     def facturasCliente(self, idCliente):
         return self.query.filter(Factura.Cliente_idCliente == idCliente).all()
 #Carlos --> Cliente

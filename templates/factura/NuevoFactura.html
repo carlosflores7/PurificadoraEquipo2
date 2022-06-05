@@ -4,24 +4,18 @@
 <h1 class="bg-primary text-center">Registro De Factura</h1>
 <form action="/Factura/agregando" method="post">
 
-	<label for="factura">factura:</label>
-           	
+
+    <div class="form-group">
+		<label for="Cliente">Cliente:</label>
+         <input  class="form-control form-control-lg"  value="{{current_user.nombre}}" readonly>
+	</div>
+
 	<div class="form-group">
 		<label for="cantidad">Fecha:</label>
 		<input type="date" name="Fecha" class="form-control form-control-lg" required>
-	</div> 
-	<br>
+	</div>
 
-
-	<label for="Cliente">Cliente:</label>
-            <select name='Cliente' class="form-control">
-                {% for c in cliente %}
-                <option value="{{c.idCliente}}">{{c.usuario.nombre}}</option>
-                {% endfor %}
-            </select>
-        <br>
-
-    <label for="Cliente">Ventas:</label>
+    <label for="Cliente">Folio Venta:</label>
             <select name='Ventas' class="form-control">
                 {% for v in ventas %}
                 <option value="{{v.idVenta}}">{{v.idVenta}}</option>
@@ -38,11 +32,7 @@
 	
 
 </form>
- <a href="/Factura/consultar/1" class="btn btn-danger mb-3"> 
-            <span class="glyphicon glyphicon-circle-arrow-rigth"></span>
-            Mostrar
-        </a>
-
+    <br>
      <a href="/" class="btn btn-danger mb-3">
             <span class="glyphicon glyphicon-circle-arrow-left"></span>
             Regresar
