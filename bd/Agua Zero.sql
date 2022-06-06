@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`pedidos` (
     FOREIGN KEY (`idPromocion`)
     REFERENCES `aguazero`.`promociones` (`idpromocion`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 33
+AUTO_INCREMENT = 40
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`ventas` (
     FOREIGN KEY (`Repartidor_idRepartidor`)
     REFERENCES `aguazero`.`repartidor` (`idRepartidor`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 29
+AUTO_INCREMENT = 40
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -221,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`factura` (
     FOREIGN KEY (`Ventas_idVenta`)
     REFERENCES `aguazero`.`ventas` (`idVenta`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 6
+AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -256,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`nominas` (
     FOREIGN KEY (`Empleado_idEmpleado`)
     REFERENCES `aguazero`.`empleado` (`idEmpleado`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 5
+AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -308,12 +308,11 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`prestamos` (
   `idPrestamos` INT NOT NULL AUTO_INCREMENT,
   `Empleado_idEmpleado` INT NOT NULL,
   `Ventas_idVentas` INT NOT NULL,
-  `Garrafones_idGarrafon` INT NOT NULL,
   `Cliente_idCliente` INT NOT NULL,
+  `garrafones_prestados` INT NOT NULL,
   PRIMARY KEY (`idPrestamos`),
   INDEX `fk_Prestamos_Empleado1_idx` (`Empleado_idEmpleado` ASC) VISIBLE,
   INDEX `fk_Prestamos_Ventas1_idx` (`Ventas_idVentas` ASC) VISIBLE,
-  INDEX `fk_Prestamos_Garrafones1_idx` (`Garrafones_idGarrafon` ASC) VISIBLE,
   INDEX `fk_Prestamos_Cliente1_idx` (`Cliente_idCliente` ASC) VISIBLE,
   CONSTRAINT `fk_Prestamos_Cliente1`
     FOREIGN KEY (`Cliente_idCliente`)
@@ -321,13 +320,11 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`prestamos` (
   CONSTRAINT `fk_Prestamos_Empleado1`
     FOREIGN KEY (`Empleado_idEmpleado`)
     REFERENCES `aguazero`.`empleado` (`idEmpleado`),
-  CONSTRAINT `fk_Prestamos_Garrafones1`
-    FOREIGN KEY (`Garrafones_idGarrafon`)
-    REFERENCES `aguazero`.`garrafones` (`idGarrafon`),
   CONSTRAINT `fk_Prestamos_Ventas1`
     FOREIGN KEY (`Ventas_idVentas`)
     REFERENCES `aguazero`.`ventas` (`idVenta`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -385,21 +382,30 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_compraConfirmada`(
 	IN CODIGOPROMOCION CHAR(5),
     IN IDPEDIDOAUX INT,
     IN PRECIOTOTAL FLOAT,
-    IN IDCLIENTE INT
+    IN IDCLIENTE INT,
+    IN GARRAFONES_PRESTADOS INT
 )
 BEGIN
-	DECLARE IDPROMOCIONAUX INT;
+	DECLARE IDPROMOCIONAUX INT;  
 	DECLARE GARRAFONESAUX INT;
-
+    DECLARE IDVENTAAUX INT;
+	
     SET IDPROMOCIONAUX = (SELECT IDPROMOCION FROM PROMOCIONES WHERE CODIGO = CODIGOPROMOCION);
-
+    
 	#IF IDPROMOCIONAUX != "" THEN
-	UPDATE PEDIDOS SET IDPROMOCION = IDPROMOCIONAUX WHERE IDPEDIDO = IDPEDIDOAUX;
-
+	UPDATE PEDIDOS SET IDPROMOCION = IDPROMOCIONAUX WHERE IDPEDIDO = IDPEDIDOAUX; 
+   
     SET GARRAFONESAUX = (SELECT CANTIDAD_GARRAFONES FROM PEDIDOS WHERE IDPEDIDO = IDPEDIDOAUX);
-
+  
     INSERT INTO VENTAS (PRECIO_TOTAL,FECHA,ESTATUS,PROMOCIONES_IDPROMOCION,REPARTIDOR_IDREPARTIDOR,IDCLIENTE,IDPEDIDO) VALUES (PRECIOTOTAL, "2022-06-04", "Se encuentra en entrega", IDPROMOCIONAUX, 1, IDCLIENTE,IDPEDIDOAUX);
-    #ELSE
+	
+    SET IDVENTAAUX = (SELECT IDVENTA FROM VENTAS WHERE IDVENTA = IDPEDIDOAUX);
+    
+	IF (GARRAFONES_PRESTADOS=1) THEN 
+		INSERT INTO PRESTAMOS (EMPLEADO_IDEMPLEADO, VENTAS_IDVENTAS, CLIENTE_IDCLIENTE, GARRAFONES_PRESTADOS) VALUES (1, IDVENTAAUX, IDCLIENTE, GARRAFONESAUX);
+	END IF;
+    
+    #ELSE 
 		#SELECT MENSAJE "LA PROMOCION NO EXISTE";
     #END IF;
 END$$
