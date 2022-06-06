@@ -1,0 +1,67 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consultar Prestamos</h1>
+
+     <form action="/Prestamos/consultar/1" method="get">
+        Buscar por id de Prestamo:
+         <input class="form-control form-control-lg" type="text" name="filtro">
+         <br>
+         <input class="btn btn-success" type="submit" value="Buscar" required>
+          <a href="/" id="regresar" type="submit" class="btn btn-warning mb-3">
+            Regresar
+        </a>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>ID PRESTAMO</th>
+                <th>EMPLEADO_IDEMPLEADO</th>
+                <th>FOLIO DE VENTAS</th>
+                <th>GARRAFONES_IDGARRAFON</th>
+                <th>CLIENTE_IDCLIENTE</th>
+                
+            </thead>
+            {% for p in prestamos.items %}
+            <tr>
+                <td>{{p.idPrestamos}}</td>
+                <td>{{p.e.usuario.nombre}}</td>
+                <td>{{p.Ventas_idVentas}}</td>
+                <td>{{p.Garrafones_idGarrafon}}</td>
+                <td>{{p.c.usuario.nombre}}</td>
+
+                 <!-- 
+                <td>
+                    <a href="/Prestamos/editar/{{p.idPrestamos}}">
+                           <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+                </td> -->
+                <td>
+                    <a href="/Prestamos/eliminar/{{p.idPrestamos}}">
+                          <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+ <div>
+    <ul class="pagination">
+        {% for page in prestamos.iter_pages() %}
+            {% if page %}
+                {% if page == pagina %}
+                    <li class="active"><a href="#">{{page}}</a></li>
+                {% else %}
+                    <li><a href="{{url_for('consultarPrestamos', pagina=page)}}">{{ page }}</a></li>
+                {% endif %}
+            {% else %}
+            <li><a href="#">...</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    </div>
+<div id="notificaciones">
+
+</div>
+{% endblock %}

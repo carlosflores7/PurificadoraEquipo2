@@ -1,0 +1,49 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consultar Pagos</h1>
+
+     <form action="/Pagos/consultar/1" method="get">
+             
+    </form>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>IDPAGO</th>
+                <th>NOMINAS_IDNOMINA</th>
+                <th>FECHA</th>
+                <th>REALIZO</th>
+                <th>TARJETAS_IDTARJETA</th>
+            </thead>
+            {% for pay in pagos_sin_paginacion %}
+            <tr>
+                <td>{{pay.idPago}}</td>
+                <td>{{pay.nominas_idnomina}}</td>
+                <td>{{pay.fecha}}</td>
+                <td>{{pay.realizo}}</td>
+                <td>{{pay.tarjetas_idTarjeta}}</td>
+                <td>
+                    <a href="/Pagos/editar/{{pay.idPago}}">
+                           <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+                </td>
+                <td>
+                    <a href="/Factura/eliminar/{{pay.idPago}}">
+                          <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <br>
+
+<div id="notificaciones">
+        <a href="{{url_for('consultarPagos', pagina=1)}}" id="regresar" type="submit" class="btn btn-warning mb-3">
+            Regresar
+        </a>
+
+</div>
+{% endblock %}

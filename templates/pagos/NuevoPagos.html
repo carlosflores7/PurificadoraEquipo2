@@ -1,0 +1,60 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+<h1 class="bg-primary text-center">Registro De Pagos</h1>
+<form action="/Pagos/agregando" method="post">
+
+	<label for="pagos">pagos:</label>
+           	
+	<label for="nomina">nominas:</label>
+            <select name='Nominas' class="form-control">
+                {% for n in nomina  %}
+                <option value="{{n.idnomina}}">{{n.empleado.usuario.nombre}}</option>
+                {% endfor %}
+            </select>
+        <br>
+
+    <div class="form-group">
+        <label for="Pagos">Fecha:</label>
+        <input type="date" name="Fecha" class="form-control form-control-lg" required>
+    </div> 
+        <br>
+
+    <label for="Pagos">realizo:</label>
+            <select name='Realizo' class="form-control">
+                <option value="1">Si</option>
+                <option value="0">No</option>
+                
+            </select>
+        <br>
+
+    <label for="Pagos">Tarjetas:</label>
+            <select name='Tarjetas' class="form-control">
+                {% for t in tarjeta %}
+                <option value="{{t.idTarjeta}}">{{t.numero_tarjeta}}</option>
+                {% endfor %}
+            </select>
+        <br>
+
+
+	<button type="submit" class="btn btn-primary mb-3">
+		<span class="glyphicon glyphicon-floppy-disk"></span>
+		Registrar
+	</button>
+
+	
+
+</form>
+ <a href="/Pagos/consultar/1" class="btn btn-danger mb-3"> 
+            <span class="glyphicon glyphicon-circle-arrow-rigth"></span>
+            Mostrar
+        </a>
+
+     <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+<div id="notificaciones">
+
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+     <h1 class="bg-primary text-center">Edicion de Pagos</h1>
+    <form action="/Pagos/editandoPagos" method="post">
+        <div>
+            <label>ID Pago</label>
+            <input type="text" name="Pago" value="{{pay.idPago}}" readonly required class="form-control form-control-lg" >
+        </div>
+        <br>
+        <div>
+            <label>Nominas_idNomina</label>
+            <input type="text" name="Nomina" value="{{pay.nominas_idnomina}}" readonly required class="form-control form-control-lg" >
+        </div>
+        <div>
+            <label>Fecha</label>
+            <input type="date" name="Fecha" value="{{pay.fecha}}" required class="form-control form-control-lg" >
+        </div>
+        <label for="Pagos">Realizo:</label>
+            <select name='Realizo' class="form-control">
+                <option value="1">Si</option>
+                <option value="0">No</option>
+                
+            </select>
+        <br>
+        <div>
+            <label>Tarjetas_idTarjetas</label>
+            <input type="text" maxlength="19" name="Tarjetas" value="{{pay.tarjetas.idTarjeta}}" readonly required class="form-control form-control-lg">
+        </div>
+        <br>
+        <button id="registrar" type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Actualizar
+        </button>
+        <a href="{{url_for('consultarPagos', pagina=1)}}" id="regresar" type="submit" class="btn btn-warning mb-3">
+            Regresar
+        </a>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+   
+{% endblock %}

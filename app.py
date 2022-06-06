@@ -6,13 +6,13 @@ import xlwt
 from flask import Flask, render_template, request, redirect, url_for, flash, session, abort, make_response, Response
 from flask_bootstrap import Bootstrap
 import pdfkit
-from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas,Factura,Cliente,Pedidos, Nomina
+from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas,Factura,Cliente,Pedidos, Nomina,Pagos,Prestamos
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
 from datetime import date
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:hola.123@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -1061,6 +1061,116 @@ def nuevoPago():
         #abort(404)
 
 #Fin CRUD de clientes#
+
+#Inicio CRUD Prestamos
+@app.route('/Prestamos/nuevo')
+def agregarPrestamo():
+    cliente = Cliente()
+    ventas = Ventas()
+    garrafones = Garrafones()
+    empleado = Empleado()
+
+    return render_template('/Prestamos/NuevoPrestamo.html', cliente = cliente.consultaGeneral(), ventas = ventas.consultaGeneral(), garrafones = garrafones.consultaGeneral() , empleado = empleado.consultaGeneral())
+
+
+
+@app.route('/Prestamos/agregando', methods=['post'])
+def agregarPrestamos():
+    prestamo = Prestamos()
+    prestamo.Empleado_idEmpleado = request.form['Empleado']
+    prestamo.Ventas_idVentas = request.form['Ventas']
+    prestamo.Garrafones_idGarrafon = request.form['Garrafones']
+    prestamo.Cliente_idCliente = request.form['Cliente']
+    prestamo.insertar()
+    flash('¡El prestamo se ha registrado!')
+
+    return redirect(url_for("agregarPrestamo"))
+
+#MOSTRAR
+@app.route('/Prestamos/consultar/<int:pagina>')
+@login_required
+def consultarPrestamos(pagina):
+    if current_user.is_admin() :
+        p = Prestamos()
+        if request.args.get('filtro'):
+            return render_template('Prestamos/ConsultarFiltro.html', prestamo_sin_paginacion = p.filtrar(request.args.get('filtro')), pagina = pagina)
+        else:
+                return render_template('Prestamos/ConsultarPrestamo.html', prestamos = p.paginar(pagina), pagina = pagina)
+    else:
+        abort(404)
+
+#Eliminar
+@app.route("/Prestamos/eliminar/<int:id>")
+def eliminarPrestamos(id):
+    p = Prestamos()
+    p.eliminar(id)
+    flash('¡Se ha eliminado el prestamo!')
+    return redirect(url_for('consultarPrestamos', pagina=1))
+
+
+#Fin CRUD Prestamos
+
+
+#Inicio CRUD Pagos
+@app.route('/Pagos/nuevo')
+def agregarPago():
+    nomina = Nomina()
+    tarjeta = Tarjetas()
+
+    return render_template('/Pagos/NuevoPagos.html', nomina = nomina.consultaGeneral(), tarjeta = tarjeta.consultaGeneral())
+
+@app.route('/Pagos/agregando', methods=['post'])
+def agregarPagos():
+    pay = Pagos()
+    pay.nominas_idnomina= request.form['Nominas']
+    pay.fecha = request.form['Fecha']
+    pay.realizo = request.form['Realizo']
+    pay.tarjetas_idTarjeta = request.form['Tarjetas']
+    pay.insertar()
+    flash('¡El pago se ha registrado')
+
+    return redirect(url_for("agregarPago"))
+
+#MOSTRAR
+@app.route('/Pagos/consultar/<int:pagina>')
+@login_required
+def consultarPagos(pagina):
+    if current_user.is_admin() :
+        pay = Pagos()
+        if request.args.get('filtro'):
+            return render_template('Pagos/ConsultarFiltro.html', pagos_sin_paginacion = pay.filtrar(request.args.get('filtro')), pagina = pagina)
+        else:
+                return render_template('Pagos/ConsultarPagos.html', pagos = pay.paginar(pagina), pagina = pagina)
+    else:
+        abort(404)
+
+#EDITAR
+@app.route('/Pagos/editar/<int:id>')
+def editarPagos(id):
+    pay = Pagos()
+    n = Nomina()
+    t = Tarjetas()
+    return render_template('/Pagos/ConsultarIndividual.html', pay=pay.consultaIndividual(id))
+
+@app.route('/Pagos/editandoPagos', methods=['post'])
+def editandoPagos():
+    pay = Pagos()
+    pay.idPago=request.form['Pago']
+    pay.nominas_idnomina = request.form['Nomina']
+    pay.fecha = request.form['Fecha']
+    pay.realizo = request.form['Realizo']
+    pay.tarjetas_idTarjeta = request.form['Tarjetas']
+    pay.actualizar()
+    flash('¡Se actualizó el pago!')
+    return redirect(url_for('consultarPagos', pagina=1))
+
+#Eliminar
+@app.route("/Pagos/eliminar/<int:id>")
+def eliminarPagos(id):
+    pay = Pagos()
+    pay.eliminar(id)
+    flash('¡Se ha eliminado el Pago!')
+    return redirect(url_for('consultarPagos', pagina=1))
 if __name__=='__main__':
     db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD
     app.run(debug=True)

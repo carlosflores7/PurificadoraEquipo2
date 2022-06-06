@@ -1,0 +1,64 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+<h1 class="bg-primary text-center">Registro de Prestamos</h1>
+<form action="/Prestamos/agregando" method="post">
+
+	<label for="prestamo">prestamo:</label>
+           	
+    <label for="Empleado">Empleado:</label>
+            <select name='Empleado' class="form-control">
+                {% for e in empleado %}
+                <option value="{{e.idEmpleado}}">{{e.usuario.nombre}}</option>
+                {% endfor %}
+            </select>
+        <br>
+
+    <label for="Ventas">Ventas:</label>
+            <select name='Ventas' class="form-control">
+                {% for v in ventas %}
+                <option value="{{v.idVenta}}">{{v.idVenta}}</option>
+                {% endfor %}
+            </select>
+        <br>
+
+    <label for="Garrafones">Garrafones:</label>
+            <select name='Garrafones' class="form-control">
+                {% for g in garrafones %}
+                <option value="{{g.idGarrafon}}">{{g.idGarrafon}}</option>
+                {% endfor %}
+            </select>
+        <br>
+
+	<label for="Cliente">Cliente:</label>
+            <select name='Cliente' class="form-control">
+                {% for c in cliente %}
+                <option value="{{c.idCliente}}">{{c.usuario.nombre}}</option>
+                {% endfor %}
+            </select>
+        <br>
+
+    
+
+
+	<button type="submit" class="btn btn-primary mb-3">
+		<span class="glyphicon glyphicon-floppy-disk"></span>
+		Registrar
+	</button>
+
+	
+
+</form>
+ <a href="/Prestamos/consultar/1" class="btn btn-danger mb-3"> 
+            <span class="glyphicon glyphicon-circle-arrow-rigth"></span>
+            Mostrar
+        </a>
+
+     <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+<div id="notificaciones">
+
+</div>
+{% endblock %}
