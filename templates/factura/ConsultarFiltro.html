@@ -4,7 +4,7 @@
     <h1>Consultar Factura</h1>
 
      <form action="/Factura/consultar/1" method="get">
-        Buscar por Fecha:
+        Buscar por folio de Factura:
          <input class="form-control form-control-lg" type="text" name="filtro">
          <br>
          <input class="btn btn-success" type="submit" value="Buscar" required>
@@ -18,14 +18,16 @@
             <thead>
                 <th>IDFACTURA</th>
                 <th>FECHA</th>
-                <th>CLIENTE_IDCLIENTE</th>
-                <th>VENTAS_IDVENTAS</th>
+                <th>NOMBRE CLIENTE</th>
+                <th>FOLIO DE VENTA</th>
+                <th>EDITAR</th>
+                <th>ELIMINAR</th>
             </thead>
             {% for fac in factura_sin_paginacion %}
             <tr>
                 <td>{{fac.idfactura}}</td>
                 <td>{{fac.fecha}}</td>
-                <td>{{fac.Cliente_idCliente}}</td>
+                <td>{{fac.c.usuario.nombre}}</td>
                 <td>{{fac.Ventas_idVenta}}</td>
 
                  <td>
@@ -38,6 +40,13 @@
                           <span class="glyphicon glyphicon-trash"></span>
                     </a>
                 </td>
+                {% if fac.v.estatus == 'Entregado' %}
+                <td>
+                    <a href="/PDF/nuevo/{{fac.idfactura}}">
+                          <span class="glyphicon glyphicon-save-file"></span> PDF
+                    </a>
+                </td>
+                {% endif %}
 
             </tr>
             {% endfor %}

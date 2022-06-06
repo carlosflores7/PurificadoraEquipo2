@@ -436,6 +436,7 @@ class Ventas(db.Model):
 
     def ventasCliente(self, id):
         return self.query.filter(Ventas.idCliente == id).where(Ventas.estatus == 'Entregado').all()
+
 #Chilcho
 ###Factura###
 class Factura(db.Model):
@@ -528,7 +529,7 @@ class Pedidos(db.Model):
 
 
 
-    def procedimientAlmacenado(self,codigoPromocion, idPedido, precioTotal, idCliente):
+    def procedimientAlmacenado(self,codigoPromocion, idPedido, precioTotal, idCliente, garrafonesPrestados):
         #db.session.execute("sp_compraConfirmada ?, ?", ["CE005", 1])
-        db.session.execute(db.text(f"CALL sp_compraConfirmada('{codigoPromocion}',{idPedido},{precioTotal},{idCliente})"))
+        db.session.execute(db.text(f"CALL sp_compraConfirmada('{codigoPromocion}',{idPedido},{precioTotal},{idCliente},{garrafonesPrestados})"))
         db.session.commit()

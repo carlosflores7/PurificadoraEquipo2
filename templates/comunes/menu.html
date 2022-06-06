@@ -45,12 +45,23 @@
       </li>
       {% endif %}
       {% if current_user.is_authenticated and current_user.is_admin() %}
+
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">GARRAFONES
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="/Garrafones/agregar">Nuevo garrafón</a></li>
           <li><a href="/Garrafones/mostrar/1">Consultar garrafones</a></li>
+        </ul>
+      </li>
+
+
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">PEDIDOS
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Pedido/Nuevo">Nuevo Pedido</a></li>
+          <li><a href="/Pedido/Mispedidos">Ver Pedidos</a></li>
         </ul>
       </li>
 
@@ -131,6 +142,7 @@
       {% endif %}
 
       {% if current_user.is_authenticated and current_user.is_Cliente() %}
+
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">PEDIDOS
         <span class="caret"></span></a>
@@ -165,6 +177,14 @@
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="/Promociones/pagina/1">Ver promociones</a></li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">PEDIDOS
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Pedido/Nuevo">Nuevo Pedido</a></li>
         </ul>
       </li>
 

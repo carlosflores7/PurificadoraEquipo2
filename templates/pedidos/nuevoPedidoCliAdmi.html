@@ -5,13 +5,15 @@
     <form action="/Pedido/Agregando" method="post">
 
         <div>
-            <label>Cliente : {{usuario.nombre}}  </label>
-            <br>
+            <label>Cliente:</label>
+            <select name="idCliente" class="form-control form-control-lg" >
+                <option value="opcion">Selecciona una opcion</option>
+                {% for c in clientes %}
+                    <option value="{{ c.idCliente }}">{{ c.usuario.nombre }}</option>
+                {% endfor %}
+            </select>
         </div>
-        <div>
-            <label>Tú ID de Cliente es:</label>
-            <input type="text" maxlength="3" name="idCliente" value="{{cliente}}" readonly class="form-control form-control-lg" placeholder="" >
-        </div>
+
         <br>
         <div>
             <label>Cantidad Garrafones</label>

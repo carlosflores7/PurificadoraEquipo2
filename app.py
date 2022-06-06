@@ -5,8 +5,6 @@ from datetime import timedelta
 import xlwt
 from flask import Flask, render_template, request, redirect, url_for, flash, session, abort, make_response, Response
 from flask_bootstrap import Bootstrap
-import psycopg2
-import psycopg2.extras
 import pdfkit
 from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas,Factura,Cliente,Pedidos, Nomina
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
@@ -636,10 +634,15 @@ def eliminarVentas_detalle(id):
 def agregarFactura():
     if current_user.is_Cliente():
         c = Cliente()
+        ventas = Ventas()
         id = current_user.idUsuario
         aux = c.consulta(id)
-        ventas = Ventas()
+        print(aux.idCliente)
         return render_template('/Factura/NuevoFactura.html', ventas = ventas.ventasCliente(aux.idCliente))
+    if current_user.is_admin():
+        c = Cliente ()
+        v = Ventas ()
+        return render_template('/Factura/nuevaFacturaAdmin.html', cliente = c.consultaGeneral(), ventas = v.consultaGeneral())
     else:
         abort(404)
 
@@ -655,6 +658,15 @@ def agregarFacturas():
         fac.Cliente_idCliente = aux.idCliente
         fac.Ventas_idVenta = request.form['Ventas']
         fac.insertar()
+        flash('¡La factura se ha registrado!')
+
+        return redirect(url_for("agregarFactura"))
+    if current_user.is_admin():
+        f = Factura()
+        f.fecha = request.form['Fecha']
+        f.Cliente_idCliente = request.form['Clientes']
+        f.Ventas_idVenta = request.form['Ventas']
+        f.insertar()
         flash('¡La factura se ha registrado!')
 
         return redirect(url_for("agregarFactura"))
@@ -719,14 +731,15 @@ def eliminarFactura(id):
 
 @app.route("/Pedido/Nuevo")
 def nuevoPedido():
+    c = Cliente()
+    u = Usuario()
     if current_user.is_Cliente():
-        c = Cliente()
-        u = Usuario()
         id = current_user.idUsuario
         aux = c.consulta(id)
-        print (aux.idCliente)
         usuario = u.consultaIndividual(id)
         return render_template("/pedidos/nuevoPedido.html", cliente = aux.idCliente, usuario = usuario)
+    if current_user.is_admin() or current_user.is_Empleado():
+        return render_template("/pedidos/nuevoPedidoCliAdmi.html", clientes = c.consultaGeneral())
     else:
         abort(404)
 
@@ -737,11 +750,10 @@ def reglaNegocio():
     codigoPromocion = request.form['codigoPromocion']
     idCliente = request.form['idCliente']
     garrafones = request.form['cGarrafones']
-
-
     p.cantidad_garrafones = garrafones;
     p.ClienteID = idCliente
-
+    gPrestados = request.form['gprestados']
+    print(gPrestados)
     resultCodigo = pro.consultaCodigo(codigoPromocion)
     if resultCodigo != None:
         p.insertar()
@@ -750,16 +762,17 @@ def reglaNegocio():
         precioaux = float(precio)#200
         descuento = (precioaux * resultCodigo.porcentaje)/100 #20
         precioTotal = (precioaux - descuento)
-        p.procedimientAlmacenado(codigoPromocion,p.idPedido,precioTotal,idCliente)
-        flash('La venta se a registrado, esta pendiente de entregar')
+        p.procedimientAlmacenado(codigoPromocion,p.idPedido,precioTotal,idCliente, gPrestados)
+        flash('El pedido esta en camino y se le aplico una promoción')
         return redirect(url_for("nuevoPedido"))
     else:
         p.insertar()
         garrafonesInt = int(garrafones)
         precioTotal = garrafonesInt*20
-        p.procedimientAlmacenado('00000',p.idPedido, precioTotal,idCliente)
-        flash('La venta se registro pero la promocion es invalida')
+        p.procedimientAlmacenado('00000',p.idPedido, precioTotal,idCliente,gPrestados)
+        flash('El pedido esta en camino, pero no la promocion esta invalida')
         return redirect(url_for("nuevoPedido"))
+
 @app.route("/Pedido/Mispedidos")
 def misPedidos():
     if current_user.is_Cliente():
@@ -767,9 +780,12 @@ def misPedidos():
         v = Ventas()
         id = current_user.idUsuario
         aux = c.consulta(id)
-        print(aux.idCliente)
         pedidos = v.consultarMisPedidos(aux.idCliente)
         return render_template("/pedidos/misPedidos.html", p = pedidos)
+    if current_user.is_admin():
+        v = Ventas()
+        return render_template("/pedidos/consultarPedidosAdmin.html", p = v.consultaGeneral())
+
     else:
         abort(404)
 @app.route("/Pedido/Confirmar/<int:id>")
@@ -906,14 +922,15 @@ def downloadExcel():
         output  = io.BytesIO()
         workbook = xlwt.Workbook()
         sh = workbook.add_sheet('Ventas')
-        sh.write(0, 0, 'idVenta')
+        sh.write(0, 0, 'Folio de Venta')
         sh.write(0, 1, 'Precio_Total')
         sh.write(0, 2, 'Fecha')
         sh.write(0, 3, 'Estatus')
-        sh.write(0, 4, 'Promociones_idPromocion')
-        sh.write(0, 5, 'Repartidor_idRepartidor')
-        sh.write(0, 6, 'idCliente')
-        sh.write(0, 7, 'idPedido')
+        sh.write(0, 4, 'Codigo de Promocion')
+        sh.write(0, 5, 'Nombre del Repartidor')
+        sh.write(0, 6, 'Nombre del Cliente')
+        sh.write(0, 7, 'Folio de Pedido')
+        sh.write(0, 8, 'Cantidad de garrafones')
 
         idx = 0
         for v in ventas:
@@ -921,10 +938,16 @@ def downloadExcel():
             sh.write(idx + 1, 1, str(v.precio_total))
             sh.write(idx + 1, 2, str(v.fecha))
             sh.write(idx + 1, 3, str(v.estatus))
-            sh.write(idx + 1, 4, str(v.promociones_idpromocion))
-            sh.write(idx + 1, 5, str(v.Repartidor_idRepartidor))
-            sh.write(idx + 1, 6, str(v.idCliente))
+            if v.promociones.codigo == '00000':
+                sh.write(idx + 1, 4, str("No aplica"))
+            else:
+                sh.write(idx + 1, 4, str(v.promociones.codigo))
+
+            sh.write(idx + 1, 5, str(v.repartidor.empleado.usuario.nombre))
+            sh.write(idx + 1, 6, str(v.cliente.usuario.nombre))
             sh.write(idx + 1, 7, str(v.idPedido))
+            sh.write(idx + 1, 8, str(v.pe.cantidad_garrafones))
+
             idx +=1
         workbook.save(output)
         output.seek(0)
@@ -932,13 +955,15 @@ def downloadExcel():
         return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=Ventas.xls"})
     else:
         abort(404)
-@app.route("/venta/consultar")
-def consultarVentas():
-    if current_user.is_authenticated and current_user.is_admin():
-        v = Ventas()
-        return render_template('ventas/consultarVentas.html', ventas = v.consultaGeneral())
-    else:
-        abort(404)
+
+#@app.route("/venta/consultar")
+#def consultarVentas():
+#    if current_user.is_authenticated and current_user.is_admin():
+#        v = Ventas()
+#        return render_template('ventas/consultarVentas.html', ventas = v.consultaGeneral())
+#    else:
+#        abort(404)
+
 @app.route("/Nomina/nueva")
 def nuevaNomina():
     if current_user.is_authenticated and current_user.is_admin():

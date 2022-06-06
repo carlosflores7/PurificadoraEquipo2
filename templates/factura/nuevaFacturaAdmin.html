@@ -1,0 +1,49 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+<h1 class="bg-primary text-center">Registro De Factura</h1>
+<form action="/Factura/agregando" method="post">
+
+
+    <div class="form-group">
+		<label for="Cliente">Cliente:</label>
+        <select name='Clientes' class="form-control">
+            {% for c in cliente %}
+                 <option  class="form-control form-control-lg"  value="{{c.idCliente}}">{{ c.usuario.nombre }}</option>
+            {% endfor %}
+        </select>
+	</div>
+
+	<div class="form-group">
+		<label for="fecha">Fecha:</label>
+		<input type="date" name="Fecha" class="form-control form-control-lg" required>
+	</div>
+    <div class="form-group">
+        <label for="fventa">Folio Venta:</label>
+
+        <select name='Ventas' class="form-control">
+            {% for v in ventas %}
+                 <option  class="form-control form-control-lg"  value="{{v.idVenta}}">{{ v.idVenta }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <br>
+
+
+	<button type="submit" class="btn btn-primary mb-3">
+		<span class="glyphicon glyphicon-floppy-disk"></span>
+		Registrar
+	</button>
+
+
+
+</form>
+    <br>
+     <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+<div id="notificaciones">
+
+</div>
+{% endblock %}
