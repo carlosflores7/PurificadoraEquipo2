@@ -1,0 +1,44 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consultar Ventas Con Promocion</h1>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                 <th>IDPROMOCIONESVENTA</th>
+                 <th>PROMOCIONES_IDPROMOCION</th>
+                 <th>VENTAS_IDVENTAS</th>
+            </thead>
+            {% for p in promociones_venta_sin_paginacion %}
+            <tr>
+                <td>{{p.idPromocionesVenta}}</td>
+                <td>{{p.promociones_idpromocion}}</td>
+                <td>{{p.Ventas_idVentas}}</td>
+                
+                <!--
+                <td>
+                    <a href="/Promociones_Venta/editar/{{p.idPromociones_Venta}}">
+                           <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+                </td> -->
+                 
+                <td>
+                    <a href="/Promociones_Venta/eliminar/{{p.idPromocionesVenta}}">
+                          <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <br>
+
+<div id="notificaciones">
+          <a href="/" id="regresar" type="submit" class="btn btn-warning mb-3">
+            Regresar
+          </a>
+
+</div>
+{% endblock %}

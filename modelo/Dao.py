@@ -621,3 +621,34 @@ class Pagos(db.Model):
     def paginar(self, pagina):
         return self.query.paginate(per_page=1, page=pagina, error_out=True)
 
+###Promociones Venta###
+class Promociones_Venta(db.Model):
+    __tablename__ = 'promociones_venta'
+    idPromocionesVenta = Column(Integer, primary_key=True)
+    promociones_idpromocion = Column(Integer, ForeignKey('promociones.idpromocion'))
+    Ventas_idVentas = Column(Integer, ForeignKey('ventas.idVenta'))
+    p = relationship('Promociones', lazy='select')
+    v = relationship('Ventas', lazy='select')
+
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaIndividual(self, id):
+        return self.query.get(id)
+
+    def consultaGeneral(self):
+        return self.query.all()
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()
+
+    def filtrar(self, filtro):
+        return self.query.filter(Promociones.idpromocion.like('%' + filtro + '%'))
+
+    def paginar(self, pagina):
+        return self.query.paginate(per_page=1, page=pagina, error_out=True)
+

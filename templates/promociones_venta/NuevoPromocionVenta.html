@@ -1,0 +1,45 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+<h1 class="bg-primary text-center">Registro de Ventas Con Promocion</h1>
+<form action="/Promociones_Venta/agregando" method="post">
+
+
+
+    <label for="Promociones">Promociones:</label>
+            <select name='Promociones' class="form-control">
+                {% for p in promociones %}
+                <option value="{{p.idpromocion}}">{{p.idpromocion}}</option>
+                {% endfor %}
+            </select>
+        <br>
+
+    <label for="Ventas">Ventas:</label>
+            <select name='Ventas' class="form-control">
+                {% for v in ventas %}
+                <option value="{{v.idVenta}}">{{v.idVenta}}</option>
+                {% endfor %}
+            </select>
+        <br>
+
+	<button type="submit" class="btn btn-primary mb-3">
+		<span class="glyphicon glyphicon-floppy-disk"></span>
+		Registrar
+	</button>
+
+	
+
+</form>
+ <a href="/Promociones_Venta/consultar/1" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-rigth"></span>
+            Mostrar
+        </a>
+
+     <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+<div id="notificaciones">
+
+</div>
+{% endblock %}

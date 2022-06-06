@@ -6,13 +6,13 @@ import xlwt
 from flask import Flask, render_template, request, redirect, url_for, flash, session, abort, make_response, Response
 from flask_bootstrap import Bootstrap
 import pdfkit
-from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas,Factura,Cliente,Pedidos, Nomina,Pagos,Prestamos
+from modelo.Dao import db,Usuario,Vehiculo,Garrafones,Promociones,Empleado,Tarjetas,Puesto,Repartidor, VentasDetalle, Ventas,Factura,Cliente,Pedidos, Nomina,Pagos,Prestamos,Promociones_Venta
 from flask_login import login_required,login_user,logout_user,current_user,LoginManager
 import json
 from datetime import date
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -52,9 +52,9 @@ def cargar_usuario(id):
 
 @app.route('/Usuarios/nuevo')
 def nuevoUsuario():
-    if current_user.is_authenticated and current_user.is_admin():
+    ##if current_user.is_authenticated and current_user.is_admin():
         return render_template('usuarios/nuevoUsuario.html')
-    else:
+    ##else:
         abort(404)
 
 @app.route('/Usuarios/agregar',methods=['post'])
@@ -366,6 +366,7 @@ def eliminarPromocion(id):
         flash('¡ERROR''!')
     return redirect(url_for("inicio"))
 #Fin del CRUD PROMOCIONES
+
 
 #CRUD TARJETAS
 @app.route('/Tarjetas/agregar')
@@ -1229,6 +1230,54 @@ def eliminarPuesto(id):
     return redirect(url_for('verPuestos', pagina=1))
 
 #Fin de CRUD de puestos
+
+#Inicio CRUD Promociones Venta
+@app.route('/PromocionesVenta/nuevo')
+def agregarPromocionVenta():
+    promociones = Promociones()
+    ventas = Ventas()
+    return render_template('/Promociones_Venta/NuevoPromocionVenta.html', promociones = promociones.consultaGeneral(), ventas = ventas.consultaGeneral())
+
+
+
+@app.route('/Promociones_Venta/agregando', methods=['post'])
+def agregandoPromocionVenta():
+    pventas = Promociones_Venta()
+    pventas.promociones_idpromocion = request.form['Promociones']
+    pventas.Ventas_idVentas = request.form['Ventas']
+    pventas.insertar()
+    flash('¡La Promocion de la venta se ha registrado!')
+
+    return redirect(url_for("agregarPromocionVenta"))
+
+#MOSTRAR
+@app.route('/Promociones_Venta/consultar/<int:pagina>')
+@login_required
+def consultarPromocionesVenta(pagina):
+    if current_user.is_admin():
+        p = Promociones_Venta()
+        if request.args.get('filtro'):
+            return render_template('Promociones_Venta/ConsultarFiltro.html', promocion_venta_sin_paginacion = p.filtrar(request.args.get('filtro')), pagina = pagina)
+        else:
+                return render_template('Promociones_Venta/ConsultarPromocion.html', promociones_venta = p.paginar(pagina), pagina = pagina)
+    else:
+        abort(404)
+
+#Eliminar
+@app.route("/PromocionesVenta/eliminar/<int:id>")
+def eliminarPromocionVenta(id):
+    p = Promociones_Venta()
+    p.eliminar(id)
+    flash('¡Se ha eliminado el promocion venta!')
+    return redirect(url_for('consultarPromocionesVenta', pagina=1))
+
+
 if __name__=='__main__':
     db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD
     app.run(debug=True)
+
+#FIN_CRUD_PROMOCIONES_VENTA
+if __name__=='__main__':
+    db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD
+    app.run(debug=True)
+

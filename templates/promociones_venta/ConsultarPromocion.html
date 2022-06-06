@@ -1,0 +1,63 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1>Consultar Ventas Con Promocion</h1>
+
+     <form action="/Promociones_Venta/consultar/1" method="get">
+        Buscar por id de Venta con Promocion:
+         <input class="form-control form-control-lg" type="text" name="filtro">
+         <br>
+         <input class="btn btn-success" type="submit" value="Buscar" required>
+          <a href="/" id="regresar" type="submit" class="btn btn-warning mb-3">
+            Regresar
+        </a>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>IDPROMOCIONESVENTA</th>
+                <th>PROMOCIONES_IDPROMOCION</th>
+                <th>VENTAS_IDVENTAS</th>
+                
+            </thead>
+            {% for p in promociones_venta.items %}
+            <tr>
+                <td>{{p.idPromocionesVenta}}</td>
+                <td>{{p.promociones_idpromocion}}</td>
+                <td>{{p.Ventas_idVentas}}</td>
+
+                 <!-- 
+                <td>
+                    <a href="/Promociones_Venta/editar/{{p.idPromocionesVenta}}">
+                           <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+                </td> -->
+                <td>
+                    <a href="/Promociones_Venta/eliminar/{{p.idPromocionesVenta}}">
+                          <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+ <div>
+    <ul class="pagination">
+        {% for page in promociones_venta.iter_pages() %}
+            {% if page %}
+                {% if page == pagina %}
+                    <li class="active"><a href="#">{{page}}</a></li>
+                {% else %}
+                    <li><a href="{{url_for('consultarPromocionesVenta', pagina=page)}}">{{ page }}</a></li>
+                {% endif %}
+            {% else %}
+            <li><a href="#">...</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    </div>
+<div id="notificaciones">
+
+</div>
+{% endblock %}
