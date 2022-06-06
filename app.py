@@ -1171,6 +1171,64 @@ def eliminarPagos(id):
     pay.eliminar(id)
     flash('¡Se ha eliminado el Pago!')
     return redirect(url_for('consultarPagos', pagina=1))
+
+#Inicia CRUD de Puestos
+@app.route("/Puesto/consultar/<int:pagina>")
+def verPuestos(pagina):
+    puestos = Puesto()
+    return render_template('puestos/consultaGeneral.html', puestos=puestos.paginar(pagina), pagina=pagina)
+
+@app.route("/Puesto/nuevo")
+def nuevoPuesto():
+    return render_template('puestos/agregarPuesto.html')
+
+@app.route("/Puesto/agregando", methods=['post'])
+def agregandoPuesto():
+    try:
+        puesto = Puesto()
+        puesto.nombre = request.form['nombre']
+        puesto.salario_max = request.form['salario_max']
+        puesto.salario_min = request.form['salario_min']
+        puesto.descripcion = request.form['descripcion']
+        puesto.insertar()
+
+        flash('¡ Puesto registrado con éxito !')
+    except:
+        flash('¡ Error al agregar un nuevo Puesto !')
+    return redirect(url_for('nuevoPuesto'))
+
+@app.route("/Puesto/ind/<int:id>")
+def verPuestoIndividual(id):
+    puesto = Puesto()
+    return render_template('puestos/verPuesto.html', p=puesto.consultaIndividual(id))
+
+@app.route("/Puesto/actualizar", methods=['post'])
+def actualizandoPuesto():
+    try:
+        puesto = Puesto()
+        puesto.idPuesto = request.form['ID']
+        puesto.nombre = request.form['nombre']
+        puesto.salario_max = request.form['salario_max']
+        puesto.salario_min = request.form['salario_min']
+        puesto.descripcion = request.form['descripcion']
+        puesto.editar()
+
+        flash('¡ Puesto editado con éxito !')
+    except:
+        flash('¡ Error al editar el puesto !')
+    return redirect(url_for('verPuestoIndividual', id=request.form['ID']))
+
+@app.route('/Puesto/eliminar/<int:id>')
+def eliminarPuesto(id):
+    try:
+        puesto = Puesto()
+        puesto.eliminar(id)
+        flash('Puesto eliminado con éxito')
+    except:
+        flash('Error al eliminar el puesto')
+    return redirect(url_for('verPuestos', pagina=1))
+
+#Fin de CRUD de puestos
 if __name__=='__main__':
     db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD
     app.run(debug=True)

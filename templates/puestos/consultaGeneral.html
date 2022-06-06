@@ -1,0 +1,56 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+    <h1>LISTADO DE PUESTOS - PÁGINA {{pagina}}</h1>
+<br>
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>SALARIO MÁXIMO</th>
+            <th>SALARIO MÍNIMO</th>
+            <th>DESCRIPCIÓN</th>
+            <th>VER</th>
+        </thead>
+        {% for p in puestos.items %}
+            <tr>
+                <td>{{p.idPuesto}}</td>
+                <td>{{p.nombre}}</td>
+                <td>{{p.salario_max}}</td>
+                <td>{{p.salario_min}}</td>
+                <td>{{p.descripcion}}</td>
+                    <td>
+                        <a href="/Puesto/ind/{{p.idPuesto}}">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </a>
+                    </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    <ul class="pagination">
+    {% for page in puestos.iter_pages() %}
+        {% if page %}
+            {% if page == pagina %}
+                <li class="active"><a href="#">{{page}}</a></li>
+            {% else %}
+                <li><a href="{{url_for('verPuestos', pagina=page)}}">{{ page }}</a></li>
+            {% endif %}
+        {% else %}
+        <li><a href="#">...</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+
+    <br>
+    <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+    <a href="/Puesto/nuevo" class="btn btn-success mb-3">
+            <span class="glyphicon glyphicon-plus-sign"></span>
+            Añadir puesto
+    </a>
+{% endblock %}

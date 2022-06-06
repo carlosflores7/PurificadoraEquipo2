@@ -1,0 +1,48 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+    {{super()}}
+    <h1 class="bg-primary text-center">Consulta individual de puesto</h1>
+
+    <form action="/Puesto/actualizar" method="post" onsubmit="return validar(this)">
+        <div class="form-group">
+            <label for="nombre">ID:</label>
+            <input class="form-control form-control-lg" type="text" name="ID"  placeholder="Ejemplo: llenador" value="{{p.idPuesto}}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input class="form-control form-control-lg" type="text" name="nombre" maxlength="50"  placeholder="Ejemplo: llenador" value="{{p.nombre}}" required>
+        </div>
+        <div class="form-group">
+            <label for="salario_max">Salario máximo:</label>
+            <input class="form-control form-control-lg" type="number" name="salario_max" maxlength="5" placeholder="Ejemplo: $100" value="{{p.salario_max}}" required>
+        </div>
+        <div class="form-group">
+            <label for="salario_min">Salario mínimo:</label>
+            <input class="form-control form-control-lg" type="number" name="salario_min" maxlength="5" placeholder="Ejemplo: $50" value="{{p.salario_min}}" required>
+        </div>
+        <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <input class="form-control form-control-lg" type="text" name="descripcion" maxlength="200" placeholder="Añade una descripción" value="{{p.descripcion}}" required>
+        </div>
+        <button type="submit" class="btn btn-primary mb-3">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Actualizar
+        </button>
+        <a href="/" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+        </a>
+        <a href="/Puesto/eliminar/{{p.idPuesto}}" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon glyphicon-remove"></span>
+            Eliminar
+        </a>
+    </form>
+<div id="notificaciones">
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+    <script src="{{url_for('static',filename='js/puestos.js')}}"></script>
+{% endblock %}
