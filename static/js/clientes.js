@@ -96,10 +96,14 @@ function tieneCaracterEspecial(cadena){
 }
 
 function validarRFC(cadena){
-    if(cadena.length>=12 && cadena.length<=13){
-        return '';
-    }
-    else{
-        return 'El RFC debe ser de 12 o 13 dígitos<br>';
-    }
+
+var expreg = /^([A-Z,Ñ,&]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[A-Z|\d]{3})$/;
+
+if(expreg.test(cadena))
+    return ''; 
+  else 
+    return 'RFC inválido'; 
 }
+
+//RDL0904102F4
+//FOAC0002254V4
