@@ -14,7 +14,7 @@
             </select>
         <br>
 
-    <label for="Ventas">Ventas:</label>
+    <label for="Ventas">Folio Venta:</label>
             <select name='Ventas' class="form-control">
                 {% for v in ventas %}
                 <option value="{{v.idVenta}}">{{v.idVenta}}</option>
@@ -23,11 +23,7 @@
         <br>
 
     <label for="Garrafones">Garrafones:</label>
-            <select name='Garrafones' class="form-control">
-                {% for g in garrafones %}
-                <option value="{{g.idGarrafon}}">{{g.idGarrafon}}</option>
-                {% endfor %}
-            </select>
+    <input type="text" name="cGarrafones" maxlength="3" placeholder="Ej. 10" class="form-control form-control-lg" required>
         <br>
 
 	<label for="Cliente">Cliente:</label>

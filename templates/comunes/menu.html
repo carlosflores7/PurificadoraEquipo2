@@ -11,6 +11,7 @@
     </div>
     <ul class="nav navbar-nav">
       {% if current_user.is_authenticated and current_user.is_admin() %}
+
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">ADMIN
         <span class="caret"></span></a>
@@ -52,6 +53,15 @@
         <ul class="dropdown-menu">
           <li><a href="/Garrafones/agregar">Nuevo garrafón</a></li>
           <li><a href="/Garrafones/mostrar/1">Consultar garrafones</a></li>
+        </ul>
+      </li>
+
+          <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">PUESTOS
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Puesto/nuevo">Nuevo Puesto</a></li>
+          <li><a href="/Puesto/consultar/1">Consultar Puestos</a></li>
         </ul>
       </li>
 
@@ -98,6 +108,23 @@
         <ul class="dropdown-menu">
           <li><a href="/Nomina/nueva">Registrar Nomina</a></li>
           <li><a href="/Nomina/consultar/1">Ver Nominas</a></li>
+        </ul>
+      </li>
+          <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">PAGOS
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Pagos/nuevo">Nuevo Pago</a></li>
+          <li><a href="/Pagos/consultar/1">Ver Pagos</a></li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">PRESTAMOS
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/Prestamos/nuevo">Nuevo Prestamo</a></li>
+          <li><a href="/Prestamos/consultar/1">Ver Prestamos</a></li>
         </ul>
       </li>
 

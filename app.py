@@ -12,7 +12,7 @@ import json
 from datetime import date
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:hola.123@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -1079,7 +1079,7 @@ def agregarPrestamos():
     prestamo = Prestamos()
     prestamo.Empleado_idEmpleado = request.form['Empleado']
     prestamo.Ventas_idVentas = request.form['Ventas']
-    prestamo.Garrafones_idGarrafon = request.form['Garrafones']
+    prestamo.garrafones_prestados = request.form['cGarrafones']
     prestamo.Cliente_idCliente = request.form['Cliente']
     prestamo.insertar()
     flash('¡El prestamo se ha registrado!')

@@ -7,18 +7,18 @@
         <table class="table">
             <thead>
                  <th>IDPRESTAMO</th>
-                <th>EMPLEADO_IDEMPLEADO</th>
+                <th>EMPLEADO</th>
                 <th>VENTAS_IDVENTAS</th>
-                <th>GARRAFONES_IDGARRAFON</th>
-                <th>CLIENTE_IDCLIENTE</th>
+                <th>GARRAFONES PRESTADOS</th>
+                <th>CLIENTE</th>
             </thead>
             {% for p in prestamo_sin_paginacion %}
             <tr>
                 <td>{{p.idPrestamos}}</td>
-                <td>{{p.Empleado_idEmpleado}}</td>
+                <td>{{p.e.usuario.nombre}}</td>
                 <td>{{p.Ventas_idVentas}}</td>
-                <td>{{p.Garrafones_idGarrafon}}</td>
-                <td>{{p.Cliente_idCliente}}</td>
+                <td>{{p.garrafones_prestados}}</td>
+                <td>{{p.c.usuario.nombre}}</td>
                 
                 <!-- 
                 <td>

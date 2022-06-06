@@ -229,6 +229,21 @@ class Puesto(db.Model):
     def consultaGeneral(self):
         return self.query.all()
 
+    def consultaIndividual(self, id):
+        return self.query.get(id)
+
+    def paginar(self, pagina):
+        return self.query.paginate(per_page=4, page=pagina, error_out=True)
+
+    def editar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminacionLogica(self, id):
+        empleado = self.consultaIndividual(id)
+        empleado.tipoEmpleado = 'I'
+        empleado.editar()
+
 class Empleado(db.Model):
     __tablename__='Empleado'
     idEmpleado = Column(Integer,primary_key=True)
@@ -541,12 +556,11 @@ class Prestamos(db.Model):
     idPrestamos = Column(Integer, primary_key=True)
     Empleado_idEmpleado = Column(Integer, ForeignKey('Empleado.idEmpleado'))
     Ventas_idVentas = Column(Integer, ForeignKey('ventas.idVenta'))
-    Garrafones_idGarrafon = Column(Integer, ForeignKey('garrafones.idGarrafon'))
     Cliente_idCliente = Column(Integer, ForeignKey('cliente.idCliente'))
+    garrafones_prestados = Column(Integer, nullable= False)
     e = relationship('Empleado', lazy='select')
     c = relationship('Cliente', lazy='select')
     v = relationship('Ventas', lazy='select')
-    g = relationship('Garrafones', lazy='select')
 
 
     def insertar(self):
@@ -568,7 +582,7 @@ class Prestamos(db.Model):
         return self.query.filter(Prestamos.idPrestamos.like('%' + filtro + '%'))
 
     def paginar(self, pagina):
-        return self.query.paginate(per_page=1, page=pagina, error_out=True)
+        return self.query.paginate(per_page=5, page=pagina, error_out=True)
 
 
 #Chilcho
@@ -606,3 +620,4 @@ class Pagos(db.Model):
 
     def paginar(self, pagina):
         return self.query.paginate(per_page=1, page=pagina, error_out=True)
+
