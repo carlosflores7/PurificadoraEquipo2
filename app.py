@@ -12,7 +12,7 @@ import json
 from datetime import date
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -754,6 +754,10 @@ def reglaNegocio():
     p.cantidad_garrafones = garrafones;
     p.ClienteID = idCliente
     gPrestados = request.form['gprestados']
+    if gPrestados == '1':
+        cGarrafones = request.form['cGarrafonesPrestados']
+    else:
+        cGarrafones = 0
     print(gPrestados)
     resultCodigo = pro.consultaCodigo(codigoPromocion)
     if resultCodigo != None:
@@ -763,14 +767,14 @@ def reglaNegocio():
         precioaux = float(precio)#200
         descuento = (precioaux * resultCodigo.porcentaje)/100 #20
         precioTotal = (precioaux - descuento)
-        p.procedimientAlmacenado(codigoPromocion,p.idPedido,precioTotal,idCliente, gPrestados)
+        p.procedimientAlmacenado(codigoPromocion,p.idPedido,precioTotal,idCliente, cGarrafones)
         flash('El pedido esta en camino y se le aplico una promoción')
         return redirect(url_for("nuevoPedido"))
     else:
         p.insertar()
         garrafonesInt = int(garrafones)
         precioTotal = garrafonesInt*20
-        p.procedimientAlmacenado('00000',p.idPedido, precioTotal,idCliente,gPrestados)
+        p.procedimientAlmacenado('00000',p.idPedido, precioTotal,idCliente,cGarrafones)
         flash('El pedido esta en camino, pero no la promocion esta invalida')
         return redirect(url_for("nuevoPedido"))
 
@@ -1271,10 +1275,24 @@ def eliminarPromocionVenta(id):
     flash('¡Se ha eliminado el promocion venta!')
     return redirect(url_for('consultarPromocionesVenta', pagina=1))
 
-
-if __name__=='__main__':
-    db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD
-    app.run(debug=True)
+@app.route("/Facturas/json/<int:id>")
+def consultarFacturasJSON(id):
+    ventas = Ventas()
+    if id==0:
+        lista=ventas.ventasCliente(id)
+    else:
+        lista=ventas.ventasCliente(id)
+    #print(lista)
+    listaFacturas=[]
+    cliente = Cliente()
+    cliente = cliente.consultaIndividual(id)
+    #Generacion de un diccionario para convertir los datos a JSON
+    for fac in lista:
+        fac_dic={'Folio':fac.idVenta}
+        listaFacturas.append(fac_dic)
+    #print(listaProductos)
+    var_json=json.dumps(listaFacturas)
+    return var_json
 
 #FIN_CRUD_PROMOCIONES_VENTA
 if __name__=='__main__':

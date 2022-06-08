@@ -20,11 +20,17 @@
         <br>
         <div>
             <label>¿Los garrafones son prestados?</label>
-            <select name="gprestados" class="form-control form-control-lg" >
+            <select id="gprestados" name="gprestados" class="form-control form-control-lg" onchange="prestados()">
                 <option value="opcion">Selecciona una opcion</option>
                 <option value="1">Sí</option>
                 <option value="0">No</option>
             </select>
+        </div>
+        <br>
+        <div id="divprestados" hidden>
+            <label>Cantidad de garrafones prestados</label>
+            <input id="garrafonesP" type="text" maxlength="3" name="cGarrafonesPrestados" required class="form-control form-control-lg" placeholder="" value="0">
+            <br>
         </div>
         <br>
         <div>
@@ -32,7 +38,6 @@
             <input type="text" maxlength="5" name="codigoPromocion" value="No" class="form-control form-control-lg" placeholder="" >
         </div>
 
-        <br>
         <button id="registrar" type="submit" class="btn btn-primary mb-3">
             <span class="glyphicon glyphicon-floppy-disk"></span>
             Confirmar
@@ -50,5 +55,5 @@
 
 {% block scripts %}
 {{super()}}
-
+    <script src="{{url_for('static',filename='js/pedidos.js')}}"></script>
 {% endblock %}

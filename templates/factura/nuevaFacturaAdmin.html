@@ -7,7 +7,8 @@
 
     <div class="form-group">
 		<label for="Cliente">Cliente:</label>
-        <select name='Clientes' class="form-control">
+        <select id="clientes" name='Clientes' class="form-control" onchange="obtenerID()">
+            <option  class="form-control form-control-lg"  value="0">Selecciona un cliente</option>
             {% for c in cliente %}
                  <option  class="form-control form-control-lg"  value="{{c.idCliente}}">{{ c.usuario.nombre }}</option>
             {% endfor %}
@@ -18,13 +19,11 @@
 		<label for="fecha">Fecha:</label>
 		<input type="date" name="Fecha" class="form-control form-control-lg" required>
 	</div>
-    <div class="form-group">
+    <div id="ventasdiv" class="form-group">
         <label for="fventa">Folio Venta:</label>
 
-        <select name='Ventas' class="form-control">
-            {% for v in ventas %}
-                 <option  class="form-control form-control-lg"  value="{{v.idVenta}}">{{ v.idVenta }}</option>
-            {% endfor %}
+        <select id="ventas" name='Ventas' class="form-control" readonly>
+            <option id="removeme" class="form-control form-control-lg">Selecciona primero un cliente</option>
         </select>
     </div>
     <br>
@@ -46,4 +45,9 @@
 <div id="notificaciones">
 
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+    <script src="{{url_for('static',filename='js/facturas.js')}}"></script>
 {% endblock %}
