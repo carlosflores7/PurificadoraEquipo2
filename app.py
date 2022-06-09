@@ -12,7 +12,7 @@ import json
 from datetime import date
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -983,21 +983,17 @@ def agregarNomina():
     if current_user.is_authenticated and current_user.is_admin():
         n = Nomina()
         salario = int(request.form['salario'])
-        comisiones = int(request.form['comisiones'])
         empleado = request.form['empleado']
         mensaje = ""
         if empleado == "opcion":
             mensaje += "Empleado incorrecto\n"
         if salario < 0 :
             mensaje += "Salario incorrecto\n"
-        if comisiones < 0 :
-            mensaje += "Comisiones incorrecto\n"
 
         if mensaje == "":
             n.Empleado_idEmpleado = empleado
             n.salario_total = salario
             n.dias_trabajados = request.form['dias_trabajados']
-            n.comisiones = comisiones
             n.insertar()
             flash("Nomina registrada")
         else:
@@ -1029,18 +1025,14 @@ def actualizarNomina():
     if current_user.is_authenticated and current_user.is_admin():
         n = Nomina()
         salario = float(request.form['salario'])
-        comisiones = float(request.form['comisiones'])
         mensaje = ""
         if salario < 0.0 :
             mensaje += "Salario incorrecto\n"
-        if comisiones < 0.0 :
-            mensaje += "Comisiones incorrecto\n"
 
         if mensaje == "":
             n.idnomina = request.form['idNomina']
             n.salario_total = salario
             n.dias_trabajados = request.form['dias_trabajados']
-            n.comisiones = comisiones
             n.actualizar()
             flash("Nomina actualizada")
         else:
@@ -1127,9 +1119,8 @@ def agregarPago():
 @app.route('/Pagos/agregando', methods=['post'])
 def agregarPagos():
     pay = Pagos()
-    pay.nominas_idnomina= request.form['Nominas']
+    pay.nominas_idnomina= request.form['idNomina']
     pay.fecha = request.form['Fecha']
-    pay.realizo = request.form['Realizo']
     pay.tarjetas_idTarjeta = request.form['Tarjetas']
     pay.insertar()
     flash('¡El pago se ha registrado')
@@ -1163,7 +1154,6 @@ def editandoPagos():
     pay.idPago=request.form['Pago']
     pay.nominas_idnomina = request.form['Nomina']
     pay.fecha = request.form['Fecha']
-    pay.realizo = request.form['Realizo']
     pay.tarjetas_idTarjeta = request.form['Tarjetas']
     pay.actualizar()
     flash('¡Se actualizó el pago!')
@@ -1192,8 +1182,7 @@ def agregandoPuesto():
     try:
         puesto = Puesto()
         puesto.nombre = request.form['nombre']
-        puesto.salario_max = request.form['salario_max']
-        puesto.salario_min = request.form['salario_min']
+        puesto.salario = request.form['salario']
         puesto.descripcion = request.form['descripcion']
         puesto.insertar()
 
@@ -1213,8 +1202,7 @@ def actualizandoPuesto():
         puesto = Puesto()
         puesto.idPuesto = request.form['ID']
         puesto.nombre = request.form['nombre']
-        puesto.salario_max = request.form['salario_max']
-        puesto.salario_min = request.form['salario_min']
+        puesto.salario = request.form['salario']
         puesto.descripcion = request.form['descripcion']
         puesto.editar()
 
@@ -1292,6 +1280,25 @@ def consultarFacturasJSON(id):
         listaFacturas.append(fac_dic)
     #print(listaProductos)
     var_json=json.dumps(listaFacturas)
+    return var_json
+
+@app.route("/Tarjetas/json/<int:id>")
+def consultarTarjetasJSON(id):
+    tarjetas = Tarjetas()
+    nomina = Nomina()
+    nomina = nomina.nominaCliente(id)
+    if id==0:
+        lista=tarjetas.consultaTarjetaUsuario(id)
+    else:
+        lista=tarjetas.consultaTarjetaUsuario(id)
+    #print(lista)
+    listaTarjetas=[]
+    #Generacion de un diccionario para convertir los datos a JSON
+    for tar in lista:
+        tar_dic={'Tarjeta':tar.numero_tarjeta,'idTarjeta':tar.idTarjeta,'idNomina':nomina.idnomina}
+        listaTarjetas.append(tar_dic)
+    #print(listaProductos)
+    var_json=json.dumps(listaTarjetas)
     return var_json
 
 #FIN_CRUD_PROMOCIONES_VENTA

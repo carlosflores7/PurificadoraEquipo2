@@ -1,8 +1,8 @@
 {% extends 'comunes/base.html' %}
 {% block contenido %}
     {{super()}}
-     <h1 class="bg-primary text-center">Registro De Pedidos</h1>
-    <form action="/Pedido/Agregando" method="post">
+     <h1 class="bg-primary text-center">Rsegistro De Pedidos</h1>
+    <form action="/Pedido/Agregando" method="post" onsubmit="return validar(this)">
 
         <div>
             <label>Cliente:</label>

@@ -21,7 +21,7 @@ USE `aguazero` ;
 -- Table `aguazero`.`usuarios`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`usuarios` (
-  `idUsuario` INT NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL DEFAULT NULL,
   `correo` VARCHAR(45) NULL DEFAULT NULL,
   `password_hash` VARCHAR(256) NULL DEFAULT NULL,
@@ -29,132 +29,95 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`usuarios` (
   `estatus` CHAR(1) NULL DEFAULT NULL,
   PRIMARY KEY (`idUsuario`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 15
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`cliente`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`cliente` (
-  `idCliente` INT NOT NULL AUTO_INCREMENT,
+  `idCliente` INT(11) NOT NULL AUTO_INCREMENT,
   `domicilio` VARCHAR(45) NULL DEFAULT NULL,
   `localidad` VARCHAR(45) NULL DEFAULT NULL,
   `rfc` VARCHAR(15) NULL DEFAULT NULL,
-  `Usuarios_idUsuario` INT NOT NULL,
+  `Usuarios_idUsuario` INT(11) NOT NULL,
   PRIMARY KEY (`idCliente`),
   INDEX `fk_Cliente_Usuarios1_idx` (`Usuarios_idUsuario` ASC) VISIBLE,
   CONSTRAINT `fk_Cliente_Usuarios1`
     FOREIGN KEY (`Usuarios_idUsuario`)
     REFERENCES `aguazero`.`usuarios` (`idUsuario`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 6
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`puestos`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`puestos` (
-  `idPuesto` INT NOT NULL AUTO_INCREMENT,
+  `idPuesto` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL DEFAULT NULL,
-  `salario_max` VARCHAR(45) NULL DEFAULT NULL,
-  `salario_min` VARCHAR(45) NULL DEFAULT NULL,
+  `salario` INT(11) NULL DEFAULT NULL,
   `descripcion` VARCHAR(200) NULL DEFAULT NULL,
   PRIMARY KEY (`idPuesto`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`empleado`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`empleado` (
-  `idEmpleado` INT NOT NULL AUTO_INCREMENT,
+  `idEmpleado` INT(11) NOT NULL AUTO_INCREMENT,
   `tipoEmpleado` VARCHAR(40) NULL DEFAULT NULL,
   `salario_por_dia` VARCHAR(45) NULL DEFAULT NULL,
   `turno` VARCHAR(45) NULL DEFAULT NULL,
   `nss` VARCHAR(45) NULL DEFAULT NULL,
-  `Usuarios_idUsuario` INT NOT NULL,
-  `puestos_idPuesto` INT NOT NULL,
+  `Usuarios_idUsuario` INT(11) NOT NULL,
+  `puestos_idPuesto` INT(11) NOT NULL,
   PRIMARY KEY (`idEmpleado`),
   INDEX `fk_Empleado_Usuarios1_idx` (`Usuarios_idUsuario` ASC) VISIBLE,
   INDEX `fk_Empleado_puestos1_idx` (`puestos_idPuesto` ASC) VISIBLE,
-  CONSTRAINT `fk_Empleado_puestos1`
-    FOREIGN KEY (`puestos_idPuesto`)
-    REFERENCES `aguazero`.`puestos` (`idPuesto`),
   CONSTRAINT `fk_Empleado_Usuarios1`
     FOREIGN KEY (`Usuarios_idUsuario`)
-    REFERENCES `aguazero`.`usuarios` (`idUsuario`))
+    REFERENCES `aguazero`.`usuarios` (`idUsuario`),
+  CONSTRAINT `fk_Empleado_puestos1`
+    FOREIGN KEY (`puestos_idPuesto`)
+    REFERENCES `aguazero`.`puestos` (`idPuesto`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `aguazero`.`promociones`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aguazero`.`promociones` (
-  `idpromocion` INT NOT NULL AUTO_INCREMENT,
-  `estatus` TINYINT NULL DEFAULT NULL,
-  `porcentaje` DOUBLE NULL DEFAULT NULL,
-  `codigo` VARCHAR(5) NULL DEFAULT NULL,
-  PRIMARY KEY (`idpromocion`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `aguazero`.`pedidos`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aguazero`.`pedidos` (
-  `idPedido` INT NOT NULL AUTO_INCREMENT,
-  `cantidad_garrafones` INT NOT NULL,
-  `ClienteID` INT NOT NULL,
-  `idPromocion` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`idPedido`),
-  INDEX `FK_pedidos_cliente` (`ClienteID` ASC) VISIBLE,
-  INDEX `FK_pedidos_promocion` (`idPromocion` ASC) VISIBLE,
-  CONSTRAINT `FK_pedidos_cliente`
-    FOREIGN KEY (`ClienteID`)
-    REFERENCES `aguazero`.`cliente` (`idCliente`),
-  CONSTRAINT `FK_pedidos_promocion`
-    FOREIGN KEY (`idPromocion`)
-    REFERENCES `aguazero`.`promociones` (`idpromocion`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 46
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 7
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`vehiculo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`vehiculo` (
-  `idVehiculo` INT NOT NULL AUTO_INCREMENT,
+  `idVehiculo` INT(11) NOT NULL AUTO_INCREMENT,
   `placas` VARCHAR(10) NULL DEFAULT NULL,
   `tipo_de_vehiculo` VARCHAR(45) NULL DEFAULT NULL,
   `tipo_combustible` VARCHAR(45) NULL DEFAULT NULL,
   `capacidad_tanque` VARCHAR(15) NULL DEFAULT NULL,
   `modelo` VARCHAR(45) NULL DEFAULT NULL,
   `año` CHAR(4) NULL DEFAULT NULL,
-  `capacidad_garrafones` INT NULL DEFAULT NULL,
+  `capacidad_garrafones` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`idVehiculo`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`repartidor`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`repartidor` (
-  `idRepartidor` INT NOT NULL AUTO_INCREMENT,
-  `Empleado_idEmpleado` INT NOT NULL,
-  `Vehiculo_idVehiculo` INT NOT NULL,
+  `idRepartidor` INT(11) NOT NULL AUTO_INCREMENT,
+  `Empleado_idEmpleado` INT(11) NOT NULL,
+  `Vehiculo_idVehiculo` INT(11) NOT NULL,
   `ruta` VARCHAR(45) NULL DEFAULT NULL,
-  `folio_de_licencia` INT NULL DEFAULT NULL,
+  `folio_de_licencia` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`idRepartidor`),
   INDEX `fk_Repartidor_Vehiculo1_idx` (`Vehiculo_idVehiculo` ASC) VISIBLE,
   INDEX `fk_Repartidor_Empleado1_idx` (`Empleado_idEmpleado` ASC) VISIBLE,
@@ -165,27 +128,66 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`repartidor` (
     FOREIGN KEY (`Vehiculo_idVehiculo`)
     REFERENCES `aguazero`.`vehiculo` (`idVehiculo`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `aguazero`.`promociones`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aguazero`.`promociones` (
+  `idpromocion` INT(11) NOT NULL AUTO_INCREMENT,
+  `estatus` TINYINT(4) NULL DEFAULT NULL,
+  `porcentaje` DOUBLE NULL DEFAULT NULL,
+  `codigo` VARCHAR(5) NULL DEFAULT NULL,
+  PRIMARY KEY (`idpromocion`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `aguazero`.`pedidos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aguazero`.`pedidos` (
+  `idPedido` INT(11) NOT NULL AUTO_INCREMENT,
+  `cantidad_garrafones` INT(11) NOT NULL,
+  `ClienteID` INT(11) NOT NULL,
+  `idPromocion` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`idPedido`),
+  INDEX `FK_pedidos_cliente` (`ClienteID` ASC) VISIBLE,
+  INDEX `FK_pedidos_promocion` (`idPromocion` ASC) VISIBLE,
+  CONSTRAINT `FK_pedidos_cliente`
+    FOREIGN KEY (`ClienteID`)
+    REFERENCES `aguazero`.`cliente` (`idCliente`),
+  CONSTRAINT `FK_pedidos_promocion`
+    FOREIGN KEY (`idPromocion`)
+    REFERENCES `aguazero`.`promociones` (`idpromocion`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 57
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`ventas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`ventas` (
-  `idVenta` INT NOT NULL AUTO_INCREMENT,
+  `idVenta` INT(11) NOT NULL AUTO_INCREMENT,
   `precio_total` DOUBLE NULL DEFAULT NULL,
   `fecha` DATE NULL DEFAULT NULL,
   `estatus` VARCHAR(45) NULL DEFAULT NULL,
-  `promociones_idpromocion` INT NOT NULL,
-  `Repartidor_idRepartidor` INT NOT NULL,
-  `idCliente` INT NOT NULL,
-  `idPedido` INT NOT NULL,
+  `promociones_idpromocion` INT(11) NOT NULL,
+  `Repartidor_idRepartidor` INT(11) NOT NULL,
+  `idCliente` INT(11) NOT NULL,
+  `idPedido` INT(11) NOT NULL,
   PRIMARY KEY (`idVenta`),
   INDEX `fk_Ventas_promociones1_idx` (`promociones_idpromocion` ASC) VISIBLE,
   INDEX `fk_Ventas_Repartidor1_idx` (`Repartidor_idRepartidor` ASC) VISIBLE,
   INDEX `fk_Ventas_idCliente_idx` (`idCliente` ASC) VISIBLE,
   INDEX `fk_Ventas_pedidos_idx` (`idPedido` ASC) VISIBLE,
+  CONSTRAINT `fk_Ventas_Repartidor1`
+    FOREIGN KEY (`Repartidor_idRepartidor`)
+    REFERENCES `aguazero`.`repartidor` (`idRepartidor`),
   CONSTRAINT `fk_Ventas_idCliente`
     FOREIGN KEY (`idCliente`)
     REFERENCES `aguazero`.`cliente` (`idCliente`),
@@ -194,23 +196,20 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`ventas` (
     REFERENCES `aguazero`.`pedidos` (`idPedido`),
   CONSTRAINT `fk_Ventas_promociones1`
     FOREIGN KEY (`promociones_idpromocion`)
-    REFERENCES `aguazero`.`promociones` (`idpromocion`),
-  CONSTRAINT `fk_Ventas_Repartidor1`
-    FOREIGN KEY (`Repartidor_idRepartidor`)
-    REFERENCES `aguazero`.`repartidor` (`idRepartidor`))
+    REFERENCES `aguazero`.`promociones` (`idpromocion`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 46
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 58
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`factura`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`factura` (
-  `idfactura` INT NOT NULL AUTO_INCREMENT,
+  `idfactura` INT(11) NOT NULL AUTO_INCREMENT,
   `fecha` VARCHAR(45) NULL DEFAULT NULL,
-  `Cliente_idCliente` INT NOT NULL,
-  `Ventas_idVenta` INT NOT NULL,
+  `Cliente_idCliente` INT(11) NOT NULL,
+  `Ventas_idVenta` INT(11) NOT NULL,
   PRIMARY KEY (`idfactura`),
   INDEX `fk_factura_Cliente1_idx` (`Cliente_idCliente` ASC) VISIBLE,
   INDEX `fk_factura_Ventas1_idx` (`Ventas_idVenta` ASC) VISIBLE,
@@ -221,73 +220,70 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`factura` (
     FOREIGN KEY (`Ventas_idVenta`)
     REFERENCES `aguazero`.`ventas` (`idVenta`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 11
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 12
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`garrafones`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`garrafones` (
-  `idGarrafon` INT NOT NULL AUTO_INCREMENT,
+  `idGarrafon` INT(11) NOT NULL AUTO_INCREMENT,
   `Estado` VARCHAR(15) NULL DEFAULT NULL,
   `codigo` CHAR(10) NULL DEFAULT NULL,
-  `capaciodad` INT NULL DEFAULT NULL,
+  `capaciodad` INT(11) NULL DEFAULT NULL,
   `precio_retornable` FLOAT NULL DEFAULT NULL,
   `precio_completo` FLOAT NULL DEFAULT NULL,
   PRIMARY KEY (`idGarrafon`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8mb3;
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`nominas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`nominas` (
-  `idnomina` INT NOT NULL AUTO_INCREMENT,
-  `Empleado_idEmpleado` INT NOT NULL,
+  `idnomina` INT(11) NOT NULL AUTO_INCREMENT,
+  `Empleado_idEmpleado` INT(11) NOT NULL,
   `salario_total` DOUBLE NULL DEFAULT NULL,
-  `dias_trabajados` INT NULL DEFAULT NULL,
-  `comisiones` DOUBLE NULL DEFAULT NULL,
+  `dias_trabajados` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`idnomina`),
   INDEX `fk_nominas_Empleado1_idx` (`Empleado_idEmpleado` ASC) VISIBLE,
   CONSTRAINT `fk_nominas_Empleado1`
     FOREIGN KEY (`Empleado_idEmpleado`)
     REFERENCES `aguazero`.`empleado` (`idEmpleado`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 8
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`tarjetas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`tarjetas` (
-  `idtarjeta` INT NOT NULL AUTO_INCREMENT,
-  `Empleado_idEmpleado` INT NOT NULL,
+  `idtarjeta` INT(11) NOT NULL AUTO_INCREMENT,
+  `Empleado_idEmpleado` INT(11) NOT NULL,
   `numero_tarjeta` VARCHAR(45) NULL DEFAULT NULL,
   `banco` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`idtarjeta`),
-  UNIQUE INDEX `Empleado_idEmpleado_UNIQUE` (`Empleado_idEmpleado` ASC) VISIBLE,
   INDEX `fk_tarjetas_Empleado1_idx` (`Empleado_idEmpleado` ASC) VISIBLE,
   CONSTRAINT `fk_tarjetas_Empleado1`
     FOREIGN KEY (`Empleado_idEmpleado`)
     REFERENCES `aguazero`.`empleado` (`idEmpleado`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 14
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 19
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`pagos`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`pagos` (
-  `idPago` INT NOT NULL AUTO_INCREMENT,
-  `nominas_idnomina` INT NOT NULL,
+  `idPago` INT(11) NOT NULL AUTO_INCREMENT,
+  `nominas_idnomina` INT(11) NOT NULL,
   `fecha` VARCHAR(45) NULL DEFAULT NULL,
-  `realizo` TINYINT NULL DEFAULT NULL,
-  `tarjetas_idtarjeta` INT NOT NULL,
+  `tarjetas_idtarjeta` INT(11) NOT NULL,
   PRIMARY KEY (`idPago`),
   INDEX `fk_Pagos_nominas1_idx` (`nominas_idnomina` ASC) VISIBLE,
   INDEX `fk_Pagos_tarjetas1_idx` (`tarjetas_idtarjeta` ASC) VISIBLE,
@@ -298,18 +294,19 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`pagos` (
     FOREIGN KEY (`tarjetas_idtarjeta`)
     REFERENCES `aguazero`.`tarjetas` (`idtarjeta`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`prestamos`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`prestamos` (
-  `idPrestamos` INT NOT NULL AUTO_INCREMENT,
-  `Empleado_idEmpleado` INT NOT NULL,
-  `Ventas_idVentas` INT NOT NULL,
-  `Cliente_idCliente` INT NOT NULL,
-  `garrafones_prestados` INT NOT NULL,
+  `idPrestamos` INT(11) NOT NULL AUTO_INCREMENT,
+  `Empleado_idEmpleado` INT(11) NOT NULL,
+  `Ventas_idVentas` INT(11) NOT NULL,
+  `Cliente_idCliente` INT(11) NOT NULL,
+  `garrafones_prestados` INT(11) NOT NULL,
   PRIMARY KEY (`idPrestamos`),
   INDEX `fk_Prestamos_Empleado1_idx` (`Empleado_idEmpleado` ASC) VISIBLE,
   INDEX `fk_Prestamos_Ventas1_idx` (`Ventas_idVentas` ASC) VISIBLE,
@@ -324,40 +321,40 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`prestamos` (
     FOREIGN KEY (`Ventas_idVentas`)
     REFERENCES `aguazero`.`ventas` (`idVenta`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 12
-DEFAULT CHARACTER SET = utf8mb3;
+AUTO_INCREMENT = 10
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`promociones_venta`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`promociones_venta` (
-  `idPromocionesVenta` INT NOT NULL AUTO_INCREMENT,
-  `promociones_idpromocion` INT NOT NULL,
-  `Ventas_idVentas` INT NOT NULL,
+  `idPromocionesVenta` INT(11) NOT NULL AUTO_INCREMENT,
+  `promociones_idpromocion` INT(11) NOT NULL,
+  `Ventas_idVentas` INT(11) NOT NULL,
   PRIMARY KEY (`idPromocionesVenta`),
   INDEX `fk_promociones_venta_promociones1_idx` (`promociones_idpromocion` ASC) VISIBLE,
   INDEX `fk_promociones_venta_Ventas1_idx` (`Ventas_idVentas` ASC) VISIBLE,
-  CONSTRAINT `fk_promociones_venta_promociones1`
-    FOREIGN KEY (`promociones_idpromocion`)
-    REFERENCES `aguazero`.`promociones` (`idpromocion`),
   CONSTRAINT `fk_promociones_venta_Ventas1`
     FOREIGN KEY (`Ventas_idVentas`)
-    REFERENCES `aguazero`.`ventas` (`idVenta`))
+    REFERENCES `aguazero`.`ventas` (`idVenta`),
+  CONSTRAINT `fk_promociones_venta_promociones1`
+    FOREIGN KEY (`promociones_idpromocion`)
+    REFERENCES `aguazero`.`promociones` (`idpromocion`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `aguazero`.`ventas_detalle`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aguazero`.`ventas_detalle` (
-  `idventas_detalle` INT NOT NULL AUTO_INCREMENT,
-  `Garrafones_idGarrafon` INT NOT NULL,
+  `idventas_detalle` INT(11) NOT NULL AUTO_INCREMENT,
+  `Garrafones_idGarrafon` INT(11) NOT NULL,
   `cantidad` VARCHAR(45) NULL DEFAULT NULL,
   `precio_venta` VARCHAR(45) NULL DEFAULT NULL,
-  `prestado` TINYINT NULL DEFAULT NULL,
-  `Ventas_idVenta` INT NOT NULL,
+  `prestado` TINYINT(4) NULL DEFAULT NULL,
+  `Ventas_idVenta` INT(11) NOT NULL,
   PRIMARY KEY (`idventas_detalle`),
   INDEX `fk_ventas_detalle_Garrafones1_idx` (`Garrafones_idGarrafon` ASC) VISIBLE,
   INDEX `fk_ventas_detalle_Ventas1_idx` (`Ventas_idVenta` ASC) VISIBLE,
@@ -368,7 +365,7 @@ CREATE TABLE IF NOT EXISTS `aguazero`.`ventas_detalle` (
     FOREIGN KEY (`Ventas_idVenta`)
     REFERENCES `aguazero`.`ventas` (`idVenta`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+DEFAULT CHARACTER SET = utf8;
 
 USE `aguazero` ;
 

@@ -7,9 +7,10 @@
 	<label for="pagos">pagos:</label>
            	
 	<label for="nomina">nominas:</label>
-            <select name='Nominas' class="form-control">
+            <select id="empleados" name='Nominas' class="form-control" onchange="obtenerID()">
+                <option value='0'>Selecciona un empleado</option>
                 {% for n in nomina  %}
-                <option value="{{n.idnomina}}">{{n.empleado.usuario.nombre}}</option>
+                <option value="{{n.empleado.idEmpleado}}">{{n.empleado.usuario.nombre}}</option>
                 {% endfor %}
             </select>
         <br>
@@ -20,22 +21,14 @@
     </div> 
         <br>
 
-    <label for="Pagos">realizo:</label>
-            <select name='Realizo' class="form-control">
-                <option value="1">Si</option>
-                <option value="0">No</option>
-                
+    <div id="tarjetasdiv">
+        <label for="tarjetasdiv">Tarjetas:</label>
+            <select id="tarjetas" name='Tarjetas' class="form-control" readonly>
+                <option id="removeme" class="form-control form-control-lg">Selecciona primero un cliente</option>
             </select>
-        <br>
-
-    <label for="Pagos">Tarjetas:</label>
-            <select name='Tarjetas' class="form-control">
-                {% for t in tarjeta %}
-                <option value="{{t.idTarjeta}}">{{t.numero_tarjeta}}</option>
-                {% endfor %}
-            </select>
-        <br>
-
+    </div>
+    <input type="hidden" name="idNomina" id="idNomina" value="0">
+<br>
 
 	<button type="submit" class="btn btn-primary mb-3">
 		<span class="glyphicon glyphicon-floppy-disk"></span>
@@ -57,4 +50,9 @@
 <div id="notificaciones">
 
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+    <script src="{{url_for('static',filename='js/pagos.js')}}"></script>
 {% endblock %}

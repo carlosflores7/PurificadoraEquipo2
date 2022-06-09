@@ -218,8 +218,7 @@ class Puesto(db.Model):
     __tablename__='puestos'
     idPuesto = Column(Integer,primary_key=True)
     nombre = Column(String(45),nullable=False)
-    salario_max = Column(String(45),nullable=False)
-    salario_min = Column(String(45),nullable=False)
+    salario = Column(Integer,nullable=False)
     descripcion = Column(String(200),nullable=False)
 
     def insertar(self):
@@ -243,6 +242,11 @@ class Puesto(db.Model):
         empleado = self.consultaIndividual(id)
         empleado.tipoEmpleado = 'I'
         empleado.editar()
+
+    def eliminar(self, id):
+        obj = self.consultaIndividual(id)
+        db.session.delete(obj)
+        db.session.commit()
 
 class Empleado(db.Model):
     __tablename__='Empleado'
@@ -311,6 +315,8 @@ class Tarjetas(db.Model):
     def paginar(self, pagina):
         return self.query.paginate(per_page=4, page=pagina, error_out=True)
 
+    def consultaTarjetaUsuario(self,id):
+        return self.query.filter(Tarjetas.Empleado_idEmpleado==id).all()
 
 class Nomina(db.Model):
     __tablename__='nominas'
@@ -318,7 +324,6 @@ class Nomina(db.Model):
     Empleado_idEmpleado = Column(Integer,ForeignKey('Empleado.idEmpleado'))
     salario_total = Column(Integer, nullable=False)
     dias_trabajados = Column(Integer, nullable=False)
-    comisiones = Column(Integer, nullable=False)
     empleado=relationship('Empleado', lazy='select')
 
     def insertar(self):
@@ -343,6 +348,8 @@ class Nomina(db.Model):
     def paginar(self, pagina):
         return self.query.paginate(per_page=4, page=pagina, error_out=True)
 
+    def nominaCliente(self, id):
+        return self.query.filter(Nomina.Empleado_idEmpleado==id).first()
     
 class Repartidor(db.Model):
     __tablename__='Repartidor'
@@ -592,7 +599,6 @@ class Pagos(db.Model):
     idPago = Column(Integer, primary_key=True)
     nominas_idnomina = Column(Integer, ForeignKey('nominas.idnomina'))
     fecha = Column(String, nullable=False)
-    realizo = Column(Integer, nullable=False)
     tarjetas_idTarjeta = Column(Integer, ForeignKey('tarjetas.idTarjeta'))
     tarjetas = relationship('Tarjetas', lazy='select')
 
