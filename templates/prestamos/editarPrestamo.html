@@ -1,0 +1,56 @@
+{% extends 'comunes/base.html' %}
+{% block contenido %}
+{{super()}}
+<h1 class="bg-primary text-center">Registro de Prestamos</h1>
+<form action="/Prestamos/editando" method="post">
+
+    <input type="hidden" name="id" value="{{ prestamo.idPrestamos }}" readonly>
+    <label for="Empleado">Empleado:</label>
+           <input type="text" value="{{ prestamo.e.usuario.nombre }}" name="empleado" readonly maxlength="3"class="form-control form-control-lg" required>
+
+        <br>
+
+    <label for="Ventas">Folio Venta:</label>
+           <input type="text" name="fventa" value="{{ prestamo.v.idVenta }}" readonly maxlength="3" class="form-control form-control-lg" required>
+
+        <br>
+
+    <label for="Cliente">Cliente:</label>
+            <input type="text" name="cliente" maxlength="3" value="{{ prestamo.c.usuario.nombre }}" readonly class="form-control form-control-lg" required>
+        <br>
+
+    <label for="Garrafones">Garrafones Prestados:</label>
+    <input type="text" name="cGarrafones" maxlength="3" readonly value="{{ prestamo.garrafones_prestados }}"  class="form-control form-control-lg" required>
+        <br>
+
+    <label for="Garrafones">Garrafones Entregados:</label>
+
+    {% if prestamo.garrafones_prestados == prestamo.garrafones_entregados %}
+   <input type="text" readonly name="garrafones_entregados" maxlength="3"  value="{{ prestamo.garrafones_entregados }}" class="form-control form-control-lg" required>
+    <h3>El prestamo se ha completado</h3>
+       <br>
+        <button type="submit" disabled class="btn btn-primary mb-3">
+		<span class="glyphicon glyphicon-floppy-disk"></span>
+		Actualizar
+	</button>
+    {% else %}
+
+   <input type="text" name="garrafones_entregados" maxlength="3"  value="{{ prestamo.garrafones_entregados }}" class="form-control form-control-lg" required>
+    <br>
+        <button type="submit" class="btn btn-primary mb-3">
+		<span class="glyphicon glyphicon-floppy-disk"></span>
+		Actualizar
+	</button>
+        {% endif %}
+    <br>
+
+</form>
+    <br>
+     <a href="/Prestamos/consultar/1" class="btn btn-danger mb-3">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
+<div id="notificaciones">
+
+</div>
+{% endblock %}

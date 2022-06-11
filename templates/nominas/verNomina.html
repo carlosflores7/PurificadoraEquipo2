@@ -4,15 +4,15 @@
      <h1 class="bg-primary text-center">Registro de Nominas</h1>
     <form action="/Nomina/actualizar" method="post">
         <div>
-            <label>ID Nomina</label>
-            <input type="text" name="idNomina" value="{{nomina.idnomina}}" readonly required class="form-control form-control-lg" >
+
+            <input type="hidden" name="idNomina"  value="{{nomina.idnomina}}" readonly required class="form-control form-control-lg" >
         </div>
         <br>
         <div>
-            <label>ID Empleado</label>
-            <input type="text" name="idEmpleado" value="{{nomina.Empleado_idEmpleado}}" readonly required class="form-control form-control-lg" >
+
+            <input type="hidden" name="idEmpleado"  value="{{nomina.Empleado_idEmpleado}}" readonly required class="form-control form-control-lg" >
         </div>
-        <br>
+
         <div>
             <label>Nombre Empleado</label>
             <input type="text" value="{{nomina.empleado.usuario.nombre}}" readonly required class="form-control form-control-lg" >
@@ -20,7 +20,7 @@
         <br>
         <div>
             <label>Salario Total</label>
-            <input type="text" maxlength="19" name="salario" value="{{nomina.salario_total}}" required class="form-control form-control-lg">
+            <input type="text" readonly maxlength="19" name="salario" value="{{nomina.salario_total}}" required class="form-control form-control-lg">
         </div>
         <br>
         <div>

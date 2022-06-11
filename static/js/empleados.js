@@ -1,6 +1,6 @@
 function validar(form){
     var cad=validarNSS(form.nss.value);
-    cad+=validarSalario(parseInt(form.salario.value));
+
     var div=document.getElementById("notificaciones");
     if(cad!=''){
         div.innerHTML='<p>'+cad+'</p>';
@@ -22,11 +22,3 @@ function validarNSS(cadena){
     }
 }
 
-function validarSalario(salario){
-    if(salario>0){
-        return '';
-    }
-    else{
-        return 'Establesca un salario válido';
-    }
-}

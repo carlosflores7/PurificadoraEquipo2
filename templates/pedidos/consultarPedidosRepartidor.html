@@ -3,7 +3,7 @@
     {{super()}}
 <div class="table-responsive">
         <table class="table">
-         <thead>
+            <thead>
                 <th>FOLIO DE VENTA</th>
                 <th>CLIENTE</th>
                 <th>CAN. GARRAFONES</th>
@@ -19,7 +19,7 @@
             {% for p in p %}
             <tr>
 
-                 {% if p.estatus == "Entregado" or p.estatus == "Cancelado"%}
+                {% if p.estatus == "Se encuentra en entrega" %}
                     <td>{{p.idVenta}}</td>
                     <td>{{p.cliente.usuario.nombre}}</td>
                     <td>{{p.pe.cantidad_garrafones }}</td>
@@ -46,9 +46,7 @@
       <span class="glyphicon glyphicon-circle-arrow-left"></span>
             Regresar
     </a>
-    <a href="/Excel/Download"  class="btn btn-default btn-sm">
-        <span class="glyphicon glyphicon-file"></span> Descargar Excel
-    </a>
+
 <div id="notificaciones">
 
 </div>

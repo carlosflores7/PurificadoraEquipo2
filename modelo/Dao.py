@@ -51,7 +51,7 @@ class Usuario(UserMixin,db.Model):
         else:
             return False
     def is_Empleado(self):
-        if self.tipo=='Vendedor':
+        if self.tipo=='Empleado':
             return True
         else:
             return False
@@ -251,12 +251,11 @@ class Puesto(db.Model):
 class Empleado(db.Model):
     __tablename__='Empleado'
     idEmpleado = Column(Integer,primary_key=True)
-    tipoEmpleado = Column(String(40),nullable=False)
-    salario_por_dia = Column(String(45),nullable=False)
     turno = Column(String(45),nullable=False)
     nss = Column(String(45),nullable=False)
     Usuarios_idUsuario = Column(Integer, ForeignKey('Usuarios.idUsuario'))
     puestos_idPuesto = Column(Integer,ForeignKey('puestos.idPuesto'))
+    tipoEmpleado = Column(String(1), nullable=False)
     usuario = relationship('Usuario',lazy='select')
     puesto = relationship('Puesto',lazy='select')
 
@@ -538,6 +537,7 @@ class Pedidos(db.Model):
     cantidad_garrafones = Column(Integer, nullable=False)
     ClienteID = Column(Integer, ForeignKey('cliente.idCliente'))
     idPromocion = Column(Integer, ForeignKey('promociones.idpromocion'))
+    promocion = relationship("Promociones", lazy = 'select')
 
     def insertar(self):
         db.session.add(self)
@@ -565,6 +565,8 @@ class Prestamos(db.Model):
     Ventas_idVentas = Column(Integer, ForeignKey('ventas.idVenta'))
     Cliente_idCliente = Column(Integer, ForeignKey('cliente.idCliente'))
     garrafones_prestados = Column(Integer, nullable= False)
+    garrafones_entregados = Column(Integer, nullable= True)
+
     e = relationship('Empleado', lazy='select')
     c = relationship('Cliente', lazy='select')
     v = relationship('Ventas', lazy='select')
@@ -585,6 +587,10 @@ class Prestamos(db.Model):
         db.session.delete(obj)
         db.session.commit()
 
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
     def filtrar(self, filtro):
         return self.query.filter(Prestamos.idPrestamos.like('%' + filtro + '%'))
 
@@ -600,7 +606,10 @@ class Pagos(db.Model):
     nominas_idnomina = Column(Integer, ForeignKey('nominas.idnomina'))
     fecha = Column(String, nullable=False)
     tarjetas_idTarjeta = Column(Integer, ForeignKey('tarjetas.idTarjeta'))
+    dias_pe = Column(String(45), nullable=False)
+    total = Column(Integer, nullable=False)
     tarjetas = relationship('Tarjetas', lazy='select')
+    nomina = relationship('Nomina', lazy='select' )
 
     def insertar(self):
         db.session.add(self)

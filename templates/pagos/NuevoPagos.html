@@ -4,9 +4,8 @@
 <h1 class="bg-primary text-center">Registro De Pagos</h1>
 <form action="/Pagos/agregando" method="post">
 
-	<label for="pagos">pagos:</label>
            	
-	<label for="nomina">nominas:</label>
+	<label for="nomina">Nomina:</label>
             <select id="empleados" name='Nominas' class="form-control" onchange="obtenerID()">
                 <option value='0'>Selecciona un empleado</option>
                 {% for n in nomina  %}
@@ -20,6 +19,20 @@
         <input type="date" name="Fecha" class="form-control form-control-lg" required>
     </div> 
         <br>
+        <div>
+            <label>Dias penalizados:</label>
+            <select name="dias_pe" class="form-control form-control-lg" >
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </div>
+<br>
 
     <div id="tarjetasdiv">
         <label for="tarjetasdiv">Tarjetas:</label>
@@ -38,12 +51,9 @@
 	
 
 </form>
- <a href="/Pagos/consultar/1" class="btn btn-danger mb-3"> 
-            <span class="glyphicon glyphicon-circle-arrow-rigth"></span>
-            Mostrar
-        </a>
+<br>
 
-     <a href="/" class="btn btn-danger mb-3">
+     <a href="/Pagos/consultar/1" class="btn btn-danger mb-3">
             <span class="glyphicon glyphicon-circle-arrow-left"></span>
             Regresar
     </a>

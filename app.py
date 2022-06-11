@@ -12,7 +12,7 @@ import json
 from datetime import date
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -444,7 +444,6 @@ def agregarEmpleado():
     try:
         empleado = Empleado()
         empleado.tipoEmpleado = 'A'
-        empleado.salario_por_dia = request.form['salario']
         empleado.turno = request.form['turno']
         empleado.nss = request.form['nss']
         empleado.Usuarios_idUsuario = request.form['usuario']
@@ -481,7 +480,6 @@ def editarEmpleado():
         empleado = Empleado()
         empleado.idEmpleado = request.form['ID']
         empleado.tipoEmpleado = request.form['estatus']
-        empleado.salario_por_dia = request.form['salario']
         empleado.turno = request.form['turno']
         empleado.nss = request.form['nss']
         empleado.puestos_idPuesto = request.form['puesto']
@@ -787,10 +785,12 @@ def misPedidos():
         aux = c.consulta(id)
         pedidos = v.consultarMisPedidos(aux.idCliente)
         return render_template("/pedidos/misPedidos.html", p = pedidos)
-    if current_user.is_admin():
+    elif current_user.is_admin():
         v = Ventas()
         return render_template("/pedidos/consultarPedidosAdmin.html", p = v.consultaGeneral())
-
+    elif current_user.is_Empleado():
+        v = Ventas()
+        return render_template("/pedidos/consultarPedidosRepartidor.html", p = v.consultaGeneral())
     else:
         abort(404)
 @app.route("/Pedido/Confirmar/<int:id>")
@@ -973,7 +973,6 @@ def downloadExcel():
 def nuevaNomina():
     if current_user.is_authenticated and current_user.is_admin():
         e = Empleado()
-
         return render_template('nominas/nuevaNomina.html', empleado = e.consultaGeneral())
     else:
         abort(404)
@@ -981,23 +980,30 @@ def nuevaNomina():
 @app.route("/Nomina/agregar", methods=['post'])
 def agregarNomina():
     if current_user.is_authenticated and current_user.is_admin():
-        n = Nomina()
-        salario = int(request.form['salario'])
-        empleado = request.form['empleado']
-        mensaje = ""
-        if empleado == "opcion":
-            mensaje += "Empleado incorrecto\n"
-        if salario < 0 :
-            mensaje += "Salario incorrecto\n"
+        try:
+            n = Nomina()
+            e = Empleado()
+            dias = int(request.form['dias_trabajados'])
+            empleado = request.form['empleado']
 
-        if mensaje == "":
-            n.Empleado_idEmpleado = empleado
-            n.salario_total = salario
-            n.dias_trabajados = request.form['dias_trabajados']
-            n.insertar()
-            flash("Nomina registrada")
-        else:
-            flash(mensaje)
+            mensaje = ""
+            if empleado == "opcion":
+                mensaje += "Empleado incorrecto\n"
+
+            empleadoaux = e.consultaIndividual(empleado)
+            if mensaje == "":
+                n.Empleado_idEmpleado = empleado
+                d = empleadoaux.puesto.salario * dias
+                n.salario_total =d
+
+                print(d)
+                n.dias_trabajados = dias
+                n.insertar()
+                flash("Nomina registrada")
+            else:
+                flash(mensaje)
+        except:
+            flash("Nomina ya registrada")
     else:
         abort(404)
     return redirect(url_for('nuevaNomina'))
@@ -1024,15 +1030,15 @@ def editarNomina(id):
 def actualizarNomina():
     if current_user.is_authenticated and current_user.is_admin():
         n = Nomina()
-        salario = float(request.form['salario'])
+        e = Empleado()
+        e = e.consultaIndividual(request.form['idEmpleado'])
+        dias = int(request.form['dias_trabajados'])
         mensaje = ""
-        if salario < 0.0 :
-            mensaje += "Salario incorrecto\n"
 
         if mensaje == "":
             n.idnomina = request.form['idNomina']
-            n.salario_total = salario
-            n.dias_trabajados = request.form['dias_trabajados']
+            n.salario_total = e.puesto.salario * dias
+            n.dias_trabajados = dias
             n.actualizar()
             flash("Nomina actualizada")
         else:
@@ -1043,9 +1049,13 @@ def actualizarNomina():
 @app.route("/Nomina/eliminar/<int:id>")
 def eliminarNomina(id):
     if current_user.is_authenticated and current_user.is_admin():
-        n = Nomina()
-        n.eliminar(id)
-        flash("Nomina eliminada")
+        try:
+            n = Nomina()
+            n.eliminar(id)
+            flash("Nomina eliminada")
+        except:
+            flash("Error al eliminar la nomina")
+
     else:
         abort(404)
 
@@ -1087,7 +1097,7 @@ def agregarPrestamos():
 @app.route('/Prestamos/consultar/<int:pagina>')
 @login_required
 def consultarPrestamos(pagina):
-    if current_user.is_admin() :
+    if current_user.is_admin() or current_user.is_Empleado():
         p = Prestamos()
         if request.args.get('filtro'):
             return render_template('Prestamos/ConsultarFiltro.html', prestamo_sin_paginacion = p.filtrar(request.args.get('filtro')), pagina = pagina)
@@ -1096,6 +1106,29 @@ def consultarPrestamos(pagina):
     else:
         abort(404)
 
+@app.route('/Prestamos/editar/<int:id>')
+@login_required
+def abrirPrestamo(id):
+    p = Prestamos()
+    return render_template('Prestamos/editarPrestamo.html', prestamo = p.consultaIndividual(id))
+
+@app.route('/Prestamos/editando', methods = ['post'])
+@login_required
+def actualizandoPrestamo():
+    if current_user.is_admin() or current_user.is_Empleado():
+        p = Prestamos()
+        p.idPrestamos = request.form['id']
+        prestados = int(request.form['cGarrafones'])
+        entregados = int(request.form['garrafones_entregados'])
+        if entregados <= prestados:
+            p.garrafones_entregados = entregados
+            p.actualizar()
+            flash("Se actualizo el prestamo")
+        else:
+            flash("No se puede actualizar")
+        return redirect(url_for('abrirPrestamo', id=p.idPrestamos))
+    else:
+        abort(404)
 #Eliminar
 @app.route("/Prestamos/eliminar/<int:id>")
 def eliminarPrestamos(id):
@@ -1119,9 +1152,22 @@ def agregarPago():
 @app.route('/Pagos/agregando', methods=['post'])
 def agregarPagos():
     pay = Pagos()
+    n = Nomina()
+
+    dias = int(request.form['dias_pe'])
+
     pay.nominas_idnomina= request.form['idNomina']
     pay.fecha = request.form['Fecha']
+    pay.dias_pe = dias
     pay.tarjetas_idTarjeta = request.form['Tarjetas']
+    auxpago = n.consultaIndividual(pay.nominas_idnomina)
+
+    if dias != 0:
+        descontar = auxpago.empleado.puesto.salario * dias
+        pay.total =  auxpago.salario_total - descontar
+    else:
+        pay.total = auxpago.salario_total
+
     pay.insertar()
     flash('¡El pago se ha registrado')
 

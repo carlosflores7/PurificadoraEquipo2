@@ -1,11 +1,10 @@
 {% extends 'comunes/base.html' %}
 {% block contenido %}
 {{super()}}
-<h1 class="bg-primary text-center">Registro de Prestamos</h1>
+<h1 class="bg-primary text-center">Edicion de Prestamos</h1>
 <form action="/Prestamos/agregando" method="post">
 
-	<label for="prestamo">prestamo:</label>
-           	
+
     <label for="Empleado">Empleado:</label>
             <select name='Empleado' class="form-control">
                 {% for e in empleado %}
@@ -34,7 +33,7 @@
             </select>
         <br>
 
-    
+
 
 
 	<button type="submit" class="btn btn-primary mb-3">
@@ -42,10 +41,10 @@
 		Registrar
 	</button>
 
-	
+
 
 </form>
- <a href="/Prestamos/consultar/1" class="btn btn-danger mb-3"> 
+ <a href="/Prestamos/consultar/1" class="btn btn-danger mb-3">
             <span class="glyphicon glyphicon-circle-arrow-rigth"></span>
             Mostrar
         </a>
