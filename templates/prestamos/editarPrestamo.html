@@ -2,13 +2,22 @@
 {% block contenido %}
 {{super()}}
 <h1 class="bg-primary text-center">Registro de Prestamos</h1>
-<form action="/Prestamos/editando" method="post">
+<form action="/Prestamos/editando" method="post" onsubmit="return validar(this)">
 
     <input type="hidden" name="id" value="{{ prestamo.idPrestamos }}" readonly>
-    <label for="Empleado">Empleado:</label>
+    
+
+    {% if prestamo.e.usuario == null %}
+                <label for="Empleado">Empleado:</label>
+           <input type="text" value="No hay empleado asignado" name="empleado" readonly maxlength="3"class="form-control form-control-lg" required>
+
+        <br>
+                {% else %}
+                <label for="Empleado">Empleado:</label>
            <input type="text" value="{{ prestamo.e.usuario.nombre }}" name="empleado" readonly maxlength="3"class="form-control form-control-lg" required>
 
         <br>
+                {% endif %}
 
     <label for="Ventas">Folio Venta:</label>
            <input type="text" name="fventa" value="{{ prestamo.v.idVenta }}" readonly maxlength="3" class="form-control form-control-lg" required>
@@ -53,4 +62,8 @@
 <div id="notificaciones">
 
 </div>
+{% endblock %}
+{% block scripts %}
+{{super()}}
+    <script src="{{url_for('static',filename='js/prestamos.js')}}"></script>
 {% endblock %}

@@ -2,7 +2,7 @@
 {% block contenido %}
     {{super()}}
      <h1 class="bg-primary text-center">Registro De Pedidos</h1>
-    <form action="/Pedido/Agregando" method="post">
+    <form action="/Pedido/Agregando" method="post" onsubmit="return validar(this)">
 
         <div>
             <label>Cliente : {{usuario.nombre}}  </label>
@@ -32,12 +32,11 @@
             <input id="garrafonesP" type="text" maxlength="3" name="cGarrafonesPrestados" required class="form-control form-control-lg" placeholder="" value="0">
             <br>
         </div>
-        <br>
         <div>
             <label>¿Tienes algun codigo de promocion?</label>
             <input type="text" maxlength="5" name="codigoPromocion" value="No" class="form-control form-control-lg" placeholder="" >
         </div>
-
+        <br>
         <button id="registrar" type="submit" class="btn btn-primary mb-3">
             <span class="glyphicon glyphicon-floppy-disk"></span>
             Confirmar

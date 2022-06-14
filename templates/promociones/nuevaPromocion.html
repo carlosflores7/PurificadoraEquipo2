@@ -4,24 +4,13 @@
     <h1 class="bg-primary text-center">Registro de Promocion</h1>
     <form action="/Promociones/agregando" method="post">
         <div>
-            <label>Cantidad Maxima</label>
-            <input type="text" maxlength="10" name="cantidadMaxima" required class="form-control form-control-lg">
+            <label>Código</label>
+            <input type="text" name="codigo" maxlength="5"  placeholder="Escribe un código" required class="form-control form-control-lg">
         </div>
-        <br>
-        <div>
-            <label>Cantidad Minima</label>
-            <input type="text" maxlength="10" name="cantidadMinima" required class="form-control form-control-lg">
-        </div>
-        <br>
-        <div class="radio" class="form-control form-control-lg">
-            <label>Tipo:</label>
-            <label class="radio-inline"><input type="radio" name="estatus" value=0>Inactivo</label>
-            <label class="radio-inline"><input type="radio" name="estatus" value=1>Activo</label>
-        </div>
-        <br>
+           <br>
         <div>
             <label>Porcentaje</label>
-            <input type="text" name="porcentaje" maxlength="10"  placeholder="%" required class="form-control form-control-lg">
+            <input type="text" name="porcentaje" maxlength="2"  placeholder="%" required class="form-control form-control-lg">
         </div>
         <br>
 
@@ -31,5 +20,10 @@
         </button>
         </a>
     </form>
+    <br>
+    <a href="/" class="btn btn-danger mb-3">
+      <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Regresar
+    </a>
 <br>
 {% endblock %}

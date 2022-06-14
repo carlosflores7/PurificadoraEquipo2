@@ -18,9 +18,9 @@
             <thead>
                 <th>IDPAGO</th>
                 <th>EMPLEADO</th>
+                <th>SUBTOTAL</th>
                 <th>DIAS PENALIZADOS</th>
                 <th>AMONESTACION</th>
-                <th>SUBTOTAL</th>
                 <th>TOTAL</th>
                 <th>FECHA</th>
                 <th>TARJETA</th>
@@ -29,9 +29,9 @@
             <tr>
                 <td>{{pay.idPago}}</td>
                 <td>{{pay.tarjetas.empleado.usuario.nombre}}</td>
-                <td>{{pay.dias_pe}}</td>
-                <td>{{pay.nomina.salario_total - pay.total}}</td>
-                <td>{{pay.nomina.salario_total}}</td>
+                <td>${{pay.nomina.salario_total}}</td>
+                <td>{{pay.dias_pe}} día(s)</td>
+                <td>${{pay.nomina.salario_total - pay.total}}</td>
                 <td>${{pay.total}}</td>
 
                 <td>{{pay.fecha}}</td>

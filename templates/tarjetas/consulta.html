@@ -17,7 +17,7 @@
         <table class="table">
             <thead>
                 <th>IDTARJETA</th>
-                <th>IDEMPLEADO</th>
+                <th>EMPLEADO</th>
                 <th>NUMERO DE TARJETA</th>
                 <th>BANCO</th>
                 <th>EDITAR</th>
@@ -26,7 +26,7 @@
             {% for t in tarjetas.items %}
             <tr>
                 <td>{{t.idTarjeta}}</td>
-                <td>{{t.Empleado_idEmpleado}}</td>
+                <td>{{t.empleado.usuario.nombre}}</td>
                 <td>{{t.numero_tarjeta}}</td>
                 <td>{{t.banco}}</td>
 

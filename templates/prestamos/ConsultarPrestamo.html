@@ -28,7 +28,11 @@
             {% for p in prestamos.items %}
             <tr>
                 <td>{{p.idPrestamos}}</td>
+                {% if not p.e %}
+                <td><b>No hay empleado asiganado</b></td>
+                {% else %}
                 <td>{{p.e.usuario.nombre}}</td>
+                {% endif %}
                 <td>{{p.Ventas_idVentas}}</td>
                 <td>{{p.garrafones_prestados}}</td>
                 <td>{{p.garrafones_entregados}}</td>
@@ -38,6 +42,7 @@
                      <td>Pendiente</td>
                 {% endif %}
                 <td>{{p.c.usuario.nombre}}</td>
+                {% if p.e %}
                 <td>
                     <a href="/Prestamos/editar/{{p.idPrestamos}}">
                            <span class="glyphicon glyphicon-eye-open"></span>
@@ -48,6 +53,7 @@
                           <span class="glyphicon glyphicon-trash"></span>
                     </a>
                 </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </table>

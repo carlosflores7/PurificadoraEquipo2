@@ -12,7 +12,7 @@ import json
 from datetime import date
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/aguazero'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Hola.123@localhost/aguazero'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.secret_key='Cl4v3'
 
@@ -52,9 +52,9 @@ def cargar_usuario(id):
 
 @app.route('/Usuarios/nuevo')
 def nuevoUsuario():
-    ##if current_user.is_authenticated and current_user.is_admin():
+    if current_user.is_authenticated and current_user.is_admin():
         return render_template('usuarios/nuevoUsuario.html')
-    ##else:
+    else:
         abort(404)
 
 @app.route('/Usuarios/agregar',methods=['post'])
@@ -324,9 +324,8 @@ def agregarPromocion():
 @app.route('/Promociones/agregando', methods=['post'])
 def agregarPromociones():
     promocion = Promociones()
-    promocion.cantidad_max = request.form['cantidadMaxima']
-    promocion.cantidad_min = request.form['cantidadMinima']
-    promocion.estatus = request.form['estatus']
+    promocion.estatus = 1
+    promocion.codigo = request.form['codigo']
     promocion.porcentaje = request.form['porcentaje']
     promocion.insertar()
     flash('¡La promocion se ha agregado!')
@@ -350,7 +349,7 @@ def actualizarPromociones():
     promocion.idpromocion = request.form['ID']
     promocion.estatus = request.form['estatus']
     promocion.porcentaje = request.form['porcentaje']
-    promocion.porcentaje = request.form['codigo']
+    promocion.codigo = request.form['codigo']
     promocion.actualizar()
     flash('¡La promocion se ha actualizado''!')
 
@@ -790,7 +789,12 @@ def misPedidos():
         return render_template("/pedidos/consultarPedidosAdmin.html", p = v.consultaGeneral())
     elif current_user.is_Empleado():
         v = Ventas()
-        return render_template("/pedidos/consultarPedidosRepartidor.html", p = v.consultaGeneral())
+        repartidor = Repartidor()
+        repartidor = repartidor.consultarPorIdUsuario(current_user.idUsuario)
+        if repartidor:
+            return render_template("/pedidos/consultarPedidosRepartidor.html", p = v.consultarPedidosRepartidor(repartidor.idRepartidor))
+        else:
+            return render_template("/pedidos/consultarPedidosRepartidor.html", p = v.consultarPedidosRepartidor(0))
     else:
         abort(404)
 @app.route("/Pedido/Confirmar/<int:id>")
@@ -1101,8 +1105,12 @@ def consultarPrestamos(pagina):
         p = Prestamos()
         if request.args.get('filtro'):
             return render_template('Prestamos/ConsultarFiltro.html', prestamo_sin_paginacion = p.filtrar(request.args.get('filtro')), pagina = pagina)
+        elif current_user.is_admin():
+            return render_template('Prestamos/ConsultarPrestamo.html', prestamos = p.paginar(pagina), pagina = pagina)
         else:
-                return render_template('Prestamos/ConsultarPrestamo.html', prestamos = p.paginar(pagina), pagina = pagina)
+            empleado = Empleado()
+            empleado = empleado.consultarPorIdUsuario(current_user.idUsuario)
+            return render_template('Prestamos/ConsultarPrestamo2.html', prestamos = p.filtrarEmpleado(empleado.idEmpleado))
     else:
         abort(404)
 
@@ -1348,6 +1356,32 @@ def consultarTarjetasJSON(id):
     return var_json
 
 #FIN_CRUD_PROMOCIONES_VENTA
+
+@app.route("/tomarPedido/<int:id>")
+def tomarPedidoRepartidor(id):
+    repartidor = Repartidor()
+    repartidor = repartidor.consultarPorIdUsuario(current_user.idUsuario)
+    idRepartidor = repartidor.idRepartidor
+    venta = Ventas()
+    venta = venta.consultaIndividual(id)
+    venta.Repartidor_idRepartidor = idRepartidor
+    venta.estatus = 'Pedido asignado a un repartidor'
+    venta.actualizar()
+    prestamo = Prestamos()
+    prestamo = prestamo.consultaPorIdVenta(id)
+    if prestamo:
+        prestamo.Empleado_idEmpleado = repartidor.Empleado_idEmpleado
+        prestamo.actualizar()
+    return redirect(url_for('inicio'))
+
+@app.route("/Pedido/SinAsignar")
+def verPedidosSinAsignar():
+    if current_user.is_admin() or current_user.is_Empleado():
+        v = Ventas()
+        return render_template("/pedidos/sinAsignar.html", p=v.pedidosSinAsignar())
+    else:
+        abort(404)
+
 if __name__=='__main__':
     db.init_app(app)#Inicializar la BD - pasar la configuración de la url de la BD
     app.run(debug=True)

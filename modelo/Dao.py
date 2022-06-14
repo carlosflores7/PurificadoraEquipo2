@@ -281,6 +281,9 @@ class Empleado(db.Model):
         empleado.tipoEmpleado = 'I'
         empleado.editar()
 
+    def consultarPorIdUsuario(self,id):
+        return self.query.filter(Empleado.Usuarios_idUsuario==id).first()
+
 class Tarjetas(db.Model):
     __tablename__='tarjetas'
     idTarjeta = Column(Integer, primary_key=True)
@@ -382,6 +385,10 @@ class Repartidor(db.Model):
         db.session.delete(obj)
         db.session.commit()
 
+    def consultarPorIdUsuario(self,id):
+        empleado = Empleado.query.filter(Empleado.Usuarios_idUsuario==id).first()
+        return self.query.filter(Repartidor.Empleado_idEmpleado==empleado.idEmpleado).first()
+
 ##Chilcho
 ###Ventas_Detalle###
 class VentasDetalle(db.Model):
@@ -444,7 +451,6 @@ class Ventas(db.Model):
     cliente = relationship('Cliente', lazy='select')
     pe = relationship('Pedidos', lazy='select')
 
-
     def consultaGeneral(self):
         return self.query.all()
 
@@ -457,6 +463,15 @@ class Ventas(db.Model):
 
     def ventasCliente(self, id):
         return self.query.filter(Ventas.idCliente == id).where(Ventas.estatus == 'Entregado').all()
+
+    def consultaIndividual(self, id):
+        return self.query.get(id)
+
+    def pedidosSinAsignar(self):
+        return self.query.filter(Ventas.estatus == 'Sin asignar').all()
+
+    def consultarPedidosRepartidor(self, id):
+        return self.query.filter(Ventas.Repartidor_idRepartidor==id).all()
 
 #Chilcho
 ###Factura###
@@ -549,8 +564,6 @@ class Pedidos(db.Model):
     def consultaGeneral(self):
         return self.query.all()
 
-
-
     def procedimientAlmacenado(self,codigoPromocion, idPedido, precioTotal, idCliente, garrafonesPrestados):
         #db.session.execute("sp_compraConfirmada ?, ?", ["CE005", 1])
         db.session.execute(db.text(f"CALL sp_compraConfirmada('{codigoPromocion}',{idPedido},{precioTotal},{idCliente},{garrafonesPrestados})"))
@@ -597,6 +610,11 @@ class Prestamos(db.Model):
     def paginar(self, pagina):
         return self.query.paginate(per_page=5, page=pagina, error_out=True)
 
+    def consultaPorIdVenta(self, id):
+        return self.query.filter(Prestamos.Ventas_idVentas == id).first()
+
+    def filtrarEmpleado(self, id):
+        return self.query.filter(Prestamos.Empleado_idEmpleado == id).all()
 
 #Chilcho
 ###Pagos###

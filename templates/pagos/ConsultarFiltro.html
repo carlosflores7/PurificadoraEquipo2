@@ -12,13 +12,22 @@
             <thead>
                 <th>IDPAGO</th>
                 <th>EMPLEADO</th>
+                <th>SUBTOTAL</th>
+                <th>DIAS PENALIZADOS</th>
+                <th>AMONESTACION</th>
+                <th>TOTAL</th>
                 <th>FECHA</th>
-                <th>TARJETA/th>
+                <th>TARJETA</th>
             </thead>
             {% for pay in pagos_sin_paginacion %}
             <tr>
                 <td>{{pay.idPago}}</td>
                 <td>{{pay.tarjetas.empleado.usuario.nombre}}</td>
+                <td>${{pay.nomina.salario_total}}</td>
+                <td>{{pay.dias_pe}} día(s)</td>
+                <td>${{pay.nomina.salario_total - pay.total}}</td>
+                <td>${{pay.total}}</td>
+
                 <td>{{pay.fecha}}</td>
                 <td>{{pay.tarjetas.numero_tarjeta}}</td>
                 <td>
@@ -27,15 +36,15 @@
                     </a>
                 </td>
                 <td>
-                    <a href="/Factura/eliminar/{{pay.idPago}}">
+                    <a href="/Pagos/eliminar/{{pay.idPago}}">
                           <span class="glyphicon glyphicon-trash"></span>
                     </a>
                 </td>
-
             </tr>
             {% endfor %}
         </table>
     </div>
+ <div>
     <br>
 
 <div id="notificaciones">

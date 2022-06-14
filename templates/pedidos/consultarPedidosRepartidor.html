@@ -17,15 +17,13 @@
 
             </thead>
             {% for p in p %}
-            <tr>
-
-                {% if p.estatus == "Se encuentra en entrega" %}
+            <tr>       
                     <td>{{p.idVenta}}</td>
                     <td>{{p.cliente.usuario.nombre}}</td>
                     <td>{{p.pe.cantidad_garrafones }}</td>
                     <td>$20.00</td>
                     <td>${{ 20 * p.pe.cantidad_garrafones }}</td>
-                    <td>{{p.promociones.porcentaje}}%</td>
+                    <td>{{p.pe.promocion.porcentaje}}% = {{p.pe.promocion.porcentaje*20*p.pe.cantidad_garrafones/100}}</td>
                     <td>${{p.precio_total}}</td>
                      {% if p.promociones.codigo == '00000' %}
                             <td>No Aplica</td>
@@ -33,10 +31,11 @@
                             <td>{{ p.promociones.codigo }}</td>
                         {% endif %}
                     <td>{{p.fecha}}</td>
+                    {% if p.estatus == "Pedido asignado a un repartidor" %}
+                    <td>Pedido asigando</td>
+                    {% else %}
                     <td>{{p.estatus}}</td>
-
-
-                {% endif %}
+                    {% endif %}
             </tr>
 
             {% endfor %}
