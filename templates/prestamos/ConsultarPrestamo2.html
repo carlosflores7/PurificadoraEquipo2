@@ -21,6 +21,8 @@
                 <th>FOLIO DE VENTAS</th>
                 <th>GARRAFONES PRESTADOS</th>
                 <th>GARRAFONES ENTREGADOS</th>
+                <th>IMPORTE</th>
+                <th>IMPORTE DEVUELTO</th>
                 <th>ESTATUS</th>
                 <th>CLIENTE</th>
                 
@@ -36,6 +38,8 @@
                 <td>{{p.Ventas_idVentas}}</td>
                 <td>{{p.garrafones_prestados}}</td>
                 <td>{{p.garrafones_entregados}}</td>
+                <td>${{5.0*p.garrafones_prestados}}</td>
+                <td>${{5.0*p.garrafones_entregados}}</td>
                  {% if p.garrafones_prestados == p.garrafones_entregados %}
                     <td>Prestamo completado</td>
                 {% else %}

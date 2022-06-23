@@ -952,7 +952,10 @@ def downloadExcel():
             else:
                 sh.write(idx + 1, 4, str(v.promociones.codigo))
 
-            sh.write(idx + 1, 5, str(v.repartidor.empleado.usuario.nombre))
+            if v.repartidor:
+                sh.write(idx + 1, 5, str(v.repartidor.empleado.usuario.nombre))
+            else:
+                sh.write(idx +1, 5, 'No se asignó repartidor')
             sh.write(idx + 1, 6, str(v.cliente.usuario.nombre))
             sh.write(idx + 1, 7, str(v.idPedido))
             sh.write(idx + 1, 8, str(v.pe.cantidad_garrafones))
